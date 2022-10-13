@@ -8,7 +8,8 @@ var container,
   effect,
   animationTimeoutMs,
   domEvents,
-  myObjects = {};
+  myObjects = {},
+  testBall;
 
 init().then(() => {
   console.log("init done");
@@ -16,7 +17,6 @@ init().then(() => {
 });
 
 async function init() {
-
   // add a loading div
   const loadingDiv = document.createElement("div");
   loadingDiv.id = "loading";
@@ -74,22 +74,37 @@ async function init() {
   // load the blender models
   // let classroom = await getMashFromBlenderModel("../blender/Physikraum.glb");
   // let chair1 = await getMashFromBlenderModel("../blender/chair.glb");
-  let computergrafik = await getMashFromBlenderModel("../blender/computergrafik.glb");
-  
+  let computergrafik = await getMashFromBlenderModel(
+    "../blender/computergrafik.glb"
+  );
+
   // scene.add(chair1); myObjects.chair1 = chair1;
   // scene.add(classroom); myObjects.classroom = classroom;
-  scene.add(computergrafik); myObjects.computergrafik = computergrafik; 
+  scene.add(computergrafik);
+  myObjects.computergrafik = computergrafik;
 
-  console.log(computergrafik.children[7])
-  // set colore to green
-  computergrafik.children[6].material = new THREE.MeshStandardMaterial( {
-    envMap: null,
-    roughness: 0.05,
-    metalness: 1
-  } );
+  console.log(getAllMeshsFromNestedGroup(computergrafik));
 
   // remove the loading div
   document.body.removeChild(loadingDiv);
+
+  // let the camera move by wasd
+  window.addEventListener("keydown", e => {
+    switch (e.key) {
+      case "w":
+        camera.position.setZ(camera.position.z - 0.1);
+        break;
+      case "s":
+        camera.position.setZ(camera.position.z + 0.1);
+        break;
+      case "a":
+        camera.position.setX(camera.position.x - 0.1);
+        break;
+      case "d":
+        camera.position.setX(camera.position.x + 0.1);
+        break;
+    }
+  });
 
   // add the renderer to the dom
   camera.position.set(4, 8, 17);
@@ -99,7 +114,10 @@ async function init() {
 async function animate() {
   requestAnimationFrame(animate);
 
-  // myObjects.chair1.position.x+=0.01;
+  // check if the camera is inside mash
+  getAllMeshsFromNestedGroup(scene).forEach(mesh => {
+    if (checkIfPointIsInsideMesh(camera.position, mesh)) console.log("inside");
+  });
 
   renderer.render(scene, camera);
 
@@ -131,8 +149,38 @@ async function getMashFromBlenderModel(path) {
   await new Promise(resolve => {
     addEventListener("modelLoaded", resolve, { once: true });
   });
- 
+
   console.log("loaded blender model");
   console.log("mesh", mesh);
   return mesh;
+}
+
+function checkIfPointIsInsideMesh(point, mesh) {
+  try {
+    mesh.updateMatrixWorld();
+    var localPt = mesh.worldToLocal(point.clone());
+    return mesh.geometry?.boundingBox.containsPoint(localPt);
+  } catch (error) {
+    console.warn(error);
+    return false;
+  }
+}
+
+function getAllMeshsFromNestedGroup(group) {
+  let meshs = [];
+  try {
+    if (group.children.length === 0 || group.children === undefined)
+      return meshs;
+    group.children.forEach(element => {
+      if (element.children.length === 0 || group.children === undefined) {
+        meshs.push(element);
+      } else {
+        meshs.push(...getAllMeshsFromNestedGroup(element));
+      }
+    });
+    return meshs;
+  } catch (error) {
+    console.warn(error);
+    return [];
+  }
 }
