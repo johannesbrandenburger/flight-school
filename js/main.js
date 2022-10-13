@@ -7,7 +7,8 @@ var container,
   controls,
   effect,
   animationTimeoutMs,
-  domEvents;
+  domEvents,
+  myObjects = {};
 
 init().then(() => {
   console.log("init done");
@@ -21,7 +22,6 @@ async function init() {
   loadingDiv.id = "loading";
   loadingDiv.innerHTML = "Loading...";
   document.body.appendChild(loadingDiv);
-
 
   // config for three.js
   scene = new THREE.Scene();
@@ -39,24 +39,31 @@ async function init() {
     console.log(camera.position);
   });
 
+  // resize the renderer when the window is resized
+  window.addEventListener("resize", () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   // enable THREEx dom events
   domEvents = new THREEx.DomEvents(camera, renderer.domElement);
 
-  // add a test cube
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-  const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube);
-  domEvents.addEventListener(
-    cube,
-    "click",
-    function(event) {
-      console.log("you clicked on the mesh");
-    },
-    false
-  );
+  // // add a test cube
+  // const geometry = new THREE.BoxGeometry(1, 1, 1);
+  // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  // const cube = new THREE.Mesh(geometry, material);
+  // scene.add(cube);
+  // domEvents.addEventListener(
+  //   cube,
+  //   "click",
+  //   function(event) {
+  //     console.log("you clicked on the mesh");
+  //   },
+  //   false
+  // );
 
   // add light
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -64,11 +71,22 @@ async function init() {
   const pointLight = new THREE.PointLight(0xffffff);
   scene.add(pointLight);
 
-  // load the classroom from blender model ../blender/Physikraum.glb
-  console.log("loading classroom model");
-  let classroom = await getMashFromBlenderModel("../blender/Physikraum.glb");
-  // let classroom = await getMashFromBlenderModel("https://download1488.mediafire.com/6p4faoyy98zg/k3ox1euptin3g8i/Physikraum.glb");
-  scene.add(classroom);
+  // load the blender models
+  // let classroom = await getMashFromBlenderModel("../blender/Physikraum.glb");
+  // let chair1 = await getMashFromBlenderModel("../blender/chair.glb");
+  let computergrafik = await getMashFromBlenderModel("../blender/computergrafik.glb");
+  
+  // scene.add(chair1); myObjects.chair1 = chair1;
+  // scene.add(classroom); myObjects.classroom = classroom;
+  scene.add(computergrafik); myObjects.computergrafik = computergrafik; 
+
+  console.log(computergrafik.children[7])
+  // set colore to green
+  computergrafik.children[6].material = new THREE.MeshStandardMaterial( {
+    envMap: null,
+    roughness: 0.05,
+    metalness: 1
+  } );
 
   // remove the loading div
   document.body.removeChild(loadingDiv);
@@ -80,6 +98,9 @@ async function init() {
 
 async function animate() {
   requestAnimationFrame(animate);
+
+  // myObjects.chair1.position.x+=0.01;
+
   renderer.render(scene, camera);
 
   await new Promise(resolve => setTimeout(resolve, animationTimeoutMs));

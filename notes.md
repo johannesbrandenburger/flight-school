@@ -1,0 +1,53 @@
+# Notes
+
+## Konzept / Anforderungen 
+
+- Klassenzimmer
+  - Objekte
+    - Stuhl
+      - onClick: aufstuhlen, abstuhlen
+      - Blender model fixen
+    - Tisch
+      - Blender Model fertig
+    - Tafel
+      - onClick: Tafel hoch/runter (MAYBE: mit Maus hoch/runter)
+      - Flugzeug malen
+      - Blender Model fixen
+    - Schrank
+      - onClick: Tür auf/zu
+      - Inhalt: Gruscht
+    - Model-Flugzeug
+      - Blender Model erstellen
+    - Wand + Decke
+      - Blender Model erstellen (Tapeten-Textur)
+    - Boden
+      - Blender Model erstellen (Boden-Textur)
+    - 2 Fenster
+      - Blender Model erstellen
+      - Milchglas
+      - Rolladen
+        - SchalterDaneben.onClick: Rolladen hoch/runter
+      - Außen
+        - unten grün
+        - oben blauer Himmel
+        - Sonne -> Lichtquelle
+    - Lichtschalter
+      - Blender Model erstellen
+      - onClick: Licht an/aus
+    - Tür
+      - Blender Model erstellen
+  - Stil
+    - Flugschule
+- 1. Bewegung mit WASD
+  - Kamera mit Maus steuerbar
+  - nicht durch Objekte laufen (Physik)
+- 2. Kamera mit Maus (OrbitControls)
+  - keine Physik
+
+- Extras
+  - ModelFlugzeug.onClick
+    - Flugsimulation durch den Raum
+    - Kamera im Flugzeug (First Person)
+    - fliegt in Richtung Maus
+    - Flugzeug kann nicht durch Objekte fliegen
+    - Inspiration: Google Earth Flight Simulator
