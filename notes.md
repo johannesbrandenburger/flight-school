@@ -2,11 +2,13 @@
 
 ## Konzept / Anforderungen 
 
+- Board (inProgress by LB)
+
 - Klassenzimmer
   - Objekte
     - Stuhl
-      - onClick: aufstuhlen, abstuhlen
-      - Blender model fixen
+      - onClick: aufstuhlen, abstuhlen (inProgress by JB)
+      - Blender model fixen (inProgress by HS)
     - Tisch
       - Blender Model fertig
     - Tafel
@@ -38,14 +40,14 @@
       - Blender Model erstellen
   - Stil
     - Flugschule
-- 1. Bewegung mit WASD
+- 1. Bewegung mit WASD (inProgress by JB)
   - Kamera mit Maus steuerbar
   - nicht durch Objekte laufen (Physik)
-- 2. Kamera mit Maus (OrbitControls)
+- 2. Kamera mit Maus (OrbitControls) (inProgress by JB)
   - keine Physik
 
 - Extras
-  - ModelFlugzeug.onClick
+  - ModelFlugzeug.onClick (inProgress by JB)
     - Flugsimulation durch den Raum
     - Kamera im Flugzeug (First Person)
     - fliegt in Richtung Maus
