@@ -1,4 +1,7 @@
+// @ts-check
+
 async function getMashFromBlenderModel(path) {
+  // @ts-ignore
   const loader = new THREE.GLTFLoader();
   console.log("loading blender model");
   console.time("getMashFromBlenderModel");
@@ -29,11 +32,17 @@ async function getMashFromBlenderModel(path) {
   return mesh;
 }
 
+/**
+ * @param { THREE.Vector3 } point
+ * @param { THREE.Mesh } mesh
+ */
 function checkIfPointIsInsideMesh(point, mesh) {
   try {
     mesh.updateMatrixWorld();
     var localPt = mesh.worldToLocal(point.clone());
-    return mesh.geometry?.boundingBox.containsPoint(localPt);
+    
+    // TOFIX: got boundingBox is undefined at some meshes
+    return mesh.geometry?.boundingBox?.containsPoint(localPt);
   } catch (error) {
     console.warn(error);
     return false;

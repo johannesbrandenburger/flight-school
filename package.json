@@ -1,0 +1,26 @@
+{
+  "name": "cg-hs-lb-jb",
+  "version": "1.0.0",
+  "description": "von Henry Schuler, Lukas Braun und Johannes Brandenburger",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johannesbrandenburger/cg-hs-lb-jb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/johannesbrandenburger/cg-hs-lb-jb/issues"
+  },
+  "homepage": "https://github.com/johannesbrandenburger/cg-hs-lb-jb#readme",
+  "dependencies": {
+    "@types/three": "^0.144.0"
+  }
+}

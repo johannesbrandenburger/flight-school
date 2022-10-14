@@ -1,3 +1,5 @@
+// @ts-check
+
 async function animate() {
   requestAnimationFrame(animate);
 

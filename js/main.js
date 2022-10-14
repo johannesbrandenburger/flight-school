@@ -1,3 +1,5 @@
+// @ts-check
+
 // global variables
 var container,
   stats,
