@@ -17,12 +17,12 @@ async function init() {
   );
   renderer = new THREE.WebGLRenderer();
   // @ts-ignore
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  // controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-  // log the camera position while moving
-  controls.addEventListener("change", () => {
-    console.log(camera.position);
-  });
+  // // log the camera position while moving
+  // controls.addEventListener("change", () => {
+  //   console.log(camera.position);
+  // });
 
   // resize the renderer when the window is resized
   window.addEventListener("resize", () => {
@@ -76,4 +76,8 @@ async function init() {
   // add the renderer to the dom
   camera.position.set(4, 8, 17);
   document.body.appendChild(renderer.domElement);
+
+  // enable walk
+  walk();
+
 }

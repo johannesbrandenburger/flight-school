@@ -11,7 +11,9 @@ var container,
   animationTimeoutMs,
   domEvents,
   myObjects = {},
-  testBall;
+  testBall
+  let isWalking = { forward: false, backward: false, left: false, right: false }
+  ;
 
 init().then(() => {
   console.log("init done");
