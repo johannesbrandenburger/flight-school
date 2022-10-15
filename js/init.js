@@ -17,7 +17,7 @@ async function init() {
   );
   renderer = new THREE.WebGLRenderer();
   // @ts-ignore
-  // controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
 
   // // log the camera position while moving
   // controls.addEventListener("change", () => {
@@ -40,7 +40,7 @@ async function init() {
   const geometry = new THREE.BoxGeometry(1, 1, 1);
   const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
   const cube = new THREE.Mesh(geometry, material);
-  scene.add(cube); 
+  scene.add(cube); myObjects.cube = cube;
   domEvents.addEventListener(
     cube,
     "click",
@@ -49,6 +49,7 @@ async function init() {
     },
     false
   );
+  myObjects.cube.position.set(0, 3, 0);
 
   // add light
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -66,7 +67,7 @@ async function init() {
   // add the blender models to the scene
   scene.add(chair1); myObjects.chair1 = chair1;
   scene.add(classroom); myObjects.classroom = classroom;
-  scene.add(computergrafik); myObjects.computergrafik = computergrafik;
+  // scene.add(computergrafik); myObjects.computergrafik = computergrafik;
 
   console.log(getAllMeshsFromNestedGroup(computergrafik));
 

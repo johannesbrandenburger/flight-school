@@ -40,7 +40,7 @@ function checkIfPointIsInsideMesh(point, mesh) {
   try {
     mesh.updateMatrixWorld();
     var localPt = mesh.worldToLocal(point.clone());
-    
+
     // TOFIX: got boundingBox is undefined at some meshes
     return mesh.geometry?.boundingBox?.containsPoint(localPt);
   } catch (error) {
@@ -49,6 +49,11 @@ function checkIfPointIsInsideMesh(point, mesh) {
   }
 }
 
+
+/**
+ * @param group
+ * @returns { THREE.Mesh[] }
+ */
 function getAllMeshsFromNestedGroup(group) {
   let meshs = [];
   try {
