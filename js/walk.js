@@ -186,13 +186,15 @@ function handleWalking() {
   }
 
   // check if the player is inside a mesh
-  getAllMeshsFromNestedGroup(scene).forEach(mesh => {
-    if (mesh === myObjects.player) return;
-    if (checkCollision(myObjects.player, mesh)) {
-      console.log("overleap at ", mesh);
-      isCollision = true;
+  let allMeshs = getAllMeshsFromNestedGroup(scene);
+  for (let i = 0; i < allMeshs.length; i++) {
+    if (allMeshs[i] !== myObjects.player) {
+      if (checkCollision(myObjects.player, allMeshs[i])) {
+        isCollision = true;
+        break;
+      }
     }
-  });
+  }
 
   // if the player is inside a mesh, set the position back to the previous position
   if (isCollision === true) {
