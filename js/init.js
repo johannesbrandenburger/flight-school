@@ -1,6 +1,7 @@
 // @ts-check
 
 async function init() {
+
   // add a loading div
   const loadingDiv = document.createElement("div");
   loadingDiv.id = "loading";
@@ -16,13 +17,6 @@ async function init() {
     1000
   );
   renderer = new THREE.WebGLRenderer();
-  // @ts-ignore
-  controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-  // // log the camera position while moving
-  // controls.addEventListener("change", () => {
-  //   console.log(camera.position);
-  // });
 
   // resize the renderer when the window is resized
   window.addEventListener("resize", () => {
@@ -78,7 +72,10 @@ async function init() {
   camera.position.set(4, 8, 17);
   document.body.appendChild(renderer.domElement);
 
-  // enable walk
-  walk();
+  // enable walking with the keyboard
+  initWalk();
+
+  // enable orientation controls
+  initMouseClickMove();
 
 }

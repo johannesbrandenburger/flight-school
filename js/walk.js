@@ -4,21 +4,21 @@
 const headHeight = 4;
 const startPoint = new THREE.Vector3(-10, headHeight, -3);
 const distancePerWalk = 0.2;
+const mouseRotateSpeed = 0.003;
+const directions = {
+  forward: 0,
+  backward: 1,
+  left: 2,
+  right: 3
+};
 
-function walk() {
+function initWalk() {
   camera.position.set(startPoint.x, startPoint.y, startPoint.z);
 
   // look 45 degrees to the right
   camera.lookAt(new THREE.Vector3(0, headHeight, 0));
 
-  // create a walk control
-  /**
-     * at w walk in direktion of lookAt
-     * at s walk in opposite direktion of lookAt
-     * at a walk in direktion of lookAt rotated by 90°
-     * at d walk in direktion of lookAt rotated by -90°
-     * at space jump
-     */
+  // register key events
   window.addEventListener("keydown", event => {
     switch (event.key) {
       case "w":
@@ -35,6 +35,7 @@ function walk() {
         break;
     }
   });
+
   window.addEventListener("keyup", event => {
     switch (event.key) {
       case "w":
@@ -51,16 +52,8 @@ function walk() {
         break;
     }
   });
-  createPlayerPyramide();
+  createPlayer();
 }
-
-// create new enum for directions
-const directions = {
-  forward: 0,
-  backward: 1,
-  left: 2,
-  right: 3
-};
 
 /**
  * @param {THREE.Vector3} position
@@ -117,8 +110,7 @@ function getCameraLookAt(cam) {
   return vector;
 }
 
-function createPlayerPyramide() {
-  // create a player pyramid
+function createPlayer() {
   const playerGeometry = new THREE.BoxGeometry(1, headHeight, 1);
   const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
   const player = new THREE.Mesh(playerGeometry, playerMaterial);
@@ -139,12 +131,7 @@ function checkCollision(mesh1, mesh2) {
 
 function handleWalking() {
 
-  // check if the camera is inside mash
-  getAllMeshsFromNestedGroup(scene).forEach(mesh => {
-    if (checkIfPointIsInsideMesh(camera.position, mesh)) console.log("inside");
-  });
-
-  // store previeous position of player to check for collision
+  // store previous position of player to check for collision
   const previousPosition = new THREE.Vector3(
     myObjects.player.position.x,
     myObjects.player.position.y,
@@ -211,4 +198,22 @@ function handleWalking() {
     headHeight,
     myObjects.player.position.z
   );
+}
+
+function initMouseClickMove() {
+
+  window.addEventListener("mousedown", event => {
+    isMouseDown = true;
+  });
+
+  window.addEventListener("mouseup", event => {
+    isMouseDown = false;
+  });
+
+  window.addEventListener("mousemove", event => {
+    if (!isMouseDown) return;
+    isMovingCamera = true;
+    camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), event.movementX * mouseRotateSpeed);
+    camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), event.movementY * mouseRotateSpeed);
+  });
 }

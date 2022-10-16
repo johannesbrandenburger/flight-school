@@ -11,8 +11,10 @@ var container,
   animationTimeoutMs,
   domEvents,
   myObjects = {},
-  testBall
-  let isWalking = { forward: false, backward: false, left: false, right: false }
+  testBall,
+  isWalking = { forward: false, backward: false, left: false, right: false },
+  isMouseDown = false,
+  isMovingCamera = false
   ;
 
 init().then(() => {
