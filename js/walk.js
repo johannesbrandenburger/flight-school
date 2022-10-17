@@ -4,33 +4,35 @@
 const headHeight = 4;
 const startPoint = new THREE.Vector3(-10, headHeight, -3);
 const distancePerWalk = 0.2;
-const mouseRotateSpeed = 0.003;
+const mouseRotateSpeed = 0.002;
 const directions = {
   forward: 0,
   backward: 1,
   left: 2,
   right: 3
 };
+const playerWidth = 1;
+const mouseZoomSpeed = 0.8;
 
 function initWalk() {
-  camera.position.set(startPoint.x, startPoint.y, startPoint.z);
 
-  // look 45 degrees to the right
+  // set cam on start position and look a bit right
+  camera.position.set(startPoint.x, startPoint.y, startPoint.z);
   camera.lookAt(new THREE.Vector3(0, headHeight, 0));
 
   // register key events
   window.addEventListener("keydown", event => {
     switch (event.key) {
-      case "w":
+      case "w" || "W":
         isWalking.forward = true;
         break;
-      case "s":
+      case "s" || "S":
         isWalking.backward = true;
         break;
-      case "a":
+      case "a" || "A":
         isWalking.left = true;
         break;
-      case "d":
+      case "d" || "D":
         isWalking.right = true;
         break;
     }
@@ -38,16 +40,16 @@ function initWalk() {
 
   window.addEventListener("keyup", event => {
     switch (event.key) {
-      case "w":
+      case "w" || "W":
         isWalking.forward = false;
         break;
-      case "s":
+      case "s" || "S":
         isWalking.backward = false;
         break;
-      case "a":
+      case "a" || "A":
         isWalking.left = false;
         break;
-      case "d":
+      case "d" || "D":
         isWalking.right = false;
         break;
     }
@@ -59,39 +61,42 @@ function initWalk() {
  * @param {THREE.Vector3} position
  * @param {THREE.Vector3} lookAt
  * @param {number} distance
- * @param {number} direction
+ * @param { { forward: boolean, backward: boolean, left: boolean, right: boolean } } isWalking
  */
-function getNewPosition(
-  position,
-  lookAt,
-  distance,
-  direction = directions.forward
-) {
+function getNewPosition(position, lookAt, distance, isWalking) {
   const newPosition = new THREE.Vector3(position.x, position.y, position.z);
-  switch (direction) {
-    case directions.forward:
-      newPosition.add(lookAt.clone().multiplyScalar(distance));
-      break;
-    case directions.backward:
-      newPosition.add(lookAt.clone().multiplyScalar(-distance));
-      break;
-    case directions.left:
-      newPosition.add(
-        lookAt
-          .clone()
-          .applyAxisAngle(new THREE.Vector3(0, 1, 0), degToRad(90))
-          .multiplyScalar(distance)
-      );
-      break;
-    case directions.right:
-      newPosition.add(
-        lookAt
-          .clone()
-          .applyAxisAngle(new THREE.Vector3(0, 1, 0), degToRad(-90))
-          .multiplyScalar(-distance)
-      );
-      break;
+
+  // check if two keys are pressed at the same time
+  if ((isWalking.forward && (isWalking.left || isWalking.right)) || (isWalking.backward && (isWalking.left || isWalking.right))) {
+    distance = distance / 2;
   }
+
+  if (isWalking.forward === true) {
+    newPosition.add(lookAt.clone().multiplyScalar(distance));
+  }
+
+  if (isWalking.backward === true) {
+    newPosition.add(lookAt.clone().multiplyScalar(-distance));
+  }
+
+  if (isWalking.left === true) {
+    newPosition.add(
+      lookAt
+        .clone()
+        .applyAxisAngle(new THREE.Vector3(0, 1, 0), degToRad(90))
+        .multiplyScalar(distance)
+    );
+  }
+
+  if (isWalking.right === true) {
+    newPosition.add(
+      lookAt
+        .clone()
+        .applyAxisAngle(new THREE.Vector3(0, 1, 0), degToRad(-90))
+        .multiplyScalar(distance)
+    );
+  }
+
   newPosition.y = position.y;
   return newPosition;
 }
@@ -106,13 +111,12 @@ function degToRad(deg) {
 function getCameraLookAt(cam) {
   var vector = new THREE.Vector3(0, 0, -1);
   vector.applyQuaternion(cam.quaternion);
-  console.log(vector);
   return vector;
 }
 
 function createPlayer() {
-  const playerGeometry = new THREE.BoxGeometry(1, headHeight, 1);
-  const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+  const playerGeometry = new THREE.BoxGeometry(playerWidth, headHeight, playerWidth);
+  const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
   const player = new THREE.Mesh(playerGeometry, playerMaterial);
   player.position.set(startPoint.x, headHeight / 2 + 0, startPoint.z);
   scene.add(player);
@@ -139,35 +143,13 @@ function handleWalking() {
   );
   let isCollision = false;
 
-  // walk if the user is pressing a key TODO: Optimize if
-  if (isWalking.forward) {
-    const newPosition = getNewPosition(
-      myObjects.player.position,
-      getCameraLookAt(camera),
-      distancePerWalk
-    );
-    myObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
-  } else if (isWalking.backward) {
-    const newPosition = getNewPosition(
-      myObjects.player.position,
-      getCameraLookAt(camera),
-      -distancePerWalk
-    );
-    myObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
-  } else if (isWalking.left) {
+  // walk if the user is pressing a key
+  if (isWalking.forward || isWalking.backward || isWalking.left || isWalking.right) {
     const newPosition = getNewPosition(
       myObjects.player.position,
       getCameraLookAt(camera),
       distancePerWalk,
-      directions.left
-    );
-    myObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
-  } else if (isWalking.right) {
-    const newPosition = getNewPosition(
-      myObjects.player.position,
-      getCameraLookAt(camera),
-      -distancePerWalk,
-      directions.right
+      isWalking
     );
     myObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
   }
@@ -216,4 +198,13 @@ function initMouseClickMove() {
     camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), event.movementX * mouseRotateSpeed);
     camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), event.movementY * mouseRotateSpeed);
   });
+
+  window.addEventListener("wheel", event => {
+    const delta = Math.sign(event.deltaY);
+    if ((camera.fov + delta * mouseZoomSpeed) < 135 && (camera.fov + delta * mouseZoomSpeed) > 20) {
+      camera.fov += delta * mouseZoomSpeed;
+      camera.updateProjectionMatrix();
+    }
+  });
+
 }

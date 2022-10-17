@@ -46,7 +46,7 @@ async function init() {
   myObjects.cube.position.set(0, 3, 0);
 
   // add light
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1);
   scene.add(ambientLight);
   const pointLight = new THREE.PointLight(0xffffff);
   scene.add(pointLight);
