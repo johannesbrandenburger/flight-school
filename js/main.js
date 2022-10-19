@@ -14,7 +14,8 @@ var container,
   testBall,
   isWalking = { forward: false, backward: false, left: false, right: false },
   isMouseDown = false,
-  isMovingCamera = false
+  isMovingCamera = false,
+  clock
   ;
 
 init().then(() => {

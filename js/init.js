@@ -51,19 +51,28 @@ async function init() {
   const pointLight = new THREE.PointLight(0xffffff);
   scene.add(pointLight);
 
+  // add a clock
+  clock = new THREE.Clock();
+
   // load the blender models
   let classroom = await getMashFromBlenderModel("../blender/Physikraum.glb");
-  let chair1 = await getMashFromBlenderModel("../blender/chair.glb");
-  let computergrafik = await getMashFromBlenderModel(
-    "../blender/computergrafik.glb"
-  );
+  let chair01 = await getMashFromBlenderModel("../blender/chair.glb");
+  let lightSwitch = await getMashFromBlenderModel("../blender/lightswitch.glb");
+
+  scene.add(lightSwitch); myObjects.lightSwitch = lightSwitch;
 
   // add the blender models to the scene
-  scene.add(chair1); myObjects.chair1 = chair1;
-  scene.add(classroom); myObjects.classroom = classroom;
-  // scene.add(computergrafik); myObjects.computergrafik = computergrafik;
+  myObjects.chairs = [];
+  scene.add(chair01); myObjects.chairs.push(chair01);
+  // scene.add(classroom); myObjects.classroom = classroom;
 
-  console.log(getAllMeshsFromNestedGroup(computergrafik));
+  // TODO: change the position of all chairs in separate file
+  myObjects.chairs[0].isOnTable = false;
+  myObjects.chairs[0].isOnGround = true;
+  myObjects.chairs[0].position.set(10, 0.5 * getHeightOfMesh(myObjects.chairs[0]), 10);
+
+  console.log(getAllMeshsFromNestedGroup(lightSwitch))
+
 
   // remove the loading div
   document.body.removeChild(loadingDiv);
@@ -77,5 +86,8 @@ async function init() {
 
   // enable orientation controls
   initMouseClickMove();
+
+  // enable putting the chair on the table
+  initPutChairOnTheTable();
 
 }

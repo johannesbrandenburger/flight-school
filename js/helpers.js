@@ -72,3 +72,12 @@ function getAllMeshsFromNestedGroup(group) {
     return [];
   }
 }
+
+
+/**
+ * @param { THREE.Mesh } mesh
+ */
+function getHeightOfMesh(mesh) {
+  let box = new THREE.Box3().setFromObject(mesh);
+  return box.max.y - box.min.y;
+}
