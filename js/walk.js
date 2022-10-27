@@ -101,19 +101,6 @@ function getNewPosition(position, lookAt, distance, isWalking) {
   return newPosition;
 }
 
-function degToRad(deg) {
-  return deg * Math.PI / 180;
-}
-
-/**
- * @param {THREE.PerspectiveCamera} cam
- */
-function getCameraLookAt(cam) {
-  var vector = new THREE.Vector3(0, 0, -1);
-  vector.applyQuaternion(cam.quaternion);
-  return vector;
-}
-
 function createPlayer() {
   const playerGeometry = new THREE.BoxGeometry(playerWidth, headHeight, playerWidth);
   const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
@@ -123,15 +110,6 @@ function createPlayer() {
   myObjects.player = player;
 }
 
-/**
- * @param {THREE.Mesh} mesh1
- * @param {THREE.Mesh} mesh2
- */
-function checkCollision(mesh1, mesh2) {
-  const box1 = new THREE.Box3().setFromObject(mesh1);
-  const box2 = new THREE.Box3().setFromObject(mesh2);
-  return box1.intersectsBox(box2);
-}
 
 function handleWalking() {
 

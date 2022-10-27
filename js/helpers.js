@@ -81,3 +81,29 @@ function getHeightOfMesh(mesh) {
   let box = new THREE.Box3().setFromObject(mesh);
   return box.max.y - box.min.y;
 }
+
+
+/**
+ * @param {THREE.PerspectiveCamera} cam
+ */
+ function getCameraLookAt(cam) {
+  var vector = new THREE.Vector3(0, 0, -1);
+  vector.applyQuaternion(cam.quaternion);
+  return vector;
+}
+
+
+function degToRad(deg) {
+  return deg * Math.PI / 180;
+}
+
+
+/**
+ * @param {THREE.Mesh} mesh1
+ * @param {THREE.Mesh} mesh2
+ */
+ function checkCollision(mesh1, mesh2) {
+  const box1 = new THREE.Box3().setFromObject(mesh1);
+  const box2 = new THREE.Box3().setFromObject(mesh2);
+  return box1.intersectsBox(box2);
+}
