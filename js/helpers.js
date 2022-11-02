@@ -10,14 +10,14 @@ async function getMashFromBlenderModel(path) {
 
   await loader.load(
     path,
-    function(gltf) {
+    function (gltf) {
       console.log("inside loader.load");
       console.timeEnd("getMashFromBlenderModel");
       mesh = gltf.scene;
       dispatchEvent(new Event("modelLoaded"));
     },
     undefined,
-    function(error) {
+    function (error) {
       console.error(error);
     }
   );
@@ -86,7 +86,7 @@ function getHeightOfMesh(mesh) {
 /**
  * @param {THREE.PerspectiveCamera} cam
  */
- function getCameraLookAt(cam) {
+function getCameraLookAt(cam) {
   var vector = new THREE.Vector3(0, 0, -1);
   vector.applyQuaternion(cam.quaternion);
   return vector;
@@ -102,7 +102,7 @@ function degToRad(deg) {
  * @param {THREE.Mesh} mesh1
  * @param {THREE.Mesh} mesh2
  */
- function checkCollision(mesh1, mesh2) {
+function checkCollision(mesh1, mesh2) {
   const box1 = new THREE.Box3().setFromObject(mesh1);
   const box2 = new THREE.Box3().setFromObject(mesh2);
   return box1.intersectsBox(box2);

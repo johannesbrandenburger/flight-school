@@ -1,3 +1,5 @@
+// @ts-check
+
 async function placeObjects() {
 
     // add a test cube
@@ -31,7 +33,7 @@ async function placeObjects() {
     // add the blender models to the scene
     myObjects.chairs = [];
     scene.add(chair01); myObjects.chairs.push(chair01);
-    // scene.add(classroom); myObjects.classroom = classroom;
+    scene.add(classroom); myObjects.classroom = classroom;
 
     // TODO: change the position of all chairs in separate file
     myObjects.chairs[0].isOnTable = false;
