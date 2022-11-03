@@ -1,7 +1,7 @@
 // @ts-check
 
 // create config
-const headHeight = 4;
+const headHeight = 1.70;
 const startPoint = new THREE.Vector3(-10, headHeight, -3);
 const distancePerWalk = 0.2;
 const mouseRotateSpeed = 0.002;
@@ -130,6 +130,7 @@ function handleWalking() {
       isWalking
     );
     myObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
+    console.log(myObjects.player.position);
   }
 
   // check if the player is inside a mesh
@@ -144,13 +145,13 @@ function handleWalking() {
   }
 
   // if the player is inside a mesh, set the position back to the previous position
-  if (isCollision === true) {
-    myObjects.player.position.set(
-      previousPosition.x,
-      previousPosition.y,
-      previousPosition.z
-    );
-  }
+  // if (isCollision === true) {
+  //   myObjects.player.position.set(
+  //     previousPosition.x,
+  //     previousPosition.y,
+  //     previousPosition.z
+  //   );
+  // }
 
   // update the camera position
   camera.position.set(

@@ -58,7 +58,7 @@ function getAllMeshsFromNestedGroup(group) {
   let meshs = [];
   try {
     if (group.children.length === 0 || group.children === undefined)
-      return meshs;
+      return [ group ];
     group.children.forEach(element => {
       if (element.children.length === 0 || group.children === undefined) {
         meshs.push(element);
