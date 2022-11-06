@@ -80,13 +80,13 @@ function movePlane() {
     console.log(planeLookAt);
 
     // manipulate the lookAt vector by the headingTo values
-    planeLookAt = new THREE.Vector3(planeLookAt.x + headingTo.right * 0.0001, planeLookAt.y + headingTo.up * 0.0001, planeLookAt.z);
+    planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - 0.01));
+    planeLookAt = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * 0.03));
     planeLookAt.normalize();
 
     // set the new lookAt vector
     let newPointToLookAt = new THREE.Vector3(myObjects.modelPlane.position.x + planeLookAt.x, myObjects.modelPlane.position.y + planeLookAt.y, myObjects.modelPlane.position.z + planeLookAt.z);
     myObjects.modelPlane.lookAt(newPointToLookAt);
-
 
     // move the plane forward (always)
     let newPlanePosition = myObjects.modelPlane.position.clone();
@@ -147,4 +147,37 @@ function deleteLastArrowHelper() {
         scene.remove(arrowHelpers[arrowHelpers.length - 1]);
         arrowHelpers.pop();
     }
+}
+
+function turnVectorAroundVerticalAxis(vector, angle) {
+    let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
+    newVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+    return newVector;
+}
+
+function turnVectorAroundHorizontalAxis(vector, angle) {
+
+    let newVector = new THREE.Vector3(vector.x, vector.y + 0.5 * angle, vector.z);
+    return newVector;
+
+
+
+    // // get the horizontal vector
+    // let horizontalVector = new THREE.Vector3(vector.x, 0, vector.z);
+    // horizontalVector.normalize();
+
+    // // get the vertical vector
+    // let verticalVector = new THREE.Vector3(0, vector.y, 0);
+    // verticalVector.normalize();
+
+    // // get the cross product of the horizontal and vertical vector
+    // let crossProduct = new THREE.Vector3();
+    // crossProduct.crossVectors(horizontalVector, verticalVector);
+    // crossProduct.normalize();
+
+    // // rotate the vector around the cross product
+    // let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
+    // newVector.applyAxisAngle(crossProduct, angle);
+
+    // return newVector;
 }
