@@ -1,6 +1,6 @@
 // @ts-check
 
-const distancePerFly = 0.02;
+const distancePerFly = 0.015;
 const planeStartPoint = new THREE.Vector3(4, 0.85, 5);
 const distanceOfCameraFromPlane = 1.5;
 
@@ -10,7 +10,7 @@ async function initFlying() {
     // camera.position.set(0.97, 1.70, 3);
     camera.lookAt(planeStartPoint);
 
-    createCrosshair();
+    // createCrosshair();
 
     // as further the mouse is right/left of the cross the more the plane is moving right/left
     // headingTo = { right: int, up: int } stores values from 0 to 100 
@@ -70,15 +70,13 @@ function handleFlying() {
 function movePlane() {
 
     if (!myObjects.modelPlane) return;
-
+    
     // get the planes lookAt vector by its quaternion
     let quaternion = myObjects.modelPlane.quaternion;
     let planeLookAt = new THREE.Vector3(0, 0, 1);
     planeLookAt.applyQuaternion(quaternion);
     planeLookAt.normalize();
-
-    console.log(planeLookAt);
-
+    
     // manipulate the lookAt vector by the headingTo values
     planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - 0.01));
     planeLookAt = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * 0.03));
@@ -92,10 +90,6 @@ function movePlane() {
     let newPlanePosition = myObjects.modelPlane.position.clone();
     newPlanePosition.addScaledVector(planeLookAt, distancePerFly);
 
-    // show vector in scene
-    deleteLastArrowHelper();
-    showVector(myObjects.modelPlane.position, planeLookAt, 0xff0000);
-
     // apply the new position
     myObjects.modelPlane.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
 
@@ -104,6 +98,8 @@ function movePlane() {
     camera.position.addScaledVector(planeLookAt, -distanceOfCameraFromPlane);
     camera.lookAt(newPlanePosition);
 
+    // tend the plane a little bit to the right/left depending on the headingTo.right value
+    myObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.4));
 
 }
 
@@ -118,23 +114,10 @@ async function createModelPlane() {
 
     // set the plane position
     myObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
-    myObjects.modelPlane.scale.set(0.05, 0.05, 0.05);
+    myObjects.modelPlane.scale.set(0.02, 0.02, 0.02);
     myObjects.modelPlane.lookAt(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z - 1);
 
-    // set the plane look at
-    // planeLookAt = new THREE.Vector3(planeStartPoint.x, planeStartPoint.y, 0);
-    // myObjects.modelPlane.lookAt(planeLookAt);
-
-
 }
-
-// function getLookAtByRotation(position, rotation) {
-//     let planeLookAt = new THREE.Vector3(0, 0, -1);
-//     planeLookAt.applyQuaternion(rotation);
-//     planeLookAt.add(position);
-//     return planeLookAt;
-// }
-
 
 function showVector(position, vector, color) {
     let arrow = new THREE.ArrowHelper(vector, position, 1, color);
@@ -160,7 +143,7 @@ function turnVectorAroundHorizontalAxis(vector, angle) {
     let newVector = new THREE.Vector3(vector.x, vector.y + 0.5 * angle, vector.z);
     return newVector;
 
-
+    // TODO: check if more complex calculation is needed
 
     // // get the horizontal vector
     // let horizontalVector = new THREE.Vector3(vector.x, 0, vector.z);
