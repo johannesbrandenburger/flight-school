@@ -50,6 +50,9 @@ async function init() {
   // enable walking with the keyboard
   initWalk();
 
+  // enable flying
+  initFlying();
+
   // enable orientation controls
   initMouseClickMove();
 

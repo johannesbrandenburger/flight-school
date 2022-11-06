@@ -15,7 +15,10 @@ var container,
   isWalking = { forward: false, backward: false, left: false, right: false },
   isMouseDown = false,
   isMovingCamera = false,
-  clock
+  clock,
+  planeLookAt,
+  headingTo = { right: 0, up: 0 },
+  arrowHelpers = []
   ;
 
 init().then(() => {

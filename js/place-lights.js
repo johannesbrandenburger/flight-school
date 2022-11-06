@@ -18,6 +18,6 @@ function placeLights() {
 
 
     // add env light
-    // const envLight = new THREE.AmbientLight(0xffffff, 0.5);
-    // scene.add(envLight);
+    const envLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(envLight);
 }

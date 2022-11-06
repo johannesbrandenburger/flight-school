@@ -1,5 +1,10 @@
 // @ts-check
 
+/**
+ * 
+ * @param { string } path 
+ * @returns { Promise<THREE.Mesh> } mesh
+ */
 async function getMashFromBlenderModel(path) {
   // @ts-ignore
   const loader = new THREE.GLTFLoader();
@@ -93,17 +98,62 @@ function getCameraLookAt(cam) {
 }
 
 
+/**
+ * Converts degrees to radians
+ * @param {number} deg The angle in degrees
+ * @returns {number} The radian value of the given degree
+ */
 function degToRad(deg) {
   return deg * Math.PI / 180;
 }
 
 
 /**
+ * This function checks if two meshes are intersecting with each other
  * @param {THREE.Mesh} mesh1
  * @param {THREE.Mesh} mesh2
+ * @returns {boolean} true if the two meshes are intersecting
  */
 function checkCollision(mesh1, mesh2) {
   const box1 = new THREE.Box3().setFromObject(mesh1);
   const box2 = new THREE.Box3().setFromObject(mesh2);
   return box1.intersectsBox(box2);
+}
+
+/**
+ * Creates a crosshair in the middle of the screen in the form of two divs
+ */
+function createCrosshair() {
+  const crossWidth = "20px";
+  const crossThickness = "5px";
+  const crossColor = "green";
+  const crossVertical = document.createElement("div");
+  crossVertical.style.position = "absolute";
+  crossVertical.style.top = "50%";
+  crossVertical.style.left = "50%";
+  crossVertical.style.width = crossWidth;
+  crossVertical.style.height = crossThickness;
+  crossVertical.style.backgroundColor = crossColor
+  crossVertical.style.transform = "translate(-50%, -50%)";
+  crossVertical.id = "crosshair-vertical";
+  document.body.appendChild(crossVertical);
+  const crossHorizontal = document.createElement("div");
+  crossHorizontal.style.position = "absolute";
+  crossHorizontal.style.top = "50%";
+  crossHorizontal.style.left = "50%";
+  crossHorizontal.style.width = crossThickness;
+  crossHorizontal.style.height = crossWidth;
+  crossHorizontal.style.backgroundColor = crossColor
+  crossHorizontal.style.transform = "translate(-50%, -50%)";
+  crossHorizontal.id = "crosshair-horizontal";
+  document.body.appendChild(crossHorizontal);
+}
+
+
+/**
+ * Removes the crosshair from the screen
+ */
+function removeCrosshair() {
+  document.getElementById("crosshair-vertical").remove();
+  document.getElementById("crosshair-horizontal").remove();
 }

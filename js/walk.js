@@ -2,22 +2,16 @@
 
 // create config
 const headHeight = 1.70;
-const startPoint = new THREE.Vector3(-10, headHeight, -3);
-const distancePerWalk = 0.2;
+const startPoint = new THREE.Vector3(0.97, headHeight, 3);
+const distancePerWalk = 0.1;
 const mouseRotateSpeed = 0.002;
-const directions = {
-  forward: 0,
-  backward: 1,
-  left: 2,
-  right: 3
-};
 const playerWidth = 1;
 const mouseZoomSpeed = 0.8;
 
 function initWalk() {
 
   // set cam on start position and look a bit right
-  camera.position.set(startPoint.x, startPoint.y, startPoint.z);
+  // camera.position.set(startPoint.x, startPoint.y, startPoint.z);
   camera.lookAt(new THREE.Vector3(0, headHeight, 0));
 
   // register key events
@@ -109,7 +103,6 @@ function createPlayer() {
   scene.add(player);
   myObjects.player = player;
 }
-
 
 function handleWalking() {
 
