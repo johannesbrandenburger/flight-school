@@ -28,6 +28,8 @@ const torusSpawnRadius = 100 * torusScale;
 const torusAmount = 500;
 let torusScore = 0;
 let hasScored = false;
+let startTime = null;
+let timeLeft = 60;
 
 
 init().then(() => {
@@ -55,6 +57,17 @@ async function init() {
     scoreDiv.style.fontSize = "2em";
     document.body.appendChild(scoreDiv);
 
+    // add a div for the time
+    const timeDiv = document.createElement("div");
+    timeDiv.id = "time";
+    timeDiv.innerHTML = "Time left: " + timeLeft;
+    timeDiv.style.position = "absolute";
+    timeDiv.style.top = "10px";
+    timeDiv.style.right = "10px";
+    timeDiv.style.color = "white";
+    timeDiv.style.fontSize = "2em";
+    document.body.appendChild(timeDiv);
+    startTime = new Date().getTime();
 
     // config for three.js
     scene = new THREE.Scene();
@@ -196,11 +209,29 @@ function handleScore() {
     }
 }
 
-
 async function animate() {
     requestAnimationFrame(animate);
     handleFlying();
     handleScore();
+    handleTime();
     renderer.render(scene, camera);
     await new Promise(resolve => setTimeout(resolve, animationTimeoutMs));
+}
+
+function handleTime() {
+
+    // calculate the time left
+    const currentTime = new Date().getTime();
+    timeLeft = 60 - Math.floor((currentTime - startTime)/1000);
+    document.getElementById("time").innerHTML = "Time left: " + timeLeft;
+
+    if (timeLeft <= 0) {
+        gameOver();
+        return;
+    }
+}
+
+function gameOver() {
+    alert("Game over! Your score is: " + torusScore);
+    window.location.reload();
 }
