@@ -95,17 +95,8 @@ async function init() {
     // add a clock
     clock = new THREE.Clock();
 
-    // remove the loading div
-    document.body.removeChild(loadingDiv);
-
     // add the renderer to the dom
     camera.position.set(4, 8, 17);
-    document.body.appendChild(renderer.domElement);
-
-    // orbit controls
-    controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.target.set(0, 0, 0);
-    controls.update();
 
     placeTorusObjects();
 
@@ -138,6 +129,10 @@ async function init() {
             window.location.href = "/";
         }
     });
+
+    // add the canvas and remove the loading div
+    document.body.appendChild(renderer.domElement);
+    document.body.removeChild(loadingDiv);
 
 }
 
