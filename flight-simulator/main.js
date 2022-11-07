@@ -30,6 +30,7 @@ let torusScore = 0;
 let hasScored = false;
 let startTime = null;
 let timeLeft = 60;
+let sun, water;
 
 
 init().then(() => {
@@ -114,7 +115,7 @@ async function init() {
         );
         torus.position.set(
             (Math.random() - 0.5) * torusSpawnRadius,
-            (Math.random() - 0.5) * torusSpawnRadius,
+            (Math.random()) * torusSpawnRadius,
             (Math.random() - 0.5) * torusSpawnRadius
         );
         torus.castShadow = true;
@@ -153,6 +154,9 @@ async function init() {
     scene.add(pointLight);
     scene.background = new THREE.Color(0x330000);
 
+    // init ocean and sky
+    await initOceanAndSky();
+
     await initFlying();
     startTime = new Date().getTime();
     checkForPlaneCollision = false;
@@ -174,6 +178,11 @@ function handleScore() {
     if (hasScored) return;
 
     if (!myObjects.modelPlane) return;
+
+    if (myObjects.modelPlane.position.y < 0) {
+        gameOver();
+        return;
+    }
 
     // check if plane intersects with a torus
     for (let i = 0; i < scene.children.length; i++) {
@@ -222,7 +231,7 @@ function handleTime() {
 
     // calculate the time left
     const currentTime = new Date().getTime();
-    timeLeft = 60 - Math.floor((currentTime - startTime)/1000);
+    timeLeft = 60 - Math.floor((currentTime - startTime) / 1000);
     document.getElementById("time").innerHTML = "Time left: " + timeLeft;
 
     if (timeLeft <= 0) {
@@ -235,3 +244,51 @@ function gameOver() {
     alert("Game over! Your score is: " + torusScore);
     window.location.reload();
 }
+
+/**
+ * Init the ocean and sky
+ * This code and the textures are directly from three.js
+ */
+async function initOceanAndSky() {
+
+    // sun
+    sun = new THREE.Vector3();
+    const waterGeometry = new THREE.PlaneGeometry(10000, 10000);
+
+    // water
+    water = new THREE.Water(
+        waterGeometry, {
+        textureWidth: 512,
+        textureHeight: 512,
+        waterNormals: new THREE.TextureLoader().load('../textures/waternormals.jpg', function (texture) { texture.wrapS = texture.wrapT = THREE.RepeatWrapping; }),
+        sunDirection: new THREE.Vector3(),
+        sunColor: 0xffffff,
+        waterColor: 0x001e0f,
+        distortionScale: 3.7,
+        fog: scene.fog !== undefined
+    }
+    );
+    water.rotation.x = - Math.PI / 2;
+    scene.add(water);
+
+    // sky
+    const sky = new THREE.Sky();
+    sky.scale.setScalar(10000);
+    scene.add(sky);
+    const parameters = {
+        elevation: 2,
+        azimuth: 180
+    };
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    let renderTarget;
+    const phi = THREE.MathUtils.degToRad(90 - parameters.elevation);
+    const theta = THREE.MathUtils.degToRad(parameters.azimuth);
+    sun.setFromSphericalCoords(1, phi, theta);
+    sky.material.uniforms['sunPosition'].value.copy(sun);
+    water.material.uniforms['sunDirection'].value.copy(sun).normalize();
+    if (renderTarget !== undefined) renderTarget.dispose();
+    renderTarget = pmremGenerator.fromScene(sky);
+    scene.environment = renderTarget.texture;
+
+}
+
