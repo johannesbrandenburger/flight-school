@@ -1,23 +1,21 @@
 // @ts-check
 
 // create config
-const headHeight = 4;
-const startPoint = new THREE.Vector3(-10, headHeight, -3);
-const distancePerWalk = 0.2;
+const headHeight = 1.70;
+const startPoint = new THREE.Vector3(0.97, headHeight, 3);
+const distancePerWalk = 0.1;
 const mouseRotateSpeed = 0.002;
-const directions = {
-  forward: 0,
-  backward: 1,
-  left: 2,
-  right: 3
-};
 const playerWidth = 1;
 const mouseZoomSpeed = 0.8;
 
+
+/**
+ * Initialize the walking controls
+ */
 function initWalk() {
 
   // set cam on start position and look a bit right
-  camera.position.set(startPoint.x, startPoint.y, startPoint.z);
+  // camera.position.set(startPoint.x, startPoint.y, startPoint.z);
   camera.lookAt(new THREE.Vector3(0, headHeight, 0));
 
   // register key events
@@ -35,6 +33,9 @@ function initWalk() {
       case "d" || "D":
         isWalking.right = true;
         break;
+      // TEMP: remove later
+      case "f" || "F":
+        window.location.href = "/flight-simulator";
     }
   });
 
@@ -57,7 +58,9 @@ function initWalk() {
   createPlayer();
 }
 
+
 /**
+ * Get the new position of the player/camera
  * @param {THREE.Vector3} position
  * @param {THREE.Vector3} lookAt
  * @param {number} distance
@@ -101,16 +104,24 @@ function getNewPosition(position, lookAt, distance, isWalking) {
   return newPosition;
 }
 
+
+/**
+ * Creates a player mesh and adds it to the scene
+ */
 function createPlayer() {
   const playerGeometry = new THREE.BoxGeometry(playerWidth, headHeight, playerWidth);
   const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
   const player = new THREE.Mesh(playerGeometry, playerMaterial);
-  player.position.set(startPoint.x, headHeight / 2 + 0, startPoint.z);
+  player.position.set(startPoint.x, headHeight / 2 + 0.2, startPoint.z);
   scene.add(player);
   myObjects.player = player;
 }
 
 
+/**
+ * Handle the walking of the player
+ * Is called every frame in animate.js
+ */
 function handleWalking() {
 
   // store previous position of player to check for collision
@@ -130,13 +141,28 @@ function handleWalking() {
       isWalking
     );
     myObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
+    console.log(myObjects.player.position);
   }
 
   // check if the player is inside a mesh
   let allMeshs = getAllMeshsFromNestedGroup(scene);
   for (let i = 0; i < allMeshs.length; i++) {
     if (allMeshs[i] !== myObjects.player) {
-      if (checkCollision(myObjects.player, allMeshs[i])) {
+
+      // TODO: exceptions can be removed later
+      if (checkCollision(myObjects.player, allMeshs[i])
+        && !isCollision && allMeshs[i].type !== "AxesHelper" 
+        && allMeshs[i].name !== "Floor" 
+        && allMeshs[i].name !== "Ground_Material007_0" 
+        && allMeshs[i].name !== "Trunk_Material001_0"
+        && allMeshs[i].name !== "Trunk_Trunk_0"
+        && allMeshs[i].name !== "Grass_Material_0"
+        && allMeshs[i].name !== "Mud_Material004_0"
+        && allMeshs[i].name !== "Watter_Material005_0"
+        && allMeshs[i].name !== ""
+      ) {
+        console.log("collision with");
+        console.log(allMeshs[i]);
         isCollision = true;
         break;
       }
@@ -160,6 +186,10 @@ function handleWalking() {
   );
 }
 
+
+/**
+ * Lets user rotate the camera with the mouse
+ */
 function initMouseClickMove() {
 
   window.addEventListener("mousedown", event => {

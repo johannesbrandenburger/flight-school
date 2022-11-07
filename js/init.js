@@ -17,6 +17,8 @@ async function init() {
     1000
   );
   renderer = new THREE.WebGLRenderer();
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
   // resize the renderer when the window is resized
   window.addEventListener("resize", () => {
@@ -42,6 +44,9 @@ async function init() {
   // place all objects
   await placeObjects();
 
+  // place all lights
+  placeLights();
+
   // enable walking with the keyboard
   initWalk();
 
@@ -49,6 +54,13 @@ async function init() {
   initMouseClickMove();
 
   // enable putting the chair on the table
-  initPutChairOnTheTable();
+  //initPutChairOnTheTable();
 
+  // enable shadow for each object
+  for (const group in myObjects) {
+    getAllMeshsFromNestedGroup(myObjects[group]).forEach((mesh) => {
+      mesh.receiveShadow = true;
+    });
+  }
+  console.log(myObjects);
 }
