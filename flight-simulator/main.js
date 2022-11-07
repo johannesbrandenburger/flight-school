@@ -67,7 +67,6 @@ async function init() {
     timeDiv.style.color = "white";
     timeDiv.style.fontSize = "2em";
     document.body.appendChild(timeDiv);
-    startTime = new Date().getTime();
 
     // config for three.js
     scene = new THREE.Scene();
@@ -154,7 +153,8 @@ async function init() {
     scene.add(pointLight);
     scene.background = new THREE.Color(0x330000);
 
-    initFlying();
+    await initFlying();
+    startTime = new Date().getTime();
     checkForPlaneCollision = false;
 
     // add event listener on mouse down to speed up the plane by 100%
