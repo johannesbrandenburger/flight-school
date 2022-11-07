@@ -1,7 +1,7 @@
 // @ts-check
 
-const distancePerFly = 0.015;
-const planeStartPoint = new THREE.Vector3(4, 0.85, 5);
+let distancePerFly = 0.015;
+const planeStartPoint = new THREE.Vector3(4, 0.85, 3);
 const distanceOfCameraFromPlane = 1.5;
 
 async function initFlying() {
@@ -101,6 +101,35 @@ function movePlane() {
     // tend the plane a little bit to the right/left depending on the headingTo.right value
     myObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.4));
 
+    // check for collision
+    let planeCollided = false;
+    let allMeshs = getAllMeshsFromNestedGroup(scene);
+    for (let i = 0; i < allMeshs.length; i++) {
+        if (allMeshs[i] !== myObjects.modelPlane && !meshIsChildOf(allMeshs[i], myObjects.modelPlane) && allMeshs[i].name !== "" && !getAllMeshsFromNestedGroup(myObjects.environment).includes(allMeshs[i])) {
+            if (checkCollision(myObjects.modelPlane, allMeshs[i])) {
+                console.log("collision with ");
+                console.log(allMeshs[i]);
+                planeCollided = true;
+                break;
+            }
+        }
+    }
+    if (planeCollided) {
+        distancePerFly = 0;
+
+        // show the plane in red
+        myObjects.modelPlane.traverse(function (child) {
+            if (child.isMesh) {
+                child.material.color.setHex(0xff0000);
+            }
+        });
+
+        // timeout for 1 second
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+    }
+
 }
 
 async function createModelPlane() {
@@ -163,4 +192,15 @@ function turnVectorAroundHorizontalAxis(vector, angle) {
     // newVector.applyAxisAngle(crossProduct, angle);
 
     // return newVector;
+}
+
+/**
+ * @param {THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>} possibleChild
+ * @param {THREE.Mesh} parent
+ */
+function meshIsChildOf(possibleChild, parent) {
+    if (possibleChild.parent === parent) return true;
+    if (possibleChild.parent === null) return false;
+    // @ts-ignore
+    return meshIsChildOf(possibleChild.parent, parent);
 }

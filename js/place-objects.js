@@ -27,6 +27,9 @@ async function placeObjects() {
     myObjects.room.position.set(0, 0, 0);
     getAllMeshsFromNestedGroup(myObjects.room).forEach(mesh => {
         mesh.castShadow = true;
+        if (mesh.name === "") {
+            mesh.name = "part of room";
+        }
     });
 
     // landscape environment

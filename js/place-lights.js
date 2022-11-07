@@ -8,8 +8,8 @@ function placeLights() {
     pointLight.castShadow = true;
     scene.add(pointLight);
 
-    pointLight.shadow.mapSize.width = 1024 * 2;
-    pointLight.shadow.mapSize.height = 1024 * 2;
+    pointLight.shadow.mapSize.width = 1024 * 4;
+    pointLight.shadow.mapSize.height = 1024 * 4;
     pointLight.shadow.camera.near = 0.5; // default
     pointLight.shadow.camera.far = 500; // default
 
