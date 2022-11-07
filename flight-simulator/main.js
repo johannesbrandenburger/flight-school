@@ -107,46 +107,7 @@ async function init() {
     controls.target.set(0, 0, 0);
     controls.update();
 
-    // place 30 random torus objects (rotate them randomly)
-    for (let i = 0; i < torusAmount; i++) {
-        const torus = new THREE.Mesh(
-            new THREE.TorusGeometry(torusRadius, torusTube, 16, 100),
-            new THREE.MeshPhongMaterial({ color: 0xff0000 })
-        );
-        torus.position.set(
-            (Math.random() - 0.5) * torusSpawnRadius,
-            (Math.random()) * torusSpawnRadius,
-            (Math.random() - 0.5) * torusSpawnRadius
-        );
-        torus.castShadow = true;
-        torus.setRotationFromMatrix(
-            new THREE.Matrix4().makeRotationFromEuler(
-                new THREE.Euler(
-                    Math.random() * Math.PI,
-                    Math.random() * Math.PI,
-                    Math.random() * Math.PI
-                )
-            )
-        );
-        scene.add(torus);
-        torus.name = "torus";
-
-        // check if torus intersects with another torus
-        let torusIntersects = false
-        for (let j = 0; j < scene.children.length; j++) {
-            const otherTorus = scene.children[j];
-            if (otherTorus !== torus) {
-                const distance = torus.position.distanceTo(otherTorus.position);
-                if (distance < 5 * torusScale) {
-                    torusIntersects = true;
-                }
-            }
-        }
-        if (torusIntersects) {
-            i -= 1;
-            scene.remove(torus);
-        }
-    }
+    placeTorusObjects();
 
     // add a point light to the top of the scene
     const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
@@ -173,6 +134,57 @@ async function init() {
 
 }
 
+
+/**
+ * Places torus objects in the scene at random positions+
+ */
+function placeTorusObjects() {
+    for (let i = 0; i < torusAmount; i++) {
+        const torus = new THREE.Mesh(
+            new THREE.TorusGeometry(torusRadius, torusTube, 16, 100),
+            new THREE.MeshPhongMaterial({ color: 0xff0000 })
+        );
+        torus.position.set(
+            (Math.random() - 0.5) * torusSpawnRadius,
+            (Math.random()) * torusSpawnRadius,
+            (Math.random() - 0.5) * torusSpawnRadius
+        );
+        torus.castShadow = true;
+        torus.setRotationFromMatrix(
+            new THREE.Matrix4().makeRotationFromEuler(
+                new THREE.Euler(
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI
+                )
+            )
+        );
+        scene.add(torus);
+        torus.name = "torus";
+
+        // check if torus intersects with another torus
+        let torusIntersects = false;
+        for (let j = 0; j < scene.children.length; j++) {
+            const otherTorus = scene.children[j];
+            if (otherTorus !== torus) {
+                const distance = torus.position.distanceTo(otherTorus.position);
+                if (distance < 5 * torusScale) {
+                    torusIntersects = true;
+                }
+            }
+        }
+        if (torusIntersects) {
+            i -= 1;
+            scene.remove(torus);
+        }
+    }
+}
+
+
+/**
+ * Handles the collision detection between the plane and the torus objects
+ * If plane collides with a torus, the torus is removed from the scene and the score is updated
+ */
 function handleScore() {
 
     if (hasScored) return;
@@ -210,7 +222,7 @@ function handleScore() {
                         scene.remove(element);
                         scene.background = new THREE.Color(0x330000);
                         hasScored = false;
-                    }, 1000);
+                    }, 500);
                     return;
                 }
             }
@@ -218,6 +230,10 @@ function handleScore() {
     }
 }
 
+
+/**
+ * Animates the scene
+ */
 async function animate() {
     requestAnimationFrame(animate);
     handleFlying();
@@ -227,9 +243,11 @@ async function animate() {
     await new Promise(resolve => setTimeout(resolve, animationTimeoutMs));
 }
 
-function handleTime() {
 
-    // calculate the time left
+/**
+ * Decreases the time and checks if the time is up
+ */
+function handleTime() {
     const currentTime = new Date().getTime();
     timeLeft = 60 - Math.floor((currentTime - startTime) / 1000);
     document.getElementById("time").innerHTML = "Time left: " + timeLeft;
@@ -240,10 +258,15 @@ function handleTime() {
     }
 }
 
+
+/**
+ * Quits the game and shows a game over message TODO: add a ui for this
+ */
 function gameOver() {
-    alert("Game over! Your score is: " + torusScore);
+    console.log("Game over! Your score is: " + torusScore);
     window.location.reload();
 }
+
 
 /**
  * Init the ocean and sky
@@ -291,4 +314,3 @@ async function initOceanAndSky() {
     scene.environment = renderTarget.texture;
 
 }
-
