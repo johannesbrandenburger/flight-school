@@ -62,6 +62,9 @@ function checkIfPointIsInsideMesh(point, mesh) {
 function getAllMeshsFromNestedGroup(group) {
   let meshs = [];
   try {
+    if (group.type === "Mesh") {
+      meshs.push(group);
+    }
     if (group.children.length === 0 || group.children === undefined)
       return [ group ];
     group.children.forEach(element => {

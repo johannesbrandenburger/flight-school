@@ -3,6 +3,7 @@
 let distancePerFly = 0.015;
 const planeStartPoint = new THREE.Vector3(4, 0.85, 3);
 const distanceOfCameraFromPlane = 1.5;
+let checkForPlaneCollision = true;
 
 async function initFlying() {
 
@@ -100,6 +101,8 @@ function movePlane() {
 
     // tend the plane a little bit to the right/left depending on the headingTo.right value
     myObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.4));
+
+    if (!checkForPlaneCollision) return;
 
     // check for collision
     let planeCollided = false;
