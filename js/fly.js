@@ -30,6 +30,17 @@ async function initFlying() {
         if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
     });
 
+    // add touch support for mobile devices
+    window.addEventListener("touchmove", event => {
+        headingTo.right = - (event.touches[0].clientX - window.innerWidth / 2) / 2;
+        headingTo.up = - (window.innerHeight / 2 - event.touches[0].clientY) / 2;
+        document.body.style.cursor = "crosshair";
+        if (headingTo.right > 100) { headingTo.right = 100; document.body.style.cursor = "e-resize"; }
+        if (headingTo.right < -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
+        if (headingTo.up > 100) { headingTo.up = 100; document.body.style.cursor = "n-resize"; }
+        if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
+    });
+
     await createModelPlane();
 
     camera.lookAt(myObjects.modelPlane.position);
