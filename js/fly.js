@@ -5,6 +5,9 @@ const planeStartPoint = new THREE.Vector3(4, 0.85, 3);
 const distanceOfCameraFromPlane = 1.5;
 let checkForPlaneCollision = true;
 
+/**
+ * Initializes the flying controls
+ */
 async function initFlying() {
 
     // TEMP cam position
@@ -44,42 +47,13 @@ async function initFlying() {
     await createModelPlane();
 
     camera.lookAt(myObjects.modelPlane.position);
-
-
 }
 
 
+/**
+ * Moves the Plane and the Camera
+ */
 function handleFlying() {
-
-    // rotate the plane along the plane position to planeLookAt axis headingTo.right -> 90°
-    // let planeRotation1 = new THREE.Vector3();
-    // planeRotation1.subVectors(planeLookAt, myObjects.modelPlane.position);
-    // planeRotation1.normalize();
-
-    // // show vector in scene
-    // let planeRotation1Arrow = new THREE.ArrowHelper(planeRotation1, myObjects.modelPlane.position, 1, 0xff0000);
-    // scene.add(planeRotation1Arrow);
-
-    // // rotate the plane
-    // myObjects.modelPlane.setRotationFromAxisAngle(planeRotation1, degToRad(headingTo.right * 0.3));
-
-    // // plane is now backwards -> rotate it 180°
-    // myObjects.modelPlane.rotateY(degToRad(180));
-
-    // // rotate the plane along the plane position to planeLookAt axis headingTo.up -> 90°
-    // let planeRotation2 = new THREE.Vector3();
-    // planeRotation2.subVectors(planeLookAt, myObjects.modelPlane.position);
-    // planeRotation2.normalize();
-
-    // get the planes lookAt vector
-    // planeLookAt = getLookAtByRotation(myObjects.modelPlane.position, myObjects.modelPlane.rotation);
-    movePlane();
-    // myObjects.modelPlane.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
-    // console.log(newPlanePosition);
-
-}
-
-function movePlane() {
 
     if (!myObjects.modelPlane) return;
     
@@ -146,6 +120,10 @@ function movePlane() {
 
 }
 
+
+/**
+ * Creates the plane model and adds it to the scene
+ */
 async function createModelPlane() {
 
     // load the plane model
@@ -159,15 +137,25 @@ async function createModelPlane() {
     myObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
     myObjects.modelPlane.scale.set(0.02, 0.02, 0.02);
     myObjects.modelPlane.lookAt(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z - 1);
-
 }
 
+
+/**
+ * Adds a arrow helper to the scene
+ * @param { THREE.Vector3 } position
+ * @param { THREE.Vector3 } vector
+ * @param { string } color 
+ */
 function showVector(position, vector, color) {
     let arrow = new THREE.ArrowHelper(vector, position, 1, color);
     scene.add(arrow);
     arrowHelpers.push(arrow);
 }
 
+
+/**
+ * Removes the last arrow helper from the scene
+ */
 function deleteLastArrowHelper() {
     if (arrowHelpers.length > 0) {
         scene.remove(arrowHelpers[arrowHelpers.length - 1]);
@@ -175,12 +163,26 @@ function deleteLastArrowHelper() {
     }
 }
 
+
+/**
+ * Turns a vector around the vertical axis (for plane movement)
+ * @param { THREE.Vector3 } vector
+ * @param { number } angle 
+ * @returns 
+ */
 function turnVectorAroundVerticalAxis(vector, angle) {
     let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
     newVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle);
     return newVector;
 }
 
+
+/**
+ * Turns a vector around the horizontal axis (for plane movement)
+ * @param {*} vector 
+ * @param {*} angle 
+ * @returns 
+ */
 function turnVectorAroundHorizontalAxis(vector, angle) {
 
     let newVector = new THREE.Vector3(vector.x, vector.y + 0.5 * angle, vector.z);
@@ -208,7 +210,9 @@ function turnVectorAroundHorizontalAxis(vector, angle) {
     // return newVector;
 }
 
+
 /**
+ * Checks if a mesh is a child of another mesh (recursive)
  * @param {THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>} possibleChild
  * @param {THREE.Mesh} parent
  */
