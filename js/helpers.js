@@ -3,9 +3,10 @@
 /**
  * 
  * @param { string } path 
+ * @param { string } alternativePath
  * @returns { Promise<THREE.Mesh> } mesh
  */
-async function getMashFromBlenderModel(path) {
+async function getMashFromBlenderModel(path, alternativePath = "") {
   // @ts-ignore
   const loader = new THREE.GLTFLoader();
   console.log("loading blender model");
@@ -13,6 +14,18 @@ async function getMashFromBlenderModel(path) {
 
   let mesh;
 
+  // check if file exists
+  const response = await fetch(path);
+  if (response.status === 404) {
+    console.warn("file of model not found, using alternative path");
+    if (alternativePath === "") {
+      console.error("no alternative path provided");
+      return;
+    }
+    path = alternativePath;
+  }
+
+  // use three.js to load the model
   await loader.load(
     path,
     function (gltf) {
@@ -25,7 +38,7 @@ async function getMashFromBlenderModel(path) {
     function (error) {
       console.error(error);
     }
-  );
+  )
 
   // wait till the model is loaded
   await new Promise(resolve => {
