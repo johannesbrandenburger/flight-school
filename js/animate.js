@@ -1,5 +1,8 @@
 // @ts-check
 
+/**
+ * Animates the scene
+ */
 async function animate() {
   requestAnimationFrame(animate);
   handleWalking();

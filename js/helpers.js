@@ -37,6 +37,7 @@ async function getMashFromBlenderModel(path) {
   return mesh;
 }
 
+
 /**
  * @param { THREE.Vector3 } point
  * @param { THREE.Mesh } mesh
@@ -122,6 +123,7 @@ function checkCollision(mesh1, mesh2) {
   const box2 = new THREE.Box3().setFromObject(mesh2);
   return box1.intersectsBox(box2);
 }
+
 
 /**
  * Creates a crosshair in the middle of the screen in the form of two divs

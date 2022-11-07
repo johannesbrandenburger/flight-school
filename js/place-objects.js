@@ -1,5 +1,8 @@
 // @ts-check
 
+/**
+ * places all objects in the scene and adds them to the myObjects object
+ */
 async function placeObjects() {
 
     // add a test cube

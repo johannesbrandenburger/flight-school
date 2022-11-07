@@ -8,6 +8,10 @@ const mouseRotateSpeed = 0.002;
 const playerWidth = 1;
 const mouseZoomSpeed = 0.8;
 
+
+/**
+ * Initialize the walking controls
+ */
 function initWalk() {
 
   // set cam on start position and look a bit right
@@ -54,7 +58,9 @@ function initWalk() {
   createPlayer();
 }
 
+
 /**
+ * Get the new position of the player/camera
  * @param {THREE.Vector3} position
  * @param {THREE.Vector3} lookAt
  * @param {number} distance
@@ -98,6 +104,10 @@ function getNewPosition(position, lookAt, distance, isWalking) {
   return newPosition;
 }
 
+
+/**
+ * Creates a player mesh and adds it to the scene
+ */
 function createPlayer() {
   const playerGeometry = new THREE.BoxGeometry(playerWidth, headHeight, playerWidth);
   const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
@@ -107,6 +117,11 @@ function createPlayer() {
   myObjects.player = player;
 }
 
+
+/**
+ * Handle the walking of the player
+ * Is called every frame in animate.js
+ */
 function handleWalking() {
 
   // store previous position of player to check for collision
@@ -171,6 +186,10 @@ function handleWalking() {
   );
 }
 
+
+/**
+ * Lets user rotate the camera with the mouse
+ */
 function initMouseClickMove() {
 
   window.addEventListener("mousedown", event => {
