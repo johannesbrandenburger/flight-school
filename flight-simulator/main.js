@@ -132,6 +132,13 @@ async function init() {
         distancePerFly = distancePerFly / 2;
     });
 
+    // TEMP add event listerner to redirect to homepage at pressing f
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "f") {
+            window.location.href = "/";
+        }
+    });
+
 }
 
 
@@ -264,7 +271,7 @@ function handleTime() {
  */
 function gameOver() {
     console.log("Game over! Your score is: " + torusScore);
-    window.location.reload();
+    window.location.href = "/";
 }
 
 

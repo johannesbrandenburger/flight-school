@@ -29,6 +29,9 @@ function initWalk() {
       case "d" || "D":
         isWalking.right = true;
         break;
+      // TEMP: remove later
+      case "f" || "F":
+        window.location.href = "/flight-simulator";
     }
   });
 
@@ -99,7 +102,7 @@ function createPlayer() {
   const playerGeometry = new THREE.BoxGeometry(playerWidth, headHeight, playerWidth);
   const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
   const player = new THREE.Mesh(playerGeometry, playerMaterial);
-  player.position.set(startPoint.x, headHeight / 2 + 0, startPoint.z);
+  player.position.set(startPoint.x, headHeight / 2 + 0.2, startPoint.z);
   scene.add(player);
   myObjects.player = player;
 }
@@ -130,7 +133,21 @@ function handleWalking() {
   let allMeshs = getAllMeshsFromNestedGroup(scene);
   for (let i = 0; i < allMeshs.length; i++) {
     if (allMeshs[i] !== myObjects.player) {
-      if (checkCollision(myObjects.player, allMeshs[i])) {
+
+      // TODO: exceptions can be removed later
+      if (checkCollision(myObjects.player, allMeshs[i])
+        && !isCollision && allMeshs[i].type !== "AxesHelper" 
+        && allMeshs[i].name !== "Floor" 
+        && allMeshs[i].name !== "Ground_Material007_0" 
+        && allMeshs[i].name !== "Trunk_Material001_0"
+        && allMeshs[i].name !== "Trunk_Trunk_0"
+        && allMeshs[i].name !== "Grass_Material_0"
+        && allMeshs[i].name !== "Mud_Material004_0"
+        && allMeshs[i].name !== "Watter_Material005_0"
+        && allMeshs[i].name !== ""
+      ) {
+        console.log("collision with");
+        console.log(allMeshs[i]);
         isCollision = true;
         break;
       }
@@ -138,13 +155,13 @@ function handleWalking() {
   }
 
   // if the player is inside a mesh, set the position back to the previous position
-  // if (isCollision === true) {
-  //   myObjects.player.position.set(
-  //     previousPosition.x,
-  //     previousPosition.y,
-  //     previousPosition.z
-  //   );
-  // }
+  if (isCollision === true) {
+    myObjects.player.position.set(
+      previousPosition.x,
+      previousPosition.y,
+      previousPosition.z
+    );
+  }
 
   // update the camera position
   camera.position.set(
