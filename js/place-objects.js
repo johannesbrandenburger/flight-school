@@ -35,6 +35,19 @@ async function placeObjects() {
         }
     });
 
+    // windows
+    // add a cube to the scene
+    const windowGeometry = new THREE.BoxGeometry(0.02, 1, 1);
+    const material = new THREE.MeshPhysicalMaterial({
+        metalness: 0,  
+        roughness: 0,
+        transmission: 1,
+        thickness: 0.5
+      });
+    const mesh = new THREE.Mesh(windowGeometry, material)
+    mesh.position.set(-0.075, 4, 0);
+    scene.add(mesh);
+
     // blackboard
     let blackboard = await getMashFromBlenderModel("../blender/blackboard.glb");
     scene.add(blackboard); myObjects.blackboard = blackboard;
@@ -42,7 +55,7 @@ async function placeObjects() {
     getAllMeshsFromNestedGroup(myObjects.blackboard).forEach(mesh => {
         mesh.receiveShadow = true;
     });
-    
+
     // closet 1
     let closetOne = await getMashFromBlenderModel("../blender/Closet.glb");
     scene.add(closetOne); myObjects.closetOne = closetOne;
@@ -127,26 +140,26 @@ async function placeObjects() {
     tableFour.position.set(2.926, 0, 4.1);
     scene.add(tableFour);
     myObjects.tables.push(tableFour);
-    
+
     // table 5
     let tableFive = await getMashFromBlenderModel("../blender/table.glb");
     tableFive.position.set(2.926, 0, 6.5);
     scene.add(tableFive);
     myObjects.tables.push(tableFive);
-    
+
     // table 6
     let tableSix = await getMashFromBlenderModel("../blender/table.glb");
     tableSix.position.set(2.926, 0, 8.6);
     scene.add(tableSix);
     myObjects.tables.push(tableSix);
-    
+
     // table 7
     let tableSeven = await getMashFromBlenderModel("../blender/table.glb");
     tableSeven.rotateY(degToRad(90));
     tableSeven.position.set(7.726, 0, 5.9);
     scene.add(tableSeven);
     myObjects.tables.push(tableSeven);
-    
+
     // table 8
     let tableEight = await getMashFromBlenderModel("../blender/table.glb");
     tableEight.rotateY(degToRad(90));
@@ -166,19 +179,19 @@ async function placeObjects() {
     tableTen.position.set(5.926, 0, 4.1);
     scene.add(tableTen);
     myObjects.tables.push(tableTen);
-    
+
     // table 11
     let tableEleven = await getMashFromBlenderModel("../blender/table.glb");
     tableEleven.position.set(5.926, 0, 6.5);
     scene.add(tableEleven);
     myObjects.tables.push(tableEleven);
-    
+
     // table 12
     let tableTwelve = await getMashFromBlenderModel("../blender/table.glb");
     tableTwelve.position.set(5.926, 0, 8.6);
     scene.add(tableTwelve);
     myObjects.tables.push(tableTwelve);
-    
+
     // add shadow to tables
     myObjects.tables.forEach(table => {
         getAllMeshsFromNestedGroup(table).forEach(mesh => {
@@ -211,12 +224,12 @@ async function placeObjects() {
     //         textureHeight: window.innerHeight * window.devicePixelRatio
     //     }
     // )
-    
+
     // scene.add(mirrorBack1); myObjects.mirrorBack1 = mirrorBack1;
     // myObjects.mirrorBack1.position.set(0, 1.5, 4);
     // myObjects.mirrorBack1.rotateY(degToRad(90));
 
-    
+
     // // set opacity of mirror
     // myObjects.mirrorBack1.material.opacity = 0.5;
     // myObjects.mirrorBack1.material.transparent = true;
