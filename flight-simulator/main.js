@@ -31,6 +31,7 @@ let hasScored = false;
 let startTime = null;
 let timeLeft = 60;
 let sun, water;
+let planeWingSize = 0.1;
 
 
 init().then(() => {
@@ -152,15 +153,11 @@ function placeTorusObjects() {
             (Math.random() - 0.5) * torusSpawnRadius
         );
         torus.castShadow = true;
-        torus.setRotationFromMatrix(
-            new THREE.Matrix4().makeRotationFromEuler(
-                new THREE.Euler(
-                    Math.random() * Math.PI,
-                    Math.random() * Math.PI,
-                    Math.random() * Math.PI
-                )
-            )
-        );
+
+        // rotate the torus (either 0 or 90 degrees around the x or z or y axis)
+        torus.rotation.x = Math.random() > 0.5 ? Math.PI / 2 : 0;
+        torus.rotation.z = Math.random() > 0.5 ? Math.PI / 2 : 0;
+        torus.rotation.y = Math.random() > 0.5 ? Math.PI / 2 : 0;
         scene.add(torus);
         torus.name = "torus";
 
@@ -189,45 +186,59 @@ function placeTorusObjects() {
  */
 function handleScore() {
 
-    if (hasScored) return;
-
     if (!myObjects.modelPlane) return;
 
-    if (myObjects.modelPlane.position.y < 0) {
+
+    const planePosition = myObjects.modelPlane.position;
+
+    if (planePosition.y < 0) {
         gameOver();
         return;
-    }
+    } 
+
+    let nearestTorus = null;
 
     // check if plane intersects with a torus
     for (let i = 0; i < scene.children.length; i++) {
-        const element = scene.children[i];
-        if (element.name === "torus") {
+        if (scene.children[i].name !== "torus") continue;
 
-            // check if the planes position is inside the torus
-            const boundingBox = new THREE.Box3().setFromObject(element);
-            const planePosition = myObjects.modelPlane.position;
-            if (boundingBox.containsPoint(planePosition)) {
-
-                // check the distance to the center of the torus
-                const distanceToCenter = planePosition.distanceTo(element.position);
-                if (distanceToCenter < torusRadius - 0.5 * torusTube && !hasScored) {
-
-                    element.material.color.set(0x00ff00);
-                    element.material.needsUpdate = true;
-                    scene.background = new THREE.Color(0x003300);
-                    torusScore += 1;
-                    hasScored = true;
-                    document.getElementById("score").innerHTML = "Score: " + torusScore;
-
-                    // remove the torus after 1 second
-                    setTimeout(() => {
-                        scene.remove(element);
-                        scene.background = new THREE.Color(0x330000);
-                        hasScored = false;
-                    }, 500);
-                    return;
-                }
+        // get nearest torus
+        const torus = scene.children[i];
+        if (!nearestTorus) {
+            nearestTorus = torus;
+        } else {
+            const distanceToTorus = torus.position.distanceTo(planePosition);
+            const distanceToNearestTorus = nearestTorus.position.distanceTo(planePosition);
+            if (distanceToTorus < distanceToNearestTorus) {
+                nearestTorus = torus;
             }
+        }
+    }
+
+    // check if plane intersects with the nearest torus
+    const distanceToCenter = nearestTorus.position.distanceTo(planePosition);
+
+    // check if the planes position is inside the torus
+    const boundingBox = new THREE.Box3().setFromObject(nearestTorus);
+    if (boundingBox.containsPoint(planePosition)) {
+
+        // check the distance to the center of the torus
+        if (distanceToCenter < torusRadius - 0.5 * torusTube && !hasScored) {
+            nearestTorus.material.color.set(0x00ff00);
+            nearestTorus.material.needsUpdate = true;
+            torusScore += 1;
+            hasScored = true;
+            document.getElementById("score").innerHTML = "Score: " + torusScore;
+
+            // remove the torus after 1 second
+            setTimeout(() => {
+                scene.remove(nearestTorus);
+                hasScored = false;
+            }, 500);
+        } 
+        
+        if (distanceToCenter > torusRadius - planeWingSize - 0.5 * torusTube && distanceToCenter < torusRadius + torusTube + planeWingSize) {
+            gameOver();
         }
     }
 }
