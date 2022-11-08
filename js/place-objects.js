@@ -37,16 +37,22 @@ async function placeObjects() {
 
     // windows
     // add a cube to the scene
-    const windowGeometry = new THREE.BoxGeometry(0.02, 1, 1);
-    const material = new THREE.MeshPhysicalMaterial({
+    const windowMaterial = new THREE.MeshPhysicalMaterial({
         metalness: 0,  
         roughness: 0,
         transmission: 1,
-        thickness: 0.5
+        thickness: 0.5,
+        clearcoat: 1,
+        clearcoatRoughness: 0,
       });
-    const mesh = new THREE.Mesh(windowGeometry, material)
-    mesh.position.set(-0.075, 4, 0);
-    scene.add(mesh);
+    const bigWindowGeometry = new THREE.BoxGeometry(0.02, 1, 2.45);
+    const bigWindow = new THREE.Mesh(bigWindowGeometry, windowMaterial)
+    bigWindow.position.set(-0.075, 1.5, 3.975);
+    scene.add(bigWindow);
+    const smallWindowGeometry = new THREE.BoxGeometry(0.02, 1, 1.5);
+    const smallWindow = new THREE.Mesh(smallWindowGeometry, windowMaterial)
+    smallWindow.position.set(-0.075, 1.5, 8.750);
+    scene.add(smallWindow);
 
     // blackboard
     let blackboard = await getMashFromBlenderModel("../blender/blackboard.glb");
