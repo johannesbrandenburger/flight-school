@@ -27,6 +27,8 @@ const torusTube = 0.3 * torusScale;
 const torusSpawnRadius = 100 * torusScale;
 const torusAmount = 300;
 const extraTorusAmount = 30;
+const obstacleAmount = 300;
+const obstacleRadius = 0.2;
 let torusScore = 0;
 let hasScored = false;
 let startTime = null;
@@ -102,6 +104,7 @@ async function init() {
     camera.position.set(4, 8, 17);
 
     placeTorusObjects();
+    placeObstaclesObjects();
 
     // add a point light to the top of the scene
     const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
@@ -274,6 +277,7 @@ async function animate() {
     if (isFlying) {
         handleFlying();
         handleScore();
+        handleObstacleCollision();
         handleTime();
     }
     water.material.uniforms[ 'time' ].value += 0.005
@@ -386,7 +390,7 @@ async function initOceanAndSky() {
     sky.scale.setScalar(10000);
     scene.add(sky);
     const parameters = {
-        elevation: 2,
+        elevation: 0.4,
         azimuth: 180
     };
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
@@ -400,4 +404,69 @@ async function initOceanAndSky() {
     renderTarget = pmremGenerator.fromScene(sky);
     scene.environment = renderTarget.texture;
 
+}
+
+/**
+ * Places other objects which the plane can collide with
+ * Object types:
+ *  - DodecahedronGeometry
+ *  - IcosahedronGeometry
+ *  - OctahedronGeometry
+ *  - TetrahedronGeometry
+ */
+function placeObstaclesObjects() {
+    for (let i = 0; i < obstacleAmount; i++) {
+        
+        // switch case to choose a random object type
+        const randomObjectType = Math.floor(Math.random() * 4);
+        let geometry;
+        switch (randomObjectType) {
+            case 0:
+                geometry = new THREE.DodecahedronGeometry(obstacleRadius, 0);
+                break;
+            case 1:
+                geometry = new THREE.IcosahedronGeometry(obstacleRadius, 0);
+                break;
+            case 2:
+                geometry = new THREE.OctahedronGeometry(obstacleRadius, 0);
+                break;
+            case 3:
+                geometry = new THREE.TetrahedronGeometry(obstacleRadius, 0);
+                break;
+        }
+
+        // create the object (color: a random grayscale color)
+        const color = getRandomGrayscaleColor();
+        const material = new THREE.MeshPhongMaterial({ color: color });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(
+            (Math.random() - 0.5) * torusSpawnRadius,
+            (Math.random()) * torusSpawnRadius,
+            (Math.random() - 0.5) * torusSpawnRadius
+        );
+        mesh.rotation.set(
+            Math.random() * Math.PI,
+            Math.random() * Math.PI,
+            Math.random() * Math.PI
+        );
+        mesh.name = "obstacle";
+        scene.add(mesh);
+    }
+        
+}
+
+function handleObstacleCollision() {
+    // check if the plane is colliding with an obstacle
+    for (let i = 0; i < scene.children.length; i++) {
+        if (scene.children[i].name === "obstacle") {
+            if (scene.children[i].position.distanceTo(myObjects.modelPlane.position) < obstacleRadius * 2) {
+                gameOver();
+            }
+        }
+    }
+}
+
+function getRandomGrayscaleColor() {
+    const color = Math.floor(Math.random() * 255);
+    return "rgb(" + color + "," + color + "," + color + ")";
 }
