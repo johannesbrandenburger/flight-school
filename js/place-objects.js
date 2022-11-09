@@ -41,7 +41,7 @@ async function placeObjects() {
         metalness: 0,  
         roughness: 0,
         transmission: 1,
-        thickness: 0.5,
+        // thickness: 0.5,
         clearcoat: 1,
         clearcoatRoughness: 0,
       });
@@ -69,9 +69,8 @@ async function placeObjects() {
     myObjects.closetOne.position.set(8.926, 0, 0);
 
     // closet 2
-    let closetTwo = await getMashFromBlenderModel("../blender/Closet.glb");
+    let closetTwo = closetOne.clone();
     scene.add(closetTwo); myObjects.closetTwo = closetTwo;
-    myObjects.closetTwo.rotateY(degToRad(180));
     myObjects.closetTwo.position.set(9.926, 0, 0);
     myObjects.closetTwo.castShadow = true;
 
@@ -83,27 +82,30 @@ async function placeObjects() {
     myObjects.sideboardOne.receiveShadow = true;
 
     // sideboard 2
-    let sideboardTwo = await getMashFromBlenderModel("../blender/sideboard.glb");
+    let sideboardTwo = sideboardOne.clone();
     scene.add(sideboardTwo); myObjects.sideboardTwo = sideboardTwo;
-    myObjects.sideboardTwo.rotateY(degToRad(270));
     myObjects.sideboardTwo.position.set(1.5, 0, 0);
     myObjects.sideboardTwo.receiveShadow = true;
 
     // sideboard 3
-    let sideboardThree = await getMashFromBlenderModel("../blender/sideboard.glb");
+    let sideboardThree = sideboardOne.clone();
     scene.add(sideboardThree); myObjects.sideboardThree = sideboardThree;
-    myObjects.sideboardThree.rotateY(degToRad(0));
+    myObjects.sideboardThree.rotateY(degToRad(-270));
     myObjects.sideboardThree.position.set(0, 0, 7.45);
     myObjects.sideboardThree.receiveShadow = true;
 
+    // load chair and table model one time and clone it for each char
+    let chairModel = await getMashFromBlenderModel("../blender/chair.glb");
+    let tableModel = await getMashFromBlenderModel("../blender/table.glb");
+
     // prof chair
-    let profChair = await getMashFromBlenderModel("../blender/chair.glb");
+    let profChair = chairModel.clone();
     scene.add(profChair); myObjects.profChair = profChair;
     myObjects.profChair.rotateY(degToRad(180));
     myObjects.profChair.position.set(3.6, 0, 2.2);
 
     // prof table
-    let profTable = await getMashFromBlenderModel("../blender/table.glb");
+    let profTable = tableModel.clone();
     scene.add(profTable); myObjects.profTable = profTable;
     myObjects.profTable.position.set(3, 0, 2.5);
 
@@ -130,79 +132,79 @@ async function placeObjects() {
     myObjects.tables = [];
 
     // table 1
-    let tableOne = await getMashFromBlenderModel("../blender/table.glb");
+    let tableOne = tableModel.clone();
     tableOne.rotateY(degToRad(90));
     tableOne.position.set(2.026, 0, 5.9);
     scene.add(tableOne);
     myObjects.tables.push(tableOne);
 
     // table 2
-    let tableTwo = await getMashFromBlenderModel("../blender/table.glb");
+    let tableTwo = tableModel.clone();
     tableTwo.rotateY(degToRad(90));
     tableTwo.position.set(2.026, 0, 7.7);
     scene.add(tableTwo);
     myObjects.tables.push(tableTwo);
 
     // table 3
-    let tableThree = await getMashFromBlenderModel("../blender/table.glb");
+    let tableThree = tableModel.clone();
     tableThree.rotateY(degToRad(90));
     tableThree.position.set(2.026, 0, 9.5);
     scene.add(tableThree);
     myObjects.tables.push(tableThree);
 
     // table 4
-    let tableFour = await getMashFromBlenderModel("../blender/table.glb");
+    let tableFour = tableModel.clone();
     tableFour.position.set(2.926, 0, 4.1);
     scene.add(tableFour);
     myObjects.tables.push(tableFour);
 
     // table 5
-    let tableFive = await getMashFromBlenderModel("../blender/table.glb");
+    let tableFive = tableModel.clone();
     tableFive.position.set(2.926, 0, 6.5);
     scene.add(tableFive);
     myObjects.tables.push(tableFive);
 
     // table 6
-    let tableSix = await getMashFromBlenderModel("../blender/table.glb");
+    let tableSix = tableModel.clone();
     tableSix.position.set(2.926, 0, 8.6);
     scene.add(tableSix);
     myObjects.tables.push(tableSix);
 
     // table 7
-    let tableSeven = await getMashFromBlenderModel("../blender/table.glb");
+    let tableSeven = tableModel.clone();
     tableSeven.rotateY(degToRad(90));
     tableSeven.position.set(7.726, 0, 5.9);
     scene.add(tableSeven);
     myObjects.tables.push(tableSeven);
 
     // table 8
-    let tableEight = await getMashFromBlenderModel("../blender/table.glb");
+    let tableEight = tableModel.clone();
     tableEight.rotateY(degToRad(90));
     tableEight.position.set(7.726, 0, 7.7);
     scene.add(tableEight);
     myObjects.tables.push(tableEight);
 
     // table 9
-    let tableNine = await getMashFromBlenderModel("../blender/table.glb");
+    let tableNine = tableModel.clone();
     tableNine.rotateY(degToRad(90));
     tableNine.position.set(7.726, 0, 9.5);
     scene.add(tableNine);
     myObjects.tables.push(tableNine);
 
     // table 10
-    let tableTen = await getMashFromBlenderModel("../blender/table.glb");
+    let tableTen = tableModel.clone();
     tableTen.position.set(5.926, 0, 4.1);
     scene.add(tableTen);
     myObjects.tables.push(tableTen);
 
     // table 11
-    let tableEleven = await getMashFromBlenderModel("../blender/table.glb");
+    let tableEleven = tableModel.clone();
     tableEleven.position.set(5.926, 0, 6.5);
     scene.add(tableEleven);
     myObjects.tables.push(tableEleven);
 
     // table 12
-    let tableTwelve = await getMashFromBlenderModel("../blender/table.glb");
+    let tableTwelve = tableModel.clone();
     tableTwelve.position.set(5.926, 0, 8.6);
     scene.add(tableTwelve);
     myObjects.tables.push(tableTwelve);
@@ -222,216 +224,172 @@ async function placeObjects() {
     myObjects.chairs = [];
 
     // chair 1
-    let chairOne = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairOne = chairModel.clone();
     chairOne.rotateY(degToRad(270));
     chairOne.position.set(1.8, 0, 4.65);
     scene.add(chairOne);
     myObjects.chairs.push(chairOne);
     
     // chair 2
-    let chairTwo = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairTwo = chairModel.clone();
     chairTwo.rotateY(degToRad(270));
     chairTwo.position.set(1.8, 0, 5.35);
     scene.add(chairTwo);
     myObjects.chairs.push(chairTwo);
 
     // chair 3
-    let chairThree = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairThree = chairModel.clone();
     chairThree.rotateY(degToRad(270));
     chairThree.position.set(1.8, 0, 6.45);
     scene.add(chairThree);
     myObjects.chairs.push(chairThree);
 
     // chair 4
-    let chairFour = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairFour = chairModel.clone();
     chairFour.rotateY(degToRad(270));
     chairFour.position.set(1.8, 0, 7.15);
     scene.add(chairFour);
     myObjects.chairs.push(chairFour);
 
     // chair 5
-    let chairFive = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairFive = chairModel.clone();
     chairFive.rotateY(degToRad(270));
     chairFive.position.set(1.8, 0, 8.25);
     scene.add(chairFive);
     myObjects.chairs.push(chairFive);
 
     // chair 6
-    let chairSix = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairSix = chairModel.clone();
     chairSix.rotateY(degToRad(270));
     chairSix.position.set(1.8, 0, 8.95);
     scene.add(chairSix);
     myObjects.chairs.push(chairSix);
 
     // chair 7
-    let chairSeven = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairSeven = chairModel.clone();
     chairSeven.rotateY(degToRad(0));
     chairSeven.position.set(3.5, 0, 5.3);
     scene.add(chairSeven);
     myObjects.chairs.push(chairSeven);
 
     // chair 8
-    let chairEight = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairEight = chairModel.clone();
     chairEight.rotateY(degToRad(0));
     chairEight.position.set(4.2, 0, 5.3);
     scene.add(chairEight);
     myObjects.chairs.push(chairEight);
 
     // chair 9
-    let chairNine = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairNine = chairModel.clone();
     chairNine.rotateY(degToRad(0));
     chairNine.position.set(3.5, 0, 7.65);
     scene.add(chairNine);
     myObjects.chairs.push(chairNine);
 
     // chair 10
-    let chairTen = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairTen = chairModel.clone();
     chairTen.rotateY(degToRad(0));
     chairTen.position.set(4.2, 0, 7.65);
     scene.add(chairTen);
     myObjects.chairs.push(chairTen);
 
     // chair 11
-    let chairEleven = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairEleven = chairModel.clone();
     chairEleven.rotateY(degToRad(0));
     chairEleven.position.set(3.5, 0, 9.75);
     scene.add(chairEleven);
     myObjects.chairs.push(chairEleven);
 
     // chair 12
-    let chairTwelve = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairTwelve = chairModel.clone();
     chairTwelve.rotateY(degToRad(0));
     chairTwelve.position.set(4.2, 0, 9.75);
     scene.add(chairTwelve);
     myObjects.chairs.push(chairTwelve);
 
     // chair 13
-    let chairThirteen = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairThirteen = chairModel.clone();
     chairThirteen.rotateY(degToRad(90));
     chairThirteen.position.set(8.9, 0, 4.65);
     scene.add(chairThirteen);
     myObjects.chairs.push(chairThirteen);
 
     // chair 14
-    let chairFourteen = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairFourteen = chairModel.clone();
     chairFourteen.rotateY(degToRad(90));
     chairFourteen.position.set(8.9, 0, 5.35);
     scene.add(chairFourteen);
     myObjects.chairs.push(chairFourteen);
 
     // chair 15
-    let chairFifteen = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairFifteen = chairModel.clone();
     chairFifteen.rotateY(degToRad(90));
     chairFifteen.position.set(8.9, 0, 6.45);
     scene.add(chairFifteen);
     myObjects.chairs.push(chairFifteen);
 
     // chair 16
-    let chairSixteen = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairSixteen = chairModel.clone();
     chairSixteen.rotateY(degToRad(90));
     chairSixteen.position.set(8.9, 0, 7.15);
     scene.add(chairSixteen);
     myObjects.chairs.push(chairSixteen);
 
     // chair 17
-    let chairSeventeen = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairSeventeen = chairModel.clone();
     chairSeventeen.rotateY(degToRad(90));
     chairSeventeen.position.set(8.9, 0, 8.25);
     scene.add(chairSeventeen);
     myObjects.chairs.push(chairSeventeen);
 
     // chair 18
-    let chairEighteen = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairEighteen = chairModel.clone();
     chairEighteen.rotateY(degToRad(90));
     chairEighteen.position.set(8.9, 0, 8.95);
     scene.add(chairEighteen);
     myObjects.chairs.push(chairEighteen);
 
     // chair 19
-    let chairNineteen = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairNineteen = chairModel.clone();
     chairNineteen.rotateY(degToRad(0));
     chairNineteen.position.set(6.5, 0, 5.3);
     scene.add(chairNineteen);
     myObjects.chairs.push(chairNineteen);
 
     // chair 20
-    let chairTwenty = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairTwenty = chairModel.clone();
     chairTwenty.rotateY(degToRad(0));
     chairTwenty.position.set(7.2, 0, 5.3);
     scene.add(chairTwenty);
     myObjects.chairs.push(chairTwenty);
 
     // chair 21
-    let chairTwentyOne = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairTwentyOne = chairModel.clone();
     chairTwentyOne.rotateY(degToRad(0));
     chairTwentyOne.position.set(6.5, 0, 7.65);
     scene.add(chairTwentyOne);
     myObjects.chairs.push(chairTwentyOne);
 
     // chair 22
-    let chairTwentyTwo = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairTwentyTwo = chairModel.clone();
     chairTwentyTwo.rotateY(degToRad(0));
     chairTwentyTwo.position.set(7.2, 0, 7.65);
     scene.add(chairTwentyTwo);
     myObjects.chairs.push(chairTwentyTwo);
 
     // chair 23
-    let chairTwentyThree = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairTwentyThree = chairModel.clone();
     chairTwentyThree.rotateY(degToRad(0));
     chairTwentyThree.position.set(6.5, 0, 9.75);
     scene.add(chairTwentyThree);
     myObjects.chairs.push(chairTwentyThree);
 
     // chair 24
-    let chairTwentyFour = await getMashFromBlenderModel("../blender/chair.glb");
+    let chairTwentyFour = chairModel.clone();
     chairTwentyFour.rotateY(degToRad(0));
     chairTwentyFour.position.set(7.2, 0, 9.75);
     scene.add(chairTwentyFour);
     myObjects.chairs.push(chairTwentyFour);
-    
-
-
-
-
-
-    // add window glass
-    // let squareGeometry = new THREE.PlaneGeometry(1, 0.5);
-    // const glassMaterial = new THREE.MeshPhysicalMaterial( {
-    //     color: 0xffffff, metalness: 0.25, roughness: 0, transmission: 1.0
-    // } );
-    // let square = new THREE.Mesh(squareGeometry, glassMaterial);
-    // square.receiveShadow = true;
-    // scene.add(square); myObjects.square = square;
-    // myObjects.square.position.set(0, 1.5, 4);
-    // myObjects.square.rotateY(degToRad(90));
-
-
-
-    // const mirrorBack1 = new THREE.Reflector(
-    //     new THREE.PlaneBufferGeometry(1, 0.5),
-    //     {
-    //         color: new THREE.Color(0x7f7f7f),
-    //         textureWidth: window.innerWidth * window.devicePixelRatio,
-    //         textureHeight: window.innerHeight * window.devicePixelRatio
-    //     }
-    // )
-
-    // scene.add(mirrorBack1); myObjects.mirrorBack1 = mirrorBack1;
-    // myObjects.mirrorBack1.position.set(0, 1.5, 4);
-    // myObjects.mirrorBack1.rotateY(degToRad(90));
-
-
-    // // set opacity of mirror
-    // myObjects.mirrorBack1.material.opacity = 0.5;
-    // myObjects.mirrorBack1.material.transparent = true;
-
-
-
-
-
-
-
-
 
 
     // landscape environment
