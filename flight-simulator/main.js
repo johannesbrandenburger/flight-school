@@ -134,7 +134,7 @@ async function init() {
     checkForPlaneCollision = false;
 
     // move the plane outside the torus radius
-    myObjects.modelPlane.position.set(0, 10, torusSpawnRadius * 0.5 + 5,);
+    myObjects.modelPlane.position.set(0, 5, torusSpawnRadius * 0.5 + 5,);
     
     // add event listener on mouse down to speed up the plane by 100%
     window.addEventListener("mousedown", () => {
@@ -345,13 +345,17 @@ function gameOver() {
     // show game over message and score in the middle of the screen
     const gameOverDiv = document.createElement("div");
     gameOverDiv.id = "gameOverDiv";
-    gameOverDiv.innerHTML = "Game over! Your score is: " + torusScore;
+    gameOverDiv.innerHTML = "Game over! </br> Your score is: " + torusScore;
     gameOverDiv.style.position = "absolute";
     gameOverDiv.style.top = "50%";
     gameOverDiv.style.left = "50%";
     gameOverDiv.style.transform = "translate(-50%, -50%)";
     gameOverDiv.style.fontSize = "50px";
+    gameOverDiv.style.fontFamily = "Arial";
     gameOverDiv.style.color = "white";
+    gameOverDiv.style.cursor = "pointer";
+    gameOverDiv.style.textAlign = "center";
+
     document.body.appendChild(gameOverDiv);
 
     // show restart button
@@ -363,6 +367,7 @@ function gameOver() {
     restartButton.style.left = "50%";
     restartButton.style.transform = "translate(-50%, -50%)";
     restartButton.style.fontSize = "50px";
+    restartButton.style.fontFamily = "Arial";
     restartButton.style.color = "white";
     restartButton.style.backgroundColor = "black";
     restartButton.style.border = "none";
@@ -373,6 +378,27 @@ function gameOver() {
         location.reload();
     }
     document.body.appendChild(restartButton);
+
+    // show a exit button
+    const exitButton = document.createElement("button");
+    exitButton.id = "exitButton";
+    exitButton.innerHTML = "Exit Flight Simulator";
+    exitButton.style.position = "absolute";
+    exitButton.style.top = "50%";
+    exitButton.style.left = "50%";
+    exitButton.style.transform = "translate(-50%, -50%)";
+    exitButton.style.fontSize = "50px";
+    exitButton.style.fontFamily = "Arial";
+    exitButton.style.color = "white";
+    exitButton.style.backgroundColor = "black";
+    exitButton.style.border = "none";
+    exitButton.style.padding = "20px";
+    exitButton.style.cursor = "pointer";
+    exitButton.style.marginTop = "200px";
+    exitButton.onclick = () => {
+        location.href = "/";
+    }
+    document.body.appendChild(exitButton);
 
 
 }
