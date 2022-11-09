@@ -124,14 +124,18 @@ async function init() {
     pointLight.position.set(0, torusSpawnRadius + 10, 0);
     scene.add(pointLight);
     scene.background = new THREE.Color(0x330000);
-
+    
     // init ocean and sky
     await initOceanAndSky();
-
+    
+    // add the plane
     await initFlying();
     startTime = new Date().getTime();
     checkForPlaneCollision = false;
 
+    // move the plane outside the torus radius
+    myObjects.modelPlane.position.set(0, 10, torusSpawnRadius * 0.5 + 5,);
+    
     // add event listener on mouse down to speed up the plane by 100%
     window.addEventListener("mousedown", () => {
         distancePerFly = distancePerFly * 2;
