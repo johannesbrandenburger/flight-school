@@ -41,8 +41,9 @@ async function init() {
   camera.position.set(4, 8, 17);
   document.body.appendChild(renderer.domElement);
 
-  // place all objects
+  // place all objects and enable its interactions
   await placeObjects();
+  enableInteractions();
 
   // place all lights
   placeLights();
