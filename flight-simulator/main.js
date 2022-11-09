@@ -9,9 +9,7 @@ var container,
     controls,
     effect,
     animationTimeoutMs,
-    domEvents,
     myObjects = {},
-    testBall,
     isWalking = { forward: false, backward: false, left: false, right: false },
     isMouseDown = false,
     isMovingCamera = false,
@@ -35,7 +33,7 @@ let hasScored = false;
 let startTime = null;
 let timeLeft = 60;
 let sun, water;
-let planeWingSize = 0.1;
+let planeWingSize = 0.08;
 let isFlying = true;
 
 
@@ -74,6 +72,19 @@ async function init() {
     timeDiv.style.color = "white";
     timeDiv.style.fontSize = "2em";
     document.body.appendChild(timeDiv);
+
+    // add a div for telling the user to not fly out of bounds
+    const outOfBoundsDiv = document.createElement("div");
+    outOfBoundsDiv.id = "outOfBounds";
+    outOfBoundsDiv.innerHTML = "Don't fly out of bounds!";
+    outOfBoundsDiv.style.position = "absolute";
+    outOfBoundsDiv.style.top = "10px";
+    outOfBoundsDiv.style.left = "50%";
+    outOfBoundsDiv.style.transform = "translateX(-50%)";
+    outOfBoundsDiv.style.color = "red";
+    outOfBoundsDiv.style.fontSize = "2em";
+    outOfBoundsDiv.style.display = "none";
+    document.body.appendChild(outOfBoundsDiv);
 
     // config for three.js
     scene = new THREE.Scene();
@@ -280,6 +291,7 @@ async function animate() {
         handleScore();
         handleObstacleCollision();
         handleTime();
+        handlePlaneOutOfBounds();
     }
     water.material.uniforms['time'].value += 0.005 * deltaTime;
 
@@ -467,8 +479,28 @@ function placeObstaclesObjects() {
 function handleObstacleCollision() {
     for (let i = 0; i < scene.children.length; i++) {
         if (scene.children[i].name !== "obstacle") continue;
-        if (scene.children[i].position.distanceTo(myObjects.modelPlane.position) < obstacleRadius) {
+        if (scene.children[i].position.distanceTo(myObjects.modelPlane.position) < obstacleRadius + planeWingSize) {
             gameOver();
         }
+    }
+}
+
+
+/**
+ * Turns the plane around if to far away from the center
+ * This is to prevent the plane from flying away
+ */
+function handlePlaneOutOfBounds() {
+
+    if (myObjects.modelPlane.position.distanceTo(new THREE.Vector3(0, 0, 0)) - 5 > torusSpawnRadius) {
+
+        // turn the plane around
+        myObjects.modelPlane.lookAt(new THREE.Vector3(0, 10, 0));
+
+        // show outOfBounds div for 3 seconds
+        document.getElementById("outOfBounds").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("outOfBounds").style.display = "none";
+        }, 3000);
     }
 }
