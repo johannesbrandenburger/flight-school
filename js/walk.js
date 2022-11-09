@@ -1,9 +1,9 @@
 // @ts-check
 
 // create config
-const headHeight = 1.70;
-const startPoint = new THREE.Vector3(0.97, headHeight, 3);
-const distancePerWalk = 0.1;
+const headHeight = 1.50;
+const startPoint = new THREE.Vector3(5, headHeight, 10);
+const distancePerWalk = 4;
 const mouseRotateSpeed = 0.002;
 const playerWidth = 1;
 const mouseZoomSpeed = 0.8;
@@ -137,7 +137,7 @@ function handleWalking() {
     const newPosition = getNewPosition(
       myObjects.player.position,
       getCameraLookAt(camera),
-      distancePerWalk,
+      distancePerWalk * deltaTime,
       isWalking
     );
     myObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
@@ -161,8 +161,8 @@ function handleWalking() {
         && allMeshs[i].name !== "Watter_Material005_0"
         && allMeshs[i].name !== ""
       ) {
-        console.log("collision with");
-        console.log(allMeshs[i]);
+        // console.log("collision with");
+        // console.log(allMeshs[i]);
         isCollision = true;
         break;
       }
@@ -170,13 +170,13 @@ function handleWalking() {
   }
 
   // if the player is inside a mesh, set the position back to the previous position
-  if (isCollision === true) {
-    myObjects.player.position.set(
-      previousPosition.x,
-      previousPosition.y,
-      previousPosition.z
-    );
-  }
+  // if (isCollision === true) {
+  //   myObjects.player.position.set(
+  //     previousPosition.x,
+  //     previousPosition.y,
+  //     previousPosition.z
+  //   );
+  // }
 
   // update the camera position
   camera.position.set(

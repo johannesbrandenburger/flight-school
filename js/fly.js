@@ -1,6 +1,6 @@
 // @ts-check
 
-let distancePerFly = 0.015;
+let distancePerFly = 1.5;
 const planeStartPoint = new THREE.Vector3(4, 0.85, 3);
 const distanceOfCameraFromPlane = 1.5;
 let checkForPlaneCollision = true;
@@ -10,8 +10,6 @@ let checkForPlaneCollision = true;
  */
 async function initFlying() {
 
-    // TEMP cam position
-    // camera.position.set(0.97, 1.70, 3);
     camera.lookAt(planeStartPoint);
 
     // createCrosshair();
@@ -74,7 +72,7 @@ function handleFlying() {
 
     // move the plane forward (always)
     let newPlanePosition = myObjects.modelPlane.position.clone();
-    newPlanePosition.addScaledVector(planeLookAt, distancePerFly);
+    newPlanePosition.addScaledVector(planeLookAt, distancePerFly * deltaTime);
 
     // apply the new position
     myObjects.modelPlane.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
@@ -127,7 +125,7 @@ function handleFlying() {
 async function createModelPlane() {
 
     // load the plane model
-    const modelPlane = await getMashFromBlenderModel("../blender/basic_plane.glb", "https://download1591.mediafire.com/1ukswzole2ag/2otcm1ju178d63g/basic_plane.glb");
+    const modelPlane = await getMashFromBlenderModel("../blender/low-poly_airplane.glb", "https://download1591.mediafire.com/1ukswzole2ag/2otcm1ju178d63g/basic_plane.glb");
     scene.add(modelPlane);
 
     /** @type { THREE.Mesh } */
@@ -135,7 +133,7 @@ async function createModelPlane() {
 
     // set the plane position
     myObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
-    myObjects.modelPlane.scale.set(0.02, 0.02, 0.02);
+    myObjects.modelPlane.scale.set(0.002, 0.003, 0.003);
     myObjects.modelPlane.lookAt(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z - 1);
 }
 

@@ -16,6 +16,7 @@ var container,
     isMouseDown = false,
     isMovingCamera = false,
     clock,
+    deltaTime,
     planeLookAt,
     headingTo = { right: 0, up: 0 },
     arrowHelpers = []
@@ -25,12 +26,17 @@ const torusScale = 0.2;
 const torusRadius = 2 * torusScale;
 const torusTube = 0.3 * torusScale;
 const torusSpawnRadius = 100 * torusScale;
-const torusAmount = 500;
+const torusAmount = 300;
+const extraTorusAmount = 30;
+const obstacleAmount = 300;
+const obstacleRadius = 0.2;
 let torusScore = 0;
 let hasScored = false;
 let startTime = null;
 let timeLeft = 60;
 let sun, water;
+let planeWingSize = 0.1;
+let isFlying = true;
 
 
 init().then(() => {
@@ -94,11 +100,13 @@ async function init() {
 
     // add a clock
     clock = new THREE.Clock();
+    deltaTime = 0;
 
     // add the renderer to the dom
     camera.position.set(4, 8, 17);
 
     placeTorusObjects();
+    placeObstaclesObjects();
 
     // add a point light to the top of the scene
     const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
@@ -130,6 +138,18 @@ async function init() {
         }
     });
 
+    // add event listener to pause the game
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "p") {
+            if (isFlying) {
+                isFlying = false;
+                document.getElementById("time").innerHTML = "Paused";
+            } else {
+                isFlying = true;
+            }
+        }
+    });
+
     // add the canvas and remove the loading div
     document.body.appendChild(renderer.domElement);
     document.body.removeChild(loadingDiv);
@@ -141,7 +161,7 @@ async function init() {
  * Places torus objects in the scene at random positions+
  */
 function placeTorusObjects() {
-    for (let i = 0; i < torusAmount; i++) {
+    for (let i = 0; i < torusAmount + extraTorusAmount; i++) {
         const torus = new THREE.Mesh(
             new THREE.TorusGeometry(torusRadius, torusTube, 16, 100),
             new THREE.MeshPhongMaterial({ color: 0xff0000 })
@@ -152,17 +172,19 @@ function placeTorusObjects() {
             (Math.random() - 0.5) * torusSpawnRadius
         );
         torus.castShadow = true;
-        torus.setRotationFromMatrix(
-            new THREE.Matrix4().makeRotationFromEuler(
-                new THREE.Euler(
-                    Math.random() * Math.PI,
-                    Math.random() * Math.PI,
-                    Math.random() * Math.PI
-                )
-            )
-        );
+
+        // rotate the torus (either 0 or 90 degrees around the x or z or y axis)
+        torus.rotation.x = Math.random() > 0.5 ? Math.PI / 2 : 0;
+        torus.rotation.z = Math.random() > 0.5 ? Math.PI / 2 : 0;
+        torus.rotation.y = Math.random() > 0.5 ? Math.PI / 2 : 0;
         scene.add(torus);
         torus.name = "torus";
+
+        // if torus is in the extra torus amount, make it gold and name it "extraTorus"
+        if (i >= torusAmount) {
+            torus.material.color.setHex(0xffd700);
+            torus.name = "extraTorus";
+        }
 
         // check if torus intersects with another torus
         let torusIntersects = false;
@@ -189,45 +211,58 @@ function placeTorusObjects() {
  */
 function handleScore() {
 
-    if (hasScored) return;
-
     if (!myObjects.modelPlane) return;
 
-    if (myObjects.modelPlane.position.y < 0) {
+    const planePosition = myObjects.modelPlane.position;
+
+    if (planePosition.y < 0) {
         gameOver();
         return;
     }
 
+    let nearestTorus = null;
+
     // check if plane intersects with a torus
     for (let i = 0; i < scene.children.length; i++) {
-        const element = scene.children[i];
-        if (element.name === "torus") {
+        if (scene.children[i].name !== "torus" && scene.children[i].name !== "extraTorus") continue;
 
-            // check if the planes position is inside the torus
-            const boundingBox = new THREE.Box3().setFromObject(element);
-            const planePosition = myObjects.modelPlane.position;
-            if (boundingBox.containsPoint(planePosition)) {
-
-                // check the distance to the center of the torus
-                const distanceToCenter = planePosition.distanceTo(element.position);
-                if (distanceToCenter < torusRadius - 0.5 * torusTube && !hasScored) {
-
-                    element.material.color.set(0x00ff00);
-                    element.material.needsUpdate = true;
-                    scene.background = new THREE.Color(0x003300);
-                    torusScore += 1;
-                    hasScored = true;
-                    document.getElementById("score").innerHTML = "Score: " + torusScore;
-
-                    // remove the torus after 1 second
-                    setTimeout(() => {
-                        scene.remove(element);
-                        scene.background = new THREE.Color(0x330000);
-                        hasScored = false;
-                    }, 500);
-                    return;
-                }
+        // get nearest torus
+        const torus = scene.children[i];
+        if (!nearestTorus) {
+            nearestTorus = torus;
+        } else {
+            const distanceToTorus = torus.position.distanceTo(planePosition);
+            const distanceToNearestTorus = nearestTorus.position.distanceTo(planePosition);
+            if (distanceToTorus < distanceToNearestTorus) {
+                nearestTorus = torus;
             }
+        }
+    }
+
+    // check if plane intersects with the nearest torus
+    const distanceToCenter = nearestTorus.position.distanceTo(planePosition);
+
+    // check if the planes position is inside the torus
+    const boundingBox = new THREE.Box3().setFromObject(nearestTorus);
+    if (boundingBox.containsPoint(planePosition)) {
+
+        // check the distance to the center of the torus
+        if (distanceToCenter < torusRadius - 0.5 * torusTube && !hasScored) {
+            nearestTorus.material.color.set(0x00ff00);
+            nearestTorus.material.needsUpdate = true;
+            torusScore = nearestTorus.name === "extraTorus" ? torusScore + 5 : torusScore + 1;
+            hasScored = true;
+            document.getElementById("score").innerHTML = "Score: " + torusScore;
+
+            // remove the torus after 1 second
+            setTimeout(() => {
+                scene.remove(nearestTorus);
+                hasScored = false;
+            }, 500);
+        }
+
+        if (distanceToCenter > torusRadius - planeWingSize - 0.5 * torusTube && distanceToCenter < torusRadius + torusTube + planeWingSize) {
+            gameOver();
         }
     }
 }
@@ -237,10 +272,19 @@ function handleScore() {
  * Animates the scene
  */
 async function animate() {
+
     requestAnimationFrame(animate);
-    handleFlying();
-    handleScore();
-    handleTime();
+
+    if (isFlying) {
+        handleFlying();
+        handleScore();
+        handleObstacleCollision();
+        handleTime();
+    }
+    water.material.uniforms['time'].value += 0.005 * deltaTime;
+
+    deltaTime = clock.getDelta();
+
     renderer.render(scene, camera);
     await new Promise(resolve => setTimeout(resolve, animationTimeoutMs));
 }
@@ -256,7 +300,6 @@ function handleTime() {
 
     if (timeLeft <= 0) {
         gameOver();
-        return;
     }
 }
 
@@ -265,13 +308,62 @@ function handleTime() {
  * Quits the game and shows a game over message TODO: add a ui for this
  */
 function gameOver() {
-    console.log("Game over! Your score is: " + torusScore);
-    window.location.href = "/";
+
+    // remove all event listeners
+    window.removeEventListener("mousedown", () => {
+        distancePerFly = distancePerFly * 2;
+    });
+    window.removeEventListener("mouseup", () => {
+        distancePerFly = distancePerFly / 2;
+    });
+
+    // remove the plane
+    scene.remove(myObjects.modelPlane);
+
+    // stop the game
+    isFlying = false;
+
+    // set cursor to default
+    document.body.style.cursor = "pointer";
+
+    // show game over message and score in the middle of the screen
+    const gameOverDiv = document.createElement("div");
+    gameOverDiv.id = "gameOverDiv";
+    gameOverDiv.innerHTML = "Game over! Your score is: " + torusScore;
+    gameOverDiv.style.position = "absolute";
+    gameOverDiv.style.top = "50%";
+    gameOverDiv.style.left = "50%";
+    gameOverDiv.style.transform = "translate(-50%, -50%)";
+    gameOverDiv.style.fontSize = "50px";
+    gameOverDiv.style.color = "white";
+    document.body.appendChild(gameOverDiv);
+
+    // show restart button
+    const restartButton = document.createElement("button");
+    restartButton.id = "restartButton";
+    restartButton.innerHTML = "Restart";
+    restartButton.style.position = "absolute";
+    restartButton.style.top = "50%";
+    restartButton.style.left = "50%";
+    restartButton.style.transform = "translate(-50%, -50%)";
+    restartButton.style.fontSize = "50px";
+    restartButton.style.color = "white";
+    restartButton.style.backgroundColor = "black";
+    restartButton.style.border = "none";
+    restartButton.style.padding = "20px";
+    restartButton.style.cursor = "pointer";
+    restartButton.style.marginTop = "100px";
+    restartButton.onclick = () => {
+        location.reload();
+    }
+    document.body.appendChild(restartButton);
+
+
 }
 
 
 /**
- * Init the ocean and sky
+ * Initializes the ocean and sky
  * This code and the textures are directly from three.js
  */
 async function initOceanAndSky() {
@@ -301,7 +393,7 @@ async function initOceanAndSky() {
     sky.scale.setScalar(10000);
     scene.add(sky);
     const parameters = {
-        elevation: 2,
+        elevation: 0.4,
         azimuth: 180
     };
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
@@ -315,4 +407,68 @@ async function initOceanAndSky() {
     renderTarget = pmremGenerator.fromScene(sky);
     scene.environment = renderTarget.texture;
 
+}
+
+
+/**
+ * Places other objects which the plane can collide with
+ * Object types:
+ *  - DodecahedronGeometry
+ *  - IcosahedronGeometry
+ *  - OctahedronGeometry
+ *  - TetrahedronGeometry
+ */
+function placeObstaclesObjects() {
+    for (let i = 0; i < obstacleAmount; i++) {
+
+        // switch case to choose a random object type
+        const randomObjectType = Math.floor(Math.random() * 4);
+        let geometry;
+        switch (randomObjectType) {
+            case 0:
+                geometry = new THREE.DodecahedronGeometry(obstacleRadius, 0);
+                break;
+            case 1:
+                geometry = new THREE.IcosahedronGeometry(obstacleRadius, 0);
+                break;
+            case 2:
+                geometry = new THREE.OctahedronGeometry(obstacleRadius, 0);
+                break;
+            case 3:
+                geometry = new THREE.TetrahedronGeometry(obstacleRadius, 0);
+                break;
+        }
+
+        // create the object with random grayscale color, position and rotation
+        const colorVal = Math.floor(Math.random() * 255);
+        const color = "rgb(" + colorVal + "," + colorVal + "," + colorVal + ")";    
+        const material = new THREE.MeshPhongMaterial({ color: color });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(
+            (Math.random() - 0.5) * torusSpawnRadius,
+            (Math.random()) * torusSpawnRadius,
+            (Math.random() - 0.5) * torusSpawnRadius
+        );
+        mesh.rotation.set(
+            Math.random() * Math.PI,
+            Math.random() * Math.PI,
+            Math.random() * Math.PI
+        );
+        mesh.name = "obstacle";
+        scene.add(mesh);
+    }
+
+}
+
+
+/*
+ * Chechs if the plane collides with an object
+ */
+function handleObstacleCollision() {
+    for (let i = 0; i < scene.children.length; i++) {
+        if (scene.children[i].name !== "obstacle") continue;
+        if (scene.children[i].position.distanceTo(myObjects.modelPlane.position) < obstacleRadius) {
+            gameOver();
+        }
+    }
 }

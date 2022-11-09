@@ -62,5 +62,4 @@ async function init() {
       mesh.receiveShadow = true;
     });
   }
-  console.log(myObjects);
 }

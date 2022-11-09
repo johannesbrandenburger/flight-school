@@ -16,6 +16,7 @@ var container,
   isMouseDown = false,
   isMovingCamera = false,
   clock,
+  deltaTime,
   planeLookAt,
   headingTo = { right: 0, up: 0 },
   arrowHelpers = []
