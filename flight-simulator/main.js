@@ -360,7 +360,7 @@ function gameOver() {
 
 
 /**
- * Init the ocean and sky
+ * Initializes the ocean and sky
  * This code and the textures are directly from three.js
  */
 async function initOceanAndSky() {
@@ -405,6 +405,7 @@ async function initOceanAndSky() {
     scene.environment = renderTarget.texture;
 
 }
+
 
 /**
  * Places other objects which the plane can collide with
@@ -455,6 +456,10 @@ function placeObstaclesObjects() {
         
 }
 
+
+/*
+ * Chechs if the plane collides with an object
+ */
 function handleObstacleCollision() {
     // check if the plane is colliding with an obstacle
     for (let i = 0; i < scene.children.length; i++) {
@@ -466,6 +471,11 @@ function handleObstacleCollision() {
     }
 }
 
+
+/**
+ * Generates a random grayscale color
+ * @returns { string } a random grayscale color
+ */
 function getRandomGrayscaleColor() {
     const color = Math.floor(Math.random() * 255);
     return "rgb(" + color + "," + color + "," + color + ")";
