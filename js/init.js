@@ -54,6 +54,16 @@ async function init() {
   // enable orientation controls
   initMouseClickMove();
 
+  // check if the user was redirected from the flight simulator if so look at the monitor
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirect = urlParams.get("redirect-from");
+  if (redirect === "flight-simulator") {
+    myObjects.player.position.set(3.6, myObjects.player.position.y , 1.5);
+    camera.lookAt(myObjects.monitor.position.x, -10, 100);
+    camera.updateProjectionMatrix()
+    window.history.replaceState({}, document.title, "/");
+  }
+
   // enable shadow for each object
   for (const group in myObjects) {
     getAllMeshsFromNestedGroup(myObjects[group]).forEach((mesh) => {

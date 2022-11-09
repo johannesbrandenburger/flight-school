@@ -149,7 +149,7 @@ async function init() {
     // TEMP add event listerner to redirect to homepage at pressing f
     window.addEventListener("keydown", (e) => {
         if (e.key === "f") {
-            window.location.href = "/";
+            location.href = "/?redirect-from=flight-simulator";
         }
     });
 
@@ -396,7 +396,7 @@ function gameOver() {
     exitButton.style.cursor = "pointer";
     exitButton.style.marginTop = "200px";
     exitButton.onclick = () => {
-        location.href = "/";
+        location.href = "/?redirect-from=flight-simulator";
     }
     document.body.appendChild(exitButton);
 
