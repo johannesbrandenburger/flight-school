@@ -1,6 +1,6 @@
 // @ts-check
 
-let distancePerFly = 0.015;
+let distancePerFly = 1.5;
 const planeStartPoint = new THREE.Vector3(4, 0.85, 3);
 const distanceOfCameraFromPlane = 1.5;
 let checkForPlaneCollision = true;
@@ -10,8 +10,6 @@ let checkForPlaneCollision = true;
  */
 async function initFlying() {
 
-    // TEMP cam position
-    // camera.position.set(0.97, 1.70, 3);
     camera.lookAt(planeStartPoint);
 
     // createCrosshair();
@@ -74,7 +72,7 @@ function handleFlying() {
 
     // move the plane forward (always)
     let newPlanePosition = myObjects.modelPlane.position.clone();
-    newPlanePosition.addScaledVector(planeLookAt, distancePerFly);
+    newPlanePosition.addScaledVector(planeLookAt, distancePerFly * deltaTime);
 
     // apply the new position
     myObjects.modelPlane.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);

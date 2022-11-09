@@ -3,7 +3,7 @@
 // create config
 const headHeight = 1.50;
 const startPoint = new THREE.Vector3(5, headHeight, 10);
-const distancePerWalk = 0.1;
+const distancePerWalk = 4;
 const mouseRotateSpeed = 0.002;
 const playerWidth = 1;
 const mouseZoomSpeed = 0.8;
@@ -137,7 +137,7 @@ function handleWalking() {
     const newPosition = getNewPosition(
       myObjects.player.position,
       getCameraLookAt(camera),
-      distancePerWalk,
+      distancePerWalk * deltaTime,
       isWalking
     );
     myObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);

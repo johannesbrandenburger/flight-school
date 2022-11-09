@@ -16,6 +16,7 @@ var container,
     isMouseDown = false,
     isMovingCamera = false,
     clock,
+    deltaTime,
     planeLookAt,
     headingTo = { right: 0, up: 0 },
     arrowHelpers = []
@@ -99,6 +100,7 @@ async function init() {
 
     // add a clock
     clock = new THREE.Clock();
+    deltaTime = 0;
 
     // add the renderer to the dom
     camera.position.set(4, 8, 17);
@@ -211,7 +213,6 @@ function handleScore() {
 
     if (!myObjects.modelPlane) return;
 
-
     const planePosition = myObjects.modelPlane.position;
 
     if (planePosition.y < 0) {
@@ -272,7 +273,7 @@ function handleScore() {
  */
 async function animate() {
 
-    requestAnimationFrame( animate );
+    requestAnimationFrame(animate);
 
     if (isFlying) {
         handleFlying();
@@ -280,7 +281,10 @@ async function animate() {
         handleObstacleCollision();
         handleTime();
     }
-    water.material.uniforms[ 'time' ].value += 0.005
+    water.material.uniforms['time'].value += 0.005 * deltaTime;
+
+    deltaTime = clock.getDelta();
+
     renderer.render(scene, camera);
     await new Promise(resolve => setTimeout(resolve, animationTimeoutMs));
 }
@@ -296,7 +300,6 @@ function handleTime() {
 
     if (timeLeft <= 0) {
         gameOver();
-        return;
     }
 }
 
@@ -417,7 +420,7 @@ async function initOceanAndSky() {
  */
 function placeObstaclesObjects() {
     for (let i = 0; i < obstacleAmount; i++) {
-        
+
         // switch case to choose a random object type
         const randomObjectType = Math.floor(Math.random() * 4);
         let geometry;
@@ -436,8 +439,9 @@ function placeObstaclesObjects() {
                 break;
         }
 
-        // create the object (color: a random grayscale color)
-        const color = getRandomGrayscaleColor();
+        // create the object with random grayscale color, position and rotation
+        const colorVal = Math.floor(Math.random() * 255);
+        const color = "rgb(" + colorVal + "," + colorVal + "," + colorVal + ")";    
         const material = new THREE.MeshPhongMaterial({ color: color });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(
@@ -453,7 +457,7 @@ function placeObstaclesObjects() {
         mesh.name = "obstacle";
         scene.add(mesh);
     }
-        
+
 }
 
 
@@ -461,22 +465,10 @@ function placeObstaclesObjects() {
  * Chechs if the plane collides with an object
  */
 function handleObstacleCollision() {
-    // check if the plane is colliding with an obstacle
     for (let i = 0; i < scene.children.length; i++) {
-        if (scene.children[i].name === "obstacle") {
-            if (scene.children[i].position.distanceTo(myObjects.modelPlane.position) < obstacleRadius * 2) {
-                gameOver();
-            }
+        if (scene.children[i].name !== "obstacle") continue;
+        if (scene.children[i].position.distanceTo(myObjects.modelPlane.position) < obstacleRadius) {
+            gameOver();
         }
     }
-}
-
-
-/**
- * Generates a random grayscale color
- * @returns { string } a random grayscale color
- */
-function getRandomGrayscaleColor() {
-    const color = Math.floor(Math.random() * 255);
-    return "rgb(" + color + "," + color + "," + color + ")";
 }
