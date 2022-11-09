@@ -133,7 +133,7 @@ async function createModelPlane() {
 
     // set the plane position
     myObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
-    myObjects.modelPlane.scale.set(0.002, 0.002, 0.002);
+    myObjects.modelPlane.scale.set(0.002, 0.003, 0.003);
     myObjects.modelPlane.lookAt(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z - 1);
 }
 
