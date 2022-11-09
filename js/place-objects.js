@@ -45,14 +45,18 @@ async function placeObjects() {
         clearcoat: 1,
         clearcoatRoughness: 0,
       });
+
+    // bigwindow
     const bigWindowGeometry = new THREE.BoxGeometry(0.02, 1, 2.45);
     const bigWindow = new THREE.Mesh(bigWindowGeometry, windowMaterial)
     bigWindow.position.set(-0.075, 1.5, 3.975);
-    scene.add(bigWindow);
+    scene.add(bigWindow); myObjects.bigWindow = bigWindow;
+
+    // smallwindow
     const smallWindowGeometry = new THREE.BoxGeometry(0.02, 1, 1.5);
     const smallWindow = new THREE.Mesh(smallWindowGeometry, windowMaterial)
     smallWindow.position.set(-0.075, 1.5, 8.750);
-    scene.add(smallWindow);
+    scene.add(smallWindow); myObjects.smallWindow = smallWindow;
 
     // blackboard
     let blackboard = await getMashFromBlenderModel("../blender/blackboard.glb");
