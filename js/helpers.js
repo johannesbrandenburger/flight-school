@@ -175,3 +175,15 @@ function removeCrosshair() {
   document.getElementById("crosshair-vertical").remove();
   document.getElementById("crosshair-horizontal").remove();
 }
+
+
+/**
+ * Creates a bounding box around the given mesh and shows it in the scene
+ * @param { THREE.Mesh } mesh 
+ */
+function showBoundingBox(mesh) {
+  const box = new THREE.Box3().setFromObject(mesh); 
+  const boxHelper = new THREE.Box3Helper(box, 0xffff00);
+  boxHelper.position.copy(mesh.position);
+  scene.add(boxHelper);
+}
