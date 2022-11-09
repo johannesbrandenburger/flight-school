@@ -293,7 +293,7 @@ async function animate() {
         handleTime();
         handlePlaneOutOfBounds();
     }
-    water.material.uniforms['time'].value += 0.005 * deltaTime;
+    water.material.uniforms['time'].value += 0.05 * deltaTime;
 
     deltaTime = clock.getDelta();
 
