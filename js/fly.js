@@ -125,7 +125,7 @@ function handleFlying() {
 async function createModelPlane() {
 
     // load the plane model
-    const modelPlane = await getMashFromBlenderModel("../blender/low-poly_airplane.glb", "https://download1591.mediafire.com/1ukswzole2ag/2otcm1ju178d63g/basic_plane.glb");
+    const modelPlane = await getMashFromBlenderModel("../low-poly_airplane.glb-low", "https://download1591.mediafire.com/1ukswzole2ag/2otcm1ju178d63g/basic_plane.glb");
     scene.add(modelPlane);
 
     /** @type { THREE.Mesh } */
