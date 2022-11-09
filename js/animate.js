@@ -6,7 +6,8 @@
 async function animate() {
   requestAnimationFrame(animate);
   handleWalking();
-  //handleAnimateChairs();
+  handleAnimateChairs();
+  handleAnimateClosets();
 
   deltaTime = clock.getDelta();
 

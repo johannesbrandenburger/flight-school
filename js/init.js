@@ -43,7 +43,7 @@ async function init() {
 
   // place all objects and enable its interactions
   await placeObjects();
-  enableInteractions();
+  initInteractions();
 
   // place all lights
   placeLights();
@@ -53,9 +53,6 @@ async function init() {
 
   // enable orientation controls
   initMouseClickMove();
-
-  // enable putting the chair on the table
-  //initPutChairOnTheTable();
 
   // enable shadow for each object
   for (const group in myObjects) {

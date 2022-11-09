@@ -5,21 +5,6 @@
  */
 async function placeObjects() {
 
-    // add a test cube
-    // const geometry = new THREE.BoxGeometry(1, 1, 1);
-    // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    // const cube = new THREE.Mesh(geometry, material);
-    // scene.add(cube); myObjects.cube = cube;
-    // domEvents.addEventListener(
-    //     cube,
-    //     "click",
-    //     function (event) {
-    //         console.log("you clicked on the mesh");
-    //     },
-    //     false
-    // );
-    // myObjects.cube.position.set(0, 3, 0);
-
     // axes Helper
     const axesHelper = new THREE.AxesHelper(50);
     scene.add(axesHelper);
@@ -63,16 +48,19 @@ async function placeObjects() {
     });
 
     // closet 1
+    myObjects.closets = [];
     let closetOne = await getMashFromBlenderModel("../blender/Closet.glb");
-    scene.add(closetOne); myObjects.closetOne = closetOne;
-    myObjects.closetOne.rotateY(degToRad(180));
-    myObjects.closetOne.position.set(8.926, 0, 0);
+    scene.add(closetOne);
+    closetOne.rotateY(degToRad(180));
+    closetOne.position.set(8.926, 0, 0);
+    myObjects.closets.push(closetOne);
 
     // closet 2
     let closetTwo = closetOne.clone();
-    scene.add(closetTwo); myObjects.closetTwo = closetTwo;
-    myObjects.closetTwo.position.set(9.926, 0, 0);
-    myObjects.closetTwo.castShadow = true;
+    scene.add(closetTwo);
+    closetTwo.position.set(9.926, 0, 0);
+    closetTwo.castShadow = true;
+    myObjects.closets.push(closetTwo);
 
     // sideboard 1
     let sideboardOne = await getMashFromBlenderModel("../blender/sideboard.glb");
