@@ -383,6 +383,23 @@ async function placeObjects() {
     scene.add(chairTwentyFour);
     myObjects.chairs.push(chairTwentyFour);
 
+    //#endregion
+
+    // lightswitch 1
+    let lightSwitch = await getMashFromBlenderModel("../blender/lightswitch.glb")
+    scene.add(lightSwitch); myObjects.lightSwitch = lightSwitch;
+    lightSwitch.position.set(9.6, 0.9, 11.5);
+
+    // lightswitch 2
+    let lightSwitchTwo = lightSwitch.clone();
+    scene.add(lightSwitchTwo); myObjects.lightSwitchTwo = lightSwitchTwo;
+    lightSwitchTwo.position.set(9.6, 1.0, 11.5);
+
+    // lightswitch 3
+    let lightSwitchThree = lightSwitch.clone();
+    scene.add(lightSwitchThree); myObjects.lightSwitchThree = lightSwitchThree;
+    lightSwitchThree.position.set(9.6, 1.1, 11.5);
+
 
     // landscape environment
     let environment = await getMashFromBlenderModel("../blender/mountain_landscape.glb");
