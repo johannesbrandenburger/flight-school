@@ -2,40 +2,52 @@
 
 function placeLights() {
 
-    // add glowing sphere to the scene
-    const pointLight = new THREE.PointLight(0xfffff0, 2, 100);
-    pointLight.position.set(-25, 20, 10);
-    pointLight.castShadow = true;
-    scene.add(pointLight);
+    // room light
+    const bulbGeometry = new THREE.SphereGeometry(0.04, 16, 8);
+    const bulbMat = new THREE.MeshStandardMaterial({
+        emissive: 0xffffee,
+        emissiveIntensity: 1,
+        color: 0x000,
+    });
+    const roomLightColor = 0xffeebb;
+    const roomLightIntensity = 0.18;
+    const roomLightDecay = 1;
+    const roomLightHeight = 2.9;
 
-    pointLight.shadow.mapSize.width = 1024 * 2;
-    pointLight.shadow.mapSize.height = 1024 * 2;
-    pointLight.shadow.camera.near = 0.5; // default
-    pointLight.shadow.camera.far = 500; // default
+    myObjects.bulbLights = [];
 
-    const helper = new THREE.CameraHelper(pointLight.shadow.camera);
-    scene.add(helper);
+    const roomLightConfig = [
+        { x: 4.326, z: 2.5, cluster: "1" },
+        { x: 3, z: 5.650, cluster: "2" },
+        { x: 3, z: 7.200, cluster: "2" },
+        { x: 3, z: 8.750, cluster: "2" },
+        { x: 6.326, z: 2.5, cluster: "1" },
+        { x: 7.426, z: 5.650, cluster: "3" },
+        { x: 7.426, z: 7.200, cluster: "3" },
+        { x: 7.426, z: 8.750, cluster: "3" },
+    ]
 
-    // add env light
-    const envLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(envLight);
+    roomLightConfig.forEach((lightConfig) => {
+        const bulbLight = new THREE.PointLight(roomLightColor, roomLightIntensity, 100, roomLightDecay);
+        bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
+        bulbLight.position.set(lightConfig.x, roomLightHeight, lightConfig.z);
+        bulbLight.castShadow = true;
+        bulbLight.name = lightConfig.cluster;
+        scene.add(bulbLight);
+        myObjects.bulbLights.push(bulbLight);
+    });
 
-    // light on top of room
-    const roomLight = new THREE.PointLight(0xffffff, 0.5, 100);
-    roomLight.position.set(5.213, 2, 5.750);
-    roomLight.castShadow = true;
-    roomLight.shadow.mapSize.width = 1024 * 2;
-    roomLight.shadow.mapSize.height = 1024 * 2;
-    scene.add(roomLight);
+    // hemispheric light
+    let hemiLight = new THREE.HemisphereLight(0xddeeff, 0x0f0e0d, 0.2);
+    scene.add(hemiLight);
 
-    // light directed on blackboard
-    const blackboardLight = new THREE.SpotLight(0xffffff, 0.5, 100, degToRad(30), 0.1);
-    blackboardLight.position.set(5.213, 2, 3.7);
-    blackboardLight.castShadow = true;
-    blackboardLight.target.position.set(5.213, 1, 0);
-    blackboardLight.shadow.mapSize.width = 1024 * 2;
-    blackboardLight.shadow.mapSize.height = 1024 * 2;
-    scene.add(blackboardLight);
-    scene.add(blackboardLight.target);
+    // daylight
+    let dayLight = new THREE.PointLight(0xffffff, 0.2);
+    dayLight.position.set(-16, 3, 6);
+    dayLight.castShadow = true;
+    dayLight.shadow.mapSize.width = 1024 * 2;
+    dayLight.shadow.mapSize.height = 1024 * 2;
+    scene.add(dayLight);
+
 
 }

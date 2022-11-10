@@ -8,7 +8,7 @@ function initInteractions() {
     initTriggerFlightSimulator();
     initPutChairOnTable();
     initOpenCloset();
-
+    initSwitchLight();
 }
 
 
@@ -19,6 +19,41 @@ function initTriggerFlightSimulator() {
     if (myObjects.monitor === undefined) return
     domEvents.addEventListener(myObjects.monitor, "click", () => {
         location.href = "/flight-simulator";
+    });
+}
+
+
+/**
+ * Initializes the light switchers
+ */
+function initSwitchLight() {
+
+    // add the event listeners
+    domEvents.addEventListener(myObjects.lightSwitchOne, "click", () => {
+        console.log("clicked on light switch one");
+        myObjects.bulbLights.forEach(light => {
+            if (light.name === "1") {
+                light.visible = !light.visible;
+            }
+        });
+    });
+
+    domEvents.addEventListener(myObjects.lightSwitchTwo, "click", () => {
+        console.log("clicked on light switch two");
+        myObjects.bulbLights.forEach(light => {
+            if (light.name === "2") {
+                light.visible = !light.visible;
+            }
+        });
+    });
+
+    domEvents.addEventListener(myObjects.lightSwitchThree, "click", () => {
+        console.log("clicked on light switch three");
+        myObjects.bulbLights.forEach(light => {
+            if (light.name === "3") {
+                light.visible = !light.visible;
+            }
+        });
     });
 }
 
@@ -308,5 +343,14 @@ function handleAnimateClosets() {
     if (closetAnimation.activeCloset === null) return;
 
 
+
+}
+
+
+
+/**
+ * Is called every frame and handles the information about the interactions
+ */
+function handleInfoDiv() {
 
 }

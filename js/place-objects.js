@@ -14,7 +14,7 @@ async function placeObjects() {
     scene.add(room); myObjects.room = room;
     myObjects.room.position.set(5.213, 0, 5.750);
     getAllMeshsFromNestedGroup(myObjects.room).forEach(mesh => {
-        mesh.castShadow = true;
+        mesh.receiveShadow = true;
         if (mesh.name === "") {
             mesh.name = "part of room";
         }
@@ -205,7 +205,7 @@ async function placeObjects() {
     myObjects.tables.forEach(table => {
         getAllMeshsFromNestedGroup(table).forEach(mesh => {
             mesh.castShadow = true;
-            mesh.receiveShadow = true;
+            // mesh.receiveShadow = true;
         });
     });
 
@@ -386,17 +386,17 @@ async function placeObjects() {
     //#endregion
 
     // lightswitch 1
-    let lightSwitch = await getMashFromBlenderModel("../blender/lightswitch.glb")
-    scene.add(lightSwitch); myObjects.lightSwitch = lightSwitch;
-    lightSwitch.position.set(9.6, 0.9, 11.5);
+    let lightSwitchOne = await getMashFromBlenderModel("../blender/lightswitch.glb")
+    scene.add(lightSwitchOne); myObjects.lightSwitchOne = lightSwitchOne;
+    lightSwitchOne.position.set(9.6, 0.9, 11.5);
 
     // lightswitch 2
-    let lightSwitchTwo = lightSwitch.clone();
+    let lightSwitchTwo = lightSwitchOne.clone();
     scene.add(lightSwitchTwo); myObjects.lightSwitchTwo = lightSwitchTwo;
     lightSwitchTwo.position.set(9.6, 1.0, 11.5);
 
     // lightswitch 3
-    let lightSwitchThree = lightSwitch.clone();
+    let lightSwitchThree = lightSwitchOne.clone();
     scene.add(lightSwitchThree); myObjects.lightSwitchThree = lightSwitchThree;
     lightSwitchThree.position.set(9.6, 1.1, 11.5);
 

@@ -77,7 +77,7 @@ function handleScore() {
             }, 500);
         }
 
-        if (dixstanceToCenter > torusRadius - planeWingSize - 0.5 * torusTube && distanceToCenter < torusRadius + torusTube + planeWingSize) {
+        if (distanceToCenter > torusRadius - planeWingSize - 0.5 * torusTube && distanceToCenter < torusRadius + torusTube + planeWingSize) {
             gameOver();
         }
     }
