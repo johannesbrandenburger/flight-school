@@ -163,6 +163,17 @@ function initOpenCloset() {
         closet.isOpen = false;
         domEvents.addEventListener(closet, "click", () => {
             console.log("clicked on closet:", closet);
+            if (closetAnimation.activeCloset !== null) return;
+
+            // check if one closet is already open
+            let closetIsOpen = false;
+            myObjects.closets.forEach(closet => {
+                if (closet.isOpen) {
+                    closetIsOpen = true;
+                }
+            });
+            if (closetIsOpen && !closet.isOpen) return;
+
             closetAnimation.activeCloset = closet;
             closetAnimation.open = !closet.isOpen;
         });
@@ -397,8 +408,67 @@ function handleAnimateChairs() {
 function handleAnimateClosets() {
     if (closetAnimation.activeCloset === null) return;
 
+    // Closet_Door_1 und Closet_Door_2 
+    closetAnimation.timeSinceAnimationStart = closetAnimation.timeSinceAnimationStart + deltaTime;
+    /** @type {THREE.Object3D} */
+    let door1 = closetAnimation.activeCloset.children.find(child => child.name === "Closet_Door_1");
+    /** @type {THREE.Object3D} */
+    let door2 = closetAnimation.activeCloset.children.find(child => child.name === "Closet_Door_2");
+
+    let animationComplete = false;
+    const animationDuration = 1;
+    const distanceFraction = closetAnimation.timeSinceAnimationStart / animationDuration;
+
+    let door1RotationAroundY = - Math.PI * 0.8
+    let door2RotationAroundY = Math.PI * 0.8
+
+    // door2 of the second closet can only be opened a little bit because of the wall
+    if (closetAnimation.activeCloset === myObjects.closets[1]) door2RotationAroundY = Math.PI * 0.45;
+
+    if (closetAnimation.open) {
+
+        if (door1.rotation.y > door1RotationAroundY) {
+            door1.rotation.y = door1RotationAroundY * distanceFraction;
+        } else if (door1.rotation.y <= door1RotationAroundY) {
+            door1.rotation.y = door1RotationAroundY;
+            animationComplete = true;
+        }
+
+        if (door2.rotation.y < door2RotationAroundY) {
+            door2.rotation.y = door2RotationAroundY * distanceFraction;
+        } else if (door2.rotation.y >= door2RotationAroundY) {
+            door2.rotation.y = door2RotationAroundY;
+            animationComplete = true;
+
+        }
+
+    } else {
+
+        if (door1.rotation.y < 0) {
+            door1.rotation.y = door1RotationAroundY - (door1RotationAroundY * distanceFraction);
+        } else if (door1.rotation.y >= 0) {
+            door1.rotation.y = 0;
+            animationComplete = true;
+        }
+
+        if (door2.rotation.y > 0) {
+            door2.rotation.y = door2RotationAroundY - (door2RotationAroundY * distanceFraction);
+        } else if (door2.rotation.y <= 0) {
+            door2.rotation.y = 0;
+            animationComplete = true;
+        }
+
+    }
 
 
+    if (animationComplete) {
+        closetAnimation.activeCloset.isOpen = !closetAnimation.activeCloset.isOpen;
+        closetAnimation = {
+            activeCloset: null,
+            timeSinceAnimationStart: 0,
+            open: true
+        };
+    }
 }
 
 
@@ -411,7 +481,7 @@ function handleInfoDiv() {
     let isNearSomething = false;
 
     infoTable.forEach(function (entry) {
-        
+
         if (isNearSomething) return;
 
         // get distance between camera and object (x and z)
