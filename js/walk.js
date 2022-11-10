@@ -4,7 +4,7 @@
 const headHeight = 1.50;
 const startPoint = new THREE.Vector3(5, headHeight, 10);
 const distancePerWalk = 4;
-const mouseRotateSpeed = 0.003;
+const mouseRotateSpeed = 0.2;
 const playerWidth = 0.4;
 const mouseZoomSpeed = 0.8;
 
@@ -14,8 +14,6 @@ const mouseZoomSpeed = 0.8;
  */
 function initWalk() {
 
-  // set cam on start position and look a bit right
-  // camera.position.set(startPoint.x, startPoint.y, startPoint.z);
   camera.lookAt(new THREE.Vector3(0, headHeight, 0));
 
   // register key events
@@ -203,8 +201,8 @@ function initMouseClickMove() {
   window.addEventListener("mousemove", event => {
     if (!isMouseDown) return;
     isMovingCamera = true;
-    camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), event.movementX * mouseRotateSpeed);
-    camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), event.movementY * mouseRotateSpeed);
+    camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), event.movementX * mouseRotateSpeed * deltaTime);
+    camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), event.movementY * mouseRotateSpeed * deltaTime);
   });
 
   window.addEventListener("wheel", event => {

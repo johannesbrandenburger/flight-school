@@ -1,5 +1,10 @@
 // @ts-check
 
+/** @type { { x: number, z: number, text: string }[] }*/
+let infoTable = [];
+let infoDiv;
+let infoStartTime = null;
+
 /**
  * Calls the init functions to initialize the interactions
  */
@@ -9,7 +14,60 @@ function initInteractions() {
     initPutChairOnTable();
     initOpenCloset();
     initSwitchLight();
+    initInfoDiv();
+
 }
+
+
+/**
+ * Initializes the info div
+ */
+function initInfoDiv() {
+
+    // create the div (at the top left corner with the text "click on an object")
+    infoDiv = document.createElement("div");
+    infoDiv.style.position = "absolute";
+    infoDiv.style.top = "10px";
+    infoDiv.style.left = "10px";
+    infoDiv.style.color = "white";
+    infoDiv.style.background = "rgba(0, 0, 0, 0.5)";
+    infoDiv.style.padding = "10px";
+    infoDiv.innerHTML = "";
+    infoDiv.style.visibility = "hidden";
+    document.body.appendChild(infoDiv);
+
+    // get all positions of the chair and add them to the info table
+    myObjects.chairs.forEach(chair => {
+        infoTable.push({
+            x: chair.position.x,
+            z: chair.position.z,
+            text: "Click on the chair to put it on the table or on the floor"
+        });
+    });
+
+    // get all positions of the closets and add them to the info table
+    myObjects.closets.forEach(closet => {
+        infoTable.push({
+            x: closet.position.x,
+            z: closet.position.z + 0.5,
+            text: "Click on the closet to open it"
+        });
+    });
+
+    // get all light switches
+    infoTable.push({
+        x: myObjects.lightSwitchOne.position.x,
+        z: myObjects.lightSwitchOne.position.z,
+        text: "Click on the light switch to turn on/off the lights"
+    });
+
+    infoTable.push({
+        x: myObjects.monitor.position.x,
+        z: myObjects.monitor.position.z - 0.5,
+        text: "Click on the monitor to start the flight simulator"
+    });
+}
+
 
 
 /**
@@ -347,10 +405,34 @@ function handleAnimateClosets() {
 }
 
 
-
 /**
- * Is called every frame and handles the information about the interactions
+ * Is called every frame and handles the information div about the interactions
  */
 function handleInfoDiv() {
+
+    const triggerDistance = 1.2;
+    let isNearSomething = false;
+
+    infoTable.forEach(function (entry) {
+        
+        if (isNearSomething) return;
+
+        // get distance between camera and object (x and z)
+        const distance = Math.sqrt(Math.pow(camera.position.x - entry.x, 2) + Math.pow(camera.position.z - entry.z, 2));
+
+        // if distance is smaller than 10 show the info div
+        if (distance < triggerDistance) {
+            infoDiv.innerHTML = entry.text;
+            infoDiv.style.visibility = "visible";
+            isNearSomething = true;
+        }
+
+    });
+
+    // if nothing is near the camera hide the info div
+    if (!isNearSomething) {
+        infoDiv.innerHTML = "";
+        infoDiv.style.visibility = "hidden";
+    }
 
 }
