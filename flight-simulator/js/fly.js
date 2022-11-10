@@ -22,8 +22,8 @@ async function initFlying() {
     document.body.style.cursor = "crosshair";
 
     window.addEventListener("mousemove", event => {
-        headingTo.right = - (event.clientX - window.innerWidth / 2) / 2;
-        headingTo.up = - (window.innerHeight / 2 - event.clientY) / 2;
+        headingTo.right = invertedControls ? (event.clientX - window.innerWidth / 2) / 2 : - (event.clientX - window.innerWidth / 2) / 2;
+        headingTo.up = invertedControls ? (window.innerHeight / 2 - event.clientY) / 2: - (window.innerHeight / 2 - event.clientY) / 2;
         document.body.style.cursor = "crosshair";
         if (headingTo.right > 100) { headingTo.right = 100; document.body.style.cursor = "e-resize"; }
         if (headingTo.right < -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }

@@ -16,7 +16,8 @@ var container,
     clock,
     deltaTime,
     planeLookAt,
-    headingTo = { right: 0, up: 0 };
+    headingTo = { right: 0, up: 0 },
+    invertedControls = false
     ;
 
 let torusScore = 0;

@@ -110,6 +110,10 @@ async function init() {
         if (e.key === "f") {
             location.href = "/?redirect-from=flight-simulator";
         }
+
+        if (e.key === "i") {
+            invertedControls = !invertedControls;
+        }
     });
 
     // add event listener to pause the game

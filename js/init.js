@@ -52,7 +52,6 @@ async function init() {
   // enable orientation controls
   initMouseClickMove();
 
-
   stats = new Stats();
   stats.setMode(0);
 
@@ -60,8 +59,6 @@ async function init() {
   stats.domElement.style.left = '0';
   stats.domElement.style.top = '50px';
   document.body.appendChild( stats.domElement );
-
-
 
 
   // check if the user was redirected from the flight simulator if so look at the monitor
