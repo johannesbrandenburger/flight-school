@@ -148,7 +148,6 @@ function initPutChairOnTable() {
             if (chairAnimation.activeChair !== null) return;
             chairAnimation.activeChair = chair;
             chairAnimation.initialPosition = chair.position.clone();
-            chairAnimation.startTime = clock.getElapsedTime();
             chairAnimation.up = !chair.isOnTable;
         });
     });
@@ -165,7 +164,6 @@ function initOpenCloset() {
         domEvents.addEventListener(closet, "click", () => {
             console.log("clicked on closet:", closet);
             closetAnimation.activeCloset = closet;
-            closetAnimation.startTime = clock.getElapsedTime();
             closetAnimation.open = !closet.isOpen;
         });
     });
@@ -178,17 +176,16 @@ function initOpenCloset() {
  * 1. Move the chair backwards
  * 2. Move the chair up
  * 3. Move the chair forwards
- * 
  */
 function handleAnimateChairs() {
     if (chairAnimation.activeChair === null) return;
 
+    timeSinceAnimationStart = timeSinceAnimationStart + deltaTime;
     let chair = chairAnimation.activeChair;
     let initPos = chairAnimation.initialPosition;
     let animationComplete = false;
     const distanceBack = 0.3;
     const distanceUp = 0.4;
-    const timeSinceAnimationStart = clock.getElapsedTime() - chairAnimation.startTime;
     const animationDuration = 1;  // 3 in total
     const distanceFraction = timeSinceAnimationStart / animationDuration;
 
@@ -386,9 +383,9 @@ function handleAnimateChairs() {
             activeChair: null,
             initialPosition: null,
             moveStep: 1,
-            startTime: null,
             up: true,
         };
+        timeSinceAnimationStart = 0;
     }
 
 }

@@ -45,8 +45,8 @@ function placeLights() {
     let dayLight = new THREE.PointLight(0xffffff, 0.2);
     dayLight.position.set(-16, 3, 6);
     dayLight.castShadow = true;
-    dayLight.shadow.mapSize.width = 1024 * 2;
-    dayLight.shadow.mapSize.height = 1024 * 2;
+    dayLight.shadow.mapSize.width = 1024 * 1;
+    dayLight.shadow.mapSize.height = 1024 * 1;
     scene.add(dayLight);
 
 

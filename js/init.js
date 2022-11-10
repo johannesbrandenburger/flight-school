@@ -52,11 +52,23 @@ async function init() {
   // enable orientation controls
   initMouseClickMove();
 
+
+  stats = new Stats();
+  stats.setMode(0);
+
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0';
+  stats.domElement.style.top = '50px';
+  document.body.appendChild( stats.domElement );
+
+
+
+
   // check if the user was redirected from the flight simulator if so look at the monitor
   const urlParams = new URLSearchParams(window.location.search);
   const redirect = urlParams.get("redirect-from");
   if (redirect === "flight-simulator") {
-    myObjects.player.position.set(3.6, myObjects.player.position.y , 1.5);
+    myObjects.player.position.set(3.6, myObjects.player.position.y, 1.5);
     camera.lookAt(myObjects.monitor.position.x, -10, 100);
     camera.updateProjectionMatrix()
     window.history.replaceState({}, document.title, "/");
