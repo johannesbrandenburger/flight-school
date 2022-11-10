@@ -401,11 +401,27 @@ async function placeObjects() {
     lightSwitchThree.position.set(9.6, 1.1, 11.5);
 
 
-    // landscape environment
-    let environment = await getMashFromBlenderModel("../blender/mountain_landscape.glb");
-    scene.add(environment); myObjects.environment = environment;
-    myObjects.environment.position.set(-25, -1.5, -1);
-    myObjects.environment.rotation.y = 147 * Math.PI / 180;
+    // // landscape environment
+    // let environment = await getMashFromBlenderModel("../blender/mountain_landscape.glb");
+    // scene.add(environment); myObjects.environment = environment;
+    // myObjects.environment.position.set(-25, -1.5, -1);
+    // myObjects.environment.rotation.y = 147 * Math.PI / 180;
+
+    //#region 360 degree environment/background
+
+    // sphere shape
+    let geometry = new THREE.SphereGeometry(400, 800, 800);
+    geometry.scale(-1, 1, 1);
+
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load("./../textures/background.jpeg")
+    let material = new THREE.MeshBasicMaterial({ map: texture });
+
+    let backgroundSphere = new THREE.Mesh(geometry, material);
+    backgroundSphere.position.set(5.213, 10, 5.75);
+    scene.add(backgroundSphere);
+
+    //#endregion
 
     // turn castShadow on for all meshes of the environment
     getAllMeshsFromNestedGroup(myObjects.environment).forEach(mesh => {
