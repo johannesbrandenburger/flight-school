@@ -16,8 +16,7 @@ var container,
     clock,
     deltaTime,
     planeLookAt,
-    headingTo = { right: 0, up: 0 },
-    arrowHelpers = []
+    headingTo = { right: 0, up: 0 };
     ;
 
 let torusScore = 0;

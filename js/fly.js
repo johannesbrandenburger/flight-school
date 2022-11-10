@@ -139,30 +139,6 @@ async function createModelPlane() {
 
 
 /**
- * Adds a arrow helper to the scene
- * @param { THREE.Vector3 } position
- * @param { THREE.Vector3 } vector
- * @param { string } color 
- */
-function showVector(position, vector, color) {
-    let arrow = new THREE.ArrowHelper(vector, position, 1, color);
-    scene.add(arrow);
-    arrowHelpers.push(arrow);
-}
-
-
-/**
- * Removes the last arrow helper from the scene
- */
-function deleteLastArrowHelper() {
-    if (arrowHelpers.length > 0) {
-        scene.remove(arrowHelpers[arrowHelpers.length - 1]);
-        arrowHelpers.pop();
-    }
-}
-
-
-/**
  * Turns a vector around the vertical axis (for plane movement)
  * @param { THREE.Vector3 } vector
  * @param { number } angle 

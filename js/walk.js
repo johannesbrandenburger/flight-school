@@ -3,11 +3,11 @@
 // create config
 const headHeight = 1.50;
 const startPoint = new THREE.Vector3(5, headHeight, 10);
-const distancePerWalk = 4;
 const mouseRotateSpeed = 0.2;
 const playerWidth = 0.4;
 const mouseZoomSpeed = 0.8;
-
+const baseDistancePerWalk = 4
+let distancePerWalk = baseDistancePerWalk;
 
 /**
  * Initialize the walking controls
@@ -19,37 +19,62 @@ function initWalk() {
   // register key events
   window.addEventListener("keydown", event => {
     switch (event.key) {
-      case "w" || "W":
+      case "ArrowUp":
+      case "w":
+      case "W":
         isWalking.forward = true;
         break;
-      case "s" || "S":
+      case "ArrowDown":
+      case "s":
+      case "S":
         isWalking.backward = true;
         break;
-      case "a" || "A":
+      case "ArrowLeft":
+      case "a":
+      case "A":
         isWalking.left = true;
         break;
-      case "d" || "D":
+      case "ArrowRight":
+      case "d":
+      case "D":
         isWalking.right = true;
         break;
+      case "Shift":
+      case "shift":
+        distancePerWalk = baseDistancePerWalk * 2;
+        break;
       // TEMP: remove later
-      case "f" || "F":
+      case "f":
         window.location.href = "/flight-simulator";
+        break;
     }
   });
 
   window.addEventListener("keyup", event => {
     switch (event.key) {
-      case "w" || "W":
+      case "ArrowUp":
+      case "w":
+      case "W":
         isWalking.forward = false;
         break;
-      case "s" || "S":
+      case "ArrowDown":
+      case "s":
+      case "S":
         isWalking.backward = false;
         break;
-      case "a" || "A":
+      case "ArrowLeft":
+      case "a":
+      case "A":
         isWalking.left = false;
         break;
-      case "d" || "D":
+      case "ArrowRight":
+      case "d":
+      case "D":
         isWalking.right = false;
+        break;
+      case "Shift":
+      case "shift":
+        distancePerWalk = baseDistancePerWalk;
         break;
     }
   });
@@ -149,9 +174,8 @@ function handleWalking() {
 
       // TODO: exceptions can be removed later
       if (checkCollision(myObjects.player, allMeshs[i])
-        && !isCollision && allMeshs[i].type !== "AxesHelper" 
-        && allMeshs[i].name !== "Floor" 
-        && allMeshs[i].name !== "Ground_Material007_0" 
+        && allMeshs[i].name !== "Floor"
+        && allMeshs[i].name !== "Ground_Material007_0"
         && allMeshs[i].name !== "Trunk_Material001_0"
         && allMeshs[i].name !== "Trunk_Trunk_0"
         && allMeshs[i].name !== "Grass_Material_0"

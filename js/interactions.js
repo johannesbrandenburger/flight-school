@@ -180,14 +180,14 @@ function initOpenCloset() {
 function handleAnimateChairs() {
     if (chairAnimation.activeChair === null) return;
 
-    timeSinceAnimationStart = timeSinceAnimationStart + deltaTime;
+    chairAnimation.timeSinceAnimationStart = chairAnimation.timeSinceAnimationStart + deltaTime;
     let chair = chairAnimation.activeChair;
     let initPos = chairAnimation.initialPosition;
     let animationComplete = false;
     const distanceBack = 0.3;
     const distanceUp = 0.4;
     const animationDuration = 1;  // 3 in total
-    const distanceFraction = timeSinceAnimationStart / animationDuration;
+    const distanceFraction = chairAnimation.timeSinceAnimationStart / animationDuration;
 
     switch (chair.moveDirection) {
         case 1:
@@ -384,8 +384,8 @@ function handleAnimateChairs() {
             initialPosition: null,
             moveStep: 1,
             up: true,
+            timeSinceAnimationStart: 0
         };
-        timeSinceAnimationStart = 0;
     }
 
 }

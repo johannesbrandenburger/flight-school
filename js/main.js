@@ -17,19 +17,19 @@ var container,
   isMovingCamera = false,
   clock,
   deltaTime,
-  timeSinceAnimationStart = 0,
   planeLookAt,
   headingTo = { right: 0, up: 0 },
-  arrowHelpers = [],
   chairAnimation = {
     activeChair: null,
     initialPosition: null,
     moveStep: 1,
     up: true,
+    timeSinceAnimationStart: 0,
   },
   closetAnimation = { 
     activeCloset: null,
     open: true,
+    timeSinceAnimationStart: 0,
   };
 
 init().then(() => {

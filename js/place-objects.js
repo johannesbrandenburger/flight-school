@@ -5,10 +5,6 @@
  */
 async function placeObjects() {
 
-    // axes Helper
-    const axesHelper = new THREE.AxesHelper(50);
-    scene.add(axesHelper);
-
     // room walls
     let room = await getMashFromBlenderModel("../blender/room_door.glb");
     scene.add(room); myObjects.room = room;
