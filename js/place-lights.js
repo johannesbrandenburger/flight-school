@@ -37,16 +37,19 @@ function placeLights() {
         myObjects.bulbLights.push(bulbLight);
     });
 
+    // log shadow map size of first light
+    console.log("shadow map size of first light: " + myObjects.bulbLights[0].shadow.mapSize.width);
+
     // hemispheric light
     let hemiLight = new THREE.HemisphereLight(0xddeeff, 0x0f0e0d, 0.2);
     scene.add(hemiLight);
 
     // daylight
     let dayLight = new THREE.PointLight(0xffffff, 0.2);
-    dayLight.position.set(-16, 3, 6);
+    dayLight.position.set(-16, 4, 6);
     dayLight.castShadow = true;
-    dayLight.shadow.mapSize.width = 1024 * 1;
-    dayLight.shadow.mapSize.height = 1024 * 1;
+    dayLight.shadow.mapSize.width = 512;
+    dayLight.shadow.mapSize.height = 512;
     scene.add(dayLight);
 
 

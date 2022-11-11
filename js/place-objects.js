@@ -9,23 +9,41 @@ async function placeObjects() {
     let room = await getMashFromBlenderModel("../blender/room_door.glb");
     scene.add(room); myObjects.room = room;
     myObjects.room.position.set(5.213, 0, 5.750);
-    getAllMeshsFromNestedGroup(myObjects.room).forEach(mesh => {
-        mesh.receiveShadow = true;
-        if (mesh.name === "") {
-            mesh.name = "part of room";
-        }
-    });
+    // getAllMeshsFromNestedGroup(myObjects.room).forEach(mesh => {
+    //     console.log(mesh.name);
+    //     mesh.receiveShadow = true;
+    //     if (mesh.name === "") {
+    //         mesh.name = "part of room";
+    //     }
+    // });
+
+    // adjust the shadow based on the mash
+    myObjects.room.children.find(child => child.name === "Floor").receiveShadow = true;
+    myObjects.room.children.find(child => child.name === "Floor_Outside").castShadow = true;
+    myObjects.room.children.find(child => child.name === "Door").receiveShadow = true;
+    myObjects.room.children.find(child => child.name === "Door_Outside").castShadow = true;
+    myObjects.room.children.find(child => child.name === "Ceiling").receiveShadow = true;
+    myObjects.room.children.find(child => child.name === "Ceiling_Outside").castShadow = true;
+    myObjects.room.children.find(child => child.name === "Wall_1").traverse(child => { child.receiveShadow = true; });
+    myObjects.room.children.find(child => child.name === "Wall_2").traverse(child => { child.receiveShadow = true; });
+    myObjects.room.children.find(child => child.name === "Wall_3").traverse(child => { child.receiveShadow = true; });
+    myObjects.room.children.find(child => child.name === "Wall_4").traverse(child => { child.receiveShadow = true; });
+    myObjects.room.children.find(child => child.name === "Wall_1_Outside").castShadow = true;
+    myObjects.room.children.find(child => child.name === "Wall_2_Outside").castShadow = true;
+    myObjects.room.children.find(child => child.name === "Wall_3_Outside").castShadow = true;
+    myObjects.room.children.find(child => child.name === "Wall_4_Outside").castShadow = true;
+
+    console.log("room", myObjects.room);
 
     // windows
-    // add a cube to the scene
     const windowMaterial = new THREE.MeshPhysicalMaterial({
-        metalness: 0,  
+        metalness: 0,
         roughness: 0,
         transmission: 1,
         // thickness: 0.5,
         clearcoat: 1,
         clearcoatRoughness: 0,
-      });
+    });
 
     // bigwindow
     const bigWindowGeometry = new THREE.BoxGeometry(0.02, 1, 2.45);
@@ -102,8 +120,9 @@ async function placeObjects() {
     scene.add(keyboard); myObjects.keyboard = keyboard;
     myObjects.keyboard.position.set(3.8, 0.79, 2.8);
     myObjects.keyboard.rotateY(degToRad(180));
-    getAllMeshsFromNestedGroup(myObjects.keyboard).forEach(mesh => {
-        mesh.receiveShadow = true;
+    myObjects.keyboard.traverse(child => {
+        child.receiveShadow = true;
+        child.castShadow = true;
     });
 
     // monitor
@@ -111,9 +130,7 @@ async function placeObjects() {
     scene.add(monitor); myObjects.monitor = monitor;
     myObjects.monitor.position.set(3.6, 0.79, 3.2);
     myObjects.monitor.rotateY(degToRad(270));
-    getAllMeshsFromNestedGroup(myObjects.monitor).forEach(mesh => {
-        mesh.receiveShadow = true;
-    });
+    myObjects.monitor.traverse(child => { child.castShadow = true; });
 
     //#region tables
 
@@ -197,11 +214,16 @@ async function placeObjects() {
     scene.add(tableTwelve);
     myObjects.tables.push(tableTwelve);
 
+    console.log("myObjects.tableTwelve);", tableTwelve);
+
     // add shadow to tables
-    myObjects.tables.forEach(table => {
-        getAllMeshsFromNestedGroup(table).forEach(mesh => {
-            mesh.castShadow = true;
-            // mesh.receiveShadow = true;
+    [...myObjects.tables, myObjects.profTable].forEach(table => {
+        table.traverse((child) => {
+            child.castShadow = true;
+            if (child.name == "Tischplatte_Top") {
+                child.receiveShadow = true;
+                child.castShadow = false;
+            }
         });
     });
 
@@ -217,7 +239,7 @@ async function placeObjects() {
     chairOne.position.set(1.8, 0, 4.65);
     scene.add(chairOne);
     myObjects.chairs.push(chairOne);
-    
+
     // chair 2
     let chairTwo = chairModel.clone();
     chairTwo.rotateY(degToRad(270));
@@ -378,6 +400,11 @@ async function placeObjects() {
     chairTwentyFour.position.set(7.2, 0, 9.75);
     scene.add(chairTwentyFour);
     myObjects.chairs.push(chairTwentyFour);
+
+    // TODO: check performance
+    [...myObjects.chairs, myObjects.profChair].forEach((chair) => {
+        chair.traverse((child) => { child.castShadow = true; });
+    });
 
     //#endregion
 
