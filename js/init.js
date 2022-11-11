@@ -71,10 +71,4 @@ async function init() {
     window.history.replaceState({}, document.title, "/");
   }
 
-  // enable shadow for each object
-  for (const group in myObjects) {
-    getAllMeshsFromNestedGroup(myObjects[group]).forEach((mesh) => {
-      mesh.receiveShadow = true;
-    });
-  }
 }

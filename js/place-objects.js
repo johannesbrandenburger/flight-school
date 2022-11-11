@@ -397,12 +397,6 @@ async function placeObjects() {
     lightSwitchThree.position.set(9.6, 1.1, 11.5);
 
 
-    // // landscape environment
-    // let environment = await getMashFromBlenderModel("../blender/mountain_landscape.glb");
-    // scene.add(environment); myObjects.environment = environment;
-    // myObjects.environment.position.set(-25, -1.5, -1);
-    // myObjects.environment.rotation.y = 147 * Math.PI / 180;
-
     //#region 360 degree environment/background
 
     // sphere shape
@@ -418,14 +412,6 @@ async function placeObjects() {
     scene.add(backgroundSphere);
 
     //#endregion
-
-    // turn castShadow on for all meshes of the environment
-    getAllMeshsFromNestedGroup(myObjects.environment).forEach(mesh => {
-        console.log(mesh);
-        if (mesh.isMesh && mesh.name == "Trunk_Material001_0") {
-            mesh.castShadow = true;
-        }
-    });
 
     // create blue sky box
     const skyBox = new THREE.Mesh(

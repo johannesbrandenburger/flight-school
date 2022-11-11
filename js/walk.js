@@ -220,10 +220,12 @@ function initMouseClickMove() {
 
   window.addEventListener("mouseup", event => {
     isMouseDown = false;
+    isMouseOnBlackboardBoard1 = false;
+    isMouseOnBlackboardBoard2 = false;
   });
 
   window.addEventListener("mousemove", event => {
-    if (!isMouseDown) return;
+    if (!isMouseDown || isMouseOnBlackboardBoard1 || isMouseOnBlackboardBoard2) return;
     isMovingCamera = true;
     camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), event.movementX * mouseRotateSpeed * deltaTime);
     camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), event.movementY * mouseRotateSpeed * deltaTime);

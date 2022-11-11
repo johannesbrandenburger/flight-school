@@ -15,6 +15,7 @@ function initInteractions() {
     initOpenCloset();
     initSwitchLight();
     initInfoDiv();
+    initAdjustBlackboardHeight()
 
 }
 
@@ -66,6 +67,13 @@ function initInfoDiv() {
         z: myObjects.monitor.position.z - 0.5,
         text: "Click on the monitor to start the flight simulator"
     });
+
+    // blackboard
+    infoTable.push({
+        x: myObjects.blackboard.position.x + 2,
+        z: myObjects.blackboard.position.z + 1,
+        text: "Move the boards with the mousea up and down to adjust the height"
+    });
 }
 
 
@@ -74,10 +82,54 @@ function initInfoDiv() {
  * Adds the on click event listener to monitor to start the flight simulator
  */
 function initTriggerFlightSimulator() {
-    if (myObjects.monitor === undefined) return
+    if (myObjects.monitor === undefined) return;
     domEvents.addEventListener(myObjects.monitor, "click", () => {
         location.href = "/flight-simulator";
     });
+}
+
+function initAdjustBlackboardHeight() {
+    if (myObjects.blackboard === undefined) return;
+
+    const boardYmin = 0.7;
+    const boardYmax = 1.83;
+
+    // get the individual boards and their chalk trays
+    let board1 = myObjects.blackboard.children.find(child => child.name === "Board1")
+    let chalkTray1 = myObjects.blackboard.children.find(child => child.name === "Kreideablage1")
+    let board2 = myObjects.blackboard.children.find(child => child.name === "Board2")
+    let chalkTray2 = myObjects.blackboard.children.find(child => child.name === "Kreideablage2")
+    if (board1 === undefined || chalkTray1 === undefined || board2 === undefined || chalkTray2 === undefined) return;
+    const distanceBetweenBoardAndChalkTray = chalkTray1.position.y - board1.position.y;
+
+    domEvents.addEventListener(board1, "mousedown", () => {
+        isMouseDown = isMouseOnBlackboardBoard2 = false;
+        isMouseOnBlackboardBoard1 = true;
+    });
+
+    domEvents.addEventListener(board2, "mousedown", () => {
+        isMouseDown = isMouseOnBlackboardBoard1 = false;
+        isMouseOnBlackboardBoard2 = true;
+    });
+
+    window.addEventListener("mousemove", event => {
+        if (!isMouseOnBlackboardBoard1) return;
+        let y = board1.position.y - event.movementY * deltaTime * 0.3;
+        if (y < boardYmin) y = boardYmin;
+        if (y > boardYmax) y = boardYmax;
+        board1.position.y = y;
+        chalkTray1.position.y = y + distanceBetweenBoardAndChalkTray;
+    });
+
+    window.addEventListener("mousemove", event => {
+        if (!isMouseOnBlackboardBoard2) return;
+        let y = board2.position.y - event.movementY * deltaTime * 0.3;
+        if (y < boardYmin) y = boardYmin;
+        if (y > boardYmax) y = boardYmax;
+        board2.position.y = y;
+        chalkTray2.position.y = y + distanceBetweenBoardAndChalkTray;
+    });
+
 }
 
 
@@ -85,6 +137,7 @@ function initTriggerFlightSimulator() {
  * Initializes the light switchers
  */
 function initSwitchLight() {
+    if (myObjects.lightSwitchOne === undefined || myObjects.lightSwitchTwo === undefined || myObjects.lightSwitchThree === undefined) return
 
     // add the event listeners
     domEvents.addEventListener(myObjects.lightSwitchOne, "click", () => {
@@ -200,6 +253,7 @@ function handleAnimateChairs() {
     const animationDuration = 1;  // 3 in total
     const distanceFraction = chairAnimation.timeSinceAnimationStart / animationDuration;
 
+    // 4 different directions * 3 steps = 12 cases (deep nesting)
     switch (chair.moveDirection) {
         case 1:
             console.log("moveDirection: 1 move back means in positive z direction");
