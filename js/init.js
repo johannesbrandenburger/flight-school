@@ -96,6 +96,7 @@ function initDevControls() {
 
       case "l":
       case "L":
+      
         myObjects.bulbLights.forEach(light => light.visible = !light.visible);
         break;
 

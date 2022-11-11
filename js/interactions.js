@@ -139,12 +139,19 @@ function initAdjustBlackboardHeight() {
 function initSwitchLight() {
     if (myObjects.lightSwitchOne === undefined || myObjects.lightSwitchTwo === undefined || myObjects.lightSwitchThree === undefined) return
 
+    console.log("myObjects.lightSwitchOne", myObjects.lightSwitchOne);
+
     // add the event listeners
     domEvents.addEventListener(myObjects.lightSwitchOne, "click", () => {
         console.log("clicked on light switch one");
         myObjects.bulbLights.forEach(light => {
             if (light.name === "1") {
                 light.visible = !light.visible;
+                if (light.visible) { 
+                    myObjects.lightSwitchOne.children.find(child => child.name === "Lightswitch").rotation.x += degToRad(3.5);
+                } else {
+                    myObjects.lightSwitchOne.children.find(child => child.name === "Lightswitch").rotation.x -= degToRad(3.5);
+                }
             }
         });
     });
@@ -154,6 +161,11 @@ function initSwitchLight() {
         myObjects.bulbLights.forEach(light => {
             if (light.name === "2") {
                 light.visible = !light.visible;
+                if (light.visible) { 
+                    myObjects.lightSwitchTwo.children.find(child => child.name === "Lightswitch").rotation.x += degToRad(3.5);
+                } else {
+                    myObjects.lightSwitchTwo.children.find(child => child.name === "Lightswitch").rotation.x -= degToRad(3.5);
+                }
             }
         });
     });
@@ -163,6 +175,11 @@ function initSwitchLight() {
         myObjects.bulbLights.forEach(light => {
             if (light.name === "3") {
                 light.visible = !light.visible;
+                if (light.visible) { 
+                    myObjects.lightSwitchThree.children.find(child => child.name === "Lightswitch").rotation.x += degToRad(3.5);
+                } else {
+                    myObjects.lightSwitchThree.children.find(child => child.name === "Lightswitch").rotation.x -= degToRad(3.5);
+                }
             }
         });
     });

@@ -411,17 +411,18 @@ async function placeObjects() {
     // lightswitch 1
     let lightSwitchOne = await getMashFromBlenderModel("../blender/lightswitch.glb")
     scene.add(lightSwitchOne); myObjects.lightSwitchOne = lightSwitchOne;
+    lightSwitchOne.scale.set(1.4, 1.4, 1.4);
     lightSwitchOne.position.set(9.6, 0.9, 11.5);
 
     // lightswitch 2
     let lightSwitchTwo = lightSwitchOne.clone();
     scene.add(lightSwitchTwo); myObjects.lightSwitchTwo = lightSwitchTwo;
-    lightSwitchTwo.position.set(9.6, 1.0, 11.5);
+    lightSwitchTwo.position.set(9.6, 1.05, 11.5);
 
     // lightswitch 3
     let lightSwitchThree = lightSwitchOne.clone();
     scene.add(lightSwitchThree); myObjects.lightSwitchThree = lightSwitchThree;
-    lightSwitchThree.position.set(9.6, 1.1, 11.5);
+    lightSwitchThree.position.set(9.6, 1.2, 11.5);
 
 
     //#region 360 degree environment/background
