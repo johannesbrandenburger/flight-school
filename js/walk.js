@@ -2,7 +2,7 @@
 
 // create config
 const headHeight = 1.50;
-const startPoint = new THREE.Vector3(9, headHeight, 2);
+const startPoint = new THREE.Vector3(9, headHeight, 11);
 const mouseRotateSpeed = 0.2;
 const playerWidth = 0.4;
 const mouseZoomSpeed = 0.8;

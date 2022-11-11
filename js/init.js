@@ -52,13 +52,9 @@ async function init() {
   // enable orientation controls
   initMouseClickMove();
 
-  stats = new Stats();
-  stats.setMode(0);
-
-  stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0';
-  stats.domElement.style.top = '50px';
-  document.body.appendChild( stats.domElement );
+  // init stats and gui
+  initStats();
+  initDevControls();
 
 
   // check if the user was redirected from the flight simulator if so look at the monitor
@@ -70,5 +66,49 @@ async function init() {
     camera.updateProjectionMatrix()
     window.history.replaceState({}, document.title, "/");
   }
+
+}
+
+
+/**
+ * Initialize the FPS stats
+ */
+function initStats() {
+  stats = new Stats();
+  stats.setMode(0);
+
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0';
+  stats.domElement.style.top = '50px';
+  document.body.appendChild(stats.domElement);
+}
+
+
+/**
+ * Initialize developer controls and experimental features
+ * such as the ability to turn on/off all lights by pressing l
+ * or the ability to turn on/off shadows of the chairs by pressing c
+ */
+function initDevControls() {
+
+  window.addEventListener("keydown", event => {
+    switch (event.key) {
+
+      case "l":
+      case "L":
+        myObjects.bulbLights.forEach(light => light.visible = !light.visible);
+        break;
+
+
+      case "c":
+      case "C":
+
+        [...myObjects.chairs, myObjects.profChair].forEach((chair) => {
+          chair.traverse((child) => { child.castShadow = !child.castShadow; });
+        });
+
+        break;
+    }
+  });
 
 }

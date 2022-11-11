@@ -401,10 +401,10 @@ async function placeObjects() {
     scene.add(chairTwentyFour);
     myObjects.chairs.push(chairTwentyFour);
 
-    // TODO: check performance
-    [...myObjects.chairs, myObjects.profChair].forEach((chair) => {
-        chair.traverse((child) => { child.castShadow = true; });
-    });
+    // to low performance to add shadows to all chairs
+    // [...myObjects.chairs, myObjects.profChair].forEach((chair) => {
+    //     chair.traverse((child) => { child.castShadow = true; });
+    // });
 
     //#endregion
 

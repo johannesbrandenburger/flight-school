@@ -13,6 +13,7 @@ function placeLights() {
     const roomLightIntensity = 0.18;
     const roomLightDecay = 1;
     const roomLightHeight = 2.9;
+    const roomLightDistance = 10.5;
 
     myObjects.bulbLights = [];
 
@@ -28,17 +29,15 @@ function placeLights() {
     ]
 
     roomLightConfig.forEach((lightConfig) => {
-        const bulbLight = new THREE.PointLight(roomLightColor, roomLightIntensity, 100, roomLightDecay);
+        const bulbLight = new THREE.PointLight(roomLightColor, roomLightIntensity, roomLightDistance, roomLightDecay);
         bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
         bulbLight.position.set(lightConfig.x, roomLightHeight, lightConfig.z);
         bulbLight.castShadow = true;
         bulbLight.name = lightConfig.cluster;
+        bulbLight.shadow.mapSize.width = bulbLight.shadow.mapSize.height = 512;
         scene.add(bulbLight);
         myObjects.bulbLights.push(bulbLight);
     });
-
-    // log shadow map size of first light
-    console.log("shadow map size of first light: " + myObjects.bulbLights[0].shadow.mapSize.width);
 
     // hemispheric light
     let hemiLight = new THREE.HemisphereLight(0xddeeff, 0x0f0e0d, 0.2);
