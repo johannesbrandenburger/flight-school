@@ -25,7 +25,7 @@ function initInteractions() {
  */
 function initInfoDiv() {
 
-    // create the div (at the top left corner with the text "click on an object")
+    // create the div (at the top left corner)
     infoDiv = document.createElement("div");
     infoDiv.style.position = "absolute";
     infoDiv.style.top = "10px";
@@ -84,6 +84,7 @@ function initInfoDiv() {
 function initTriggerFlightSimulator() {
     if (myObjects.monitor === undefined) return;
     domEvents.addEventListener(myObjects.monitor, "click", () => {
+        console.log("clicked on monitor");
         location.href = "/flight-simulator";
     });
 }
@@ -138,8 +139,6 @@ function initAdjustBlackboardHeight() {
  */
 function initSwitchLight() {
     if (myObjects.lightSwitchOne === undefined || myObjects.lightSwitchTwo === undefined || myObjects.lightSwitchThree === undefined) return
-
-    console.log("myObjects.lightSwitchOne", myObjects.lightSwitchOne);
 
     // add the event listeners
     domEvents.addEventListener(myObjects.lightSwitchOne, "click", () => {
@@ -273,7 +272,6 @@ function handleAnimateChairs() {
     // 4 different directions * 3 steps = 12 cases (deep nesting)
     switch (chair.moveDirection) {
         case 1:
-            console.log("moveDirection: 1 move back means in positive z direction");
             if (chairAnimation.up) {
 
                 if (chair.position.z < initPos.z + distanceBack && chairAnimation.moveStep == 1) {
@@ -317,8 +315,6 @@ function handleAnimateChairs() {
             break;
 
         case 2:
-
-            console.log("moveDirection: 2 move back means in positiv x direction");
 
             if (chairAnimation.up) {
 
@@ -364,8 +360,6 @@ function handleAnimateChairs() {
 
         case 3:
 
-            console.log("moveDirection: 3 move back means in negativ z direction");
-
             if (chairAnimation.up) {
 
                 if (chair.position.z > initPos.z - distanceBack && chairAnimation.moveStep == 1) {
@@ -410,8 +404,6 @@ function handleAnimateChairs() {
 
         case 4:
 
-            console.log("moveDirection: 4 move back means in negativ x direction");
-
             if (chairAnimation.up) {
 
                 if (chair.position.x > initPos.x - distanceBack && chairAnimation.moveStep == 1) {
@@ -455,7 +447,6 @@ function handleAnimateChairs() {
 
         default:
 
-            console.log("moveDirection: ," + chair.moveDirection + " is not valid");
             break;
     }
 

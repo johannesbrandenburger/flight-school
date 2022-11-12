@@ -26,8 +26,6 @@ async function placeObjects() {
     myObjects.room.children.find(child => child.name === "Wall_3_Outside").castShadow = true;
     myObjects.room.children.find(child => child.name === "Wall_4_Outside").castShadow = true;
 
-    console.log("room", myObjects.room);
-
     // windows
     const windowMaterial = new THREE.MeshPhysicalMaterial({
         metalness: 0,
@@ -64,13 +62,18 @@ async function placeObjects() {
     scene.add(closetOne);
     closetOne.rotateY(degToRad(180));
     closetOne.position.set(8.926, 0, 0);
+    closetOne.traverse(child => { child.receiveShadow = true; });
+    closetOne.children.find(child => child.name === "Closet_Door_1").traverse(child => { child.castShadow = true; child.receiveShadow = false; });
+    closetOne.children.find(child => child.name === "Closet_Door_2").traverse(child => { child.castShadow = true; child.receiveShadow = false; });
     myObjects.closets.push(closetOne);
 
     // closet 2
     let closetTwo = closetOne.clone();
     scene.add(closetTwo);
     closetTwo.position.set(9.926, 0, 0);
-    closetTwo.castShadow = true;
+    closetTwo.traverse(child => { child.receiveShadow = true; });
+    closetTwo.children.find(child => child.name === "Closet_Door_1").traverse(child => { child.castShadow = true; child.receiveShadow = false; });
+    closetTwo.children.find(child => child.name === "Closet_Door_2").traverse(child => { child.castShadow = true; child.receiveShadow = false; });
     myObjects.closets.push(closetTwo);
 
     // sideboard 1

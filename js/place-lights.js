@@ -28,6 +28,7 @@ function placeLights() {
         { x: 7.426, z: 8.750, cluster: "3" },
     ]
 
+    // create a light for each config
     roomLightConfig.forEach((lightConfig) => {
         const bulbLight = new THREE.PointLight(roomLightColor, roomLightIntensity, roomLightDistance, roomLightDecay);
         bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));

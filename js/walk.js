@@ -172,7 +172,7 @@ function handleWalking() {
   for (let i = 0; i < allMeshs.length; i++) {
     if (allMeshs[i] !== myObjects.player) {
 
-      // TODO: exceptions can be removed later
+      // TODO: some exceptions can be removed later
       if (checkCollision(myObjects.player, allMeshs[i])
         && allMeshs[i].name !== "Floor"
         && allMeshs[i].name !== "Ground_Material007_0"
@@ -183,8 +183,6 @@ function handleWalking() {
         && allMeshs[i].name !== "Watter_Material005_0"
         && allMeshs[i].name !== ""
       ) {
-        // console.log("collision with");
-        // console.log(allMeshs[i]);
         isCollision = true;
         break;
       }
