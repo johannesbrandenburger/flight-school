@@ -38,7 +38,7 @@ html, body {
 .start-button {
   background-color: #3498db;
   color: #ffffff;
-  font-size: 20px !important;
+  font-size: 20px;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;

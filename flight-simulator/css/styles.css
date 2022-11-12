@@ -2,6 +2,7 @@ html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  font-family: 'Nunito Sans', sans-serif;
 }
 
 .gameOverScreen {
@@ -22,6 +23,9 @@ html, body {
   width: fit-content;
   height: fit-content;
   background-color: #222222;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px black;
 }
 
 .gameOverDiv {
@@ -29,34 +33,42 @@ html, body {
   text-align: center;
 }
 
-.gameOverScreen button {
-  font-size: 30px;
+.controlPanel {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
   margin-top: 20px;
-  padding: 10px;
-  border: 1px solid white;
-  background: transparent;
-  color: white;
 }
 
-.gameOverScreen button {
+.controlPanel button {
   background-color: #FFFFFF;
   color: #222222;
   border: solid;
   border-width: 1px;
-  border-radius: 2px;
+  border-radius: 5px;
   border-color: #222222;
   padding: 6px 18px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
+  font-size: 20px;
   cursor: pointer;
   height: fit-content;
   width: fit-content;
+  transition: .5s;
 }
 
-.gameOverScreen button:hover {
+.controlPanel button:hover {
   background-color: #DADADA;
   color: #222222;
-  /* border-color: var(--color-border-hover); */
+  transition: .5s;
+}
+
+.controlPanel .restartButton:hover {
+  background-color: #3498DB;
+}
+
+.controlPanel .exitButton:hover {
+  background-color: #E74C3C;
 }
