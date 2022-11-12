@@ -1,0 +1,45 @@
+\section{Designkonzept}
+
+% Klassenzimmer --> Flugschule um weiteren Komponenten sinnvoll einzufügen
+%--> erstellung eines händischen drahtmodells -->
+% --> Definition der einzelnen Komponenten --> Maaße definieren
+% --> Visio Zeichnung 
+% --> Interaktionen definieren
+% Flugsimulator als erweiterung
+
+%TODO Mention Phong from Flightsimulator
+
+Als grundlegende Idee wurde zunächst ein Vorlesungsaal vorgeschlagen.
+Um weitere Komponenten aus den Anforderungen an diese Arbeit sinnvoll umzusetzen,
+wurde die grundlegende Idee überdacht und neu definiert als Klassenzimmer einer Flugschule.
+\newparagraph
+Um eine erste Vorstellung des Klassenzimmers zu bekommen wurde zunächst eine händische Zeichnung angefertigt.
+Diese ist in der Abbildung \ref{fig:KlassenzimmerSkizze} dargestellt.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{images/roomModel_OneNote.pdf}
+  \caption{Klassenzimmer Skizze}
+  \label{fig:KlassenzimmerSkizze}
+\end{figure}\noindent
+Anschließend wurde der Raum maßstabsgetreu in einem Bauplan gezeichnet um so die Abstände und Maaße teilweise zu definieren.
+Diese Zeichnung ist in der Abbildung \ref{fig:KlassenzimmerEntwurf} dargestellt.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{images/roomModelVisio.pdf}
+  \caption{Klassenzimmer Entwurf mit Bemaßung}
+  \label{fig:KlassenzimmerEntwurf}
+\end{figure}\noindent
+Um die Anforderungen vollständig zu erfüllen müssen Interaktionen mit der 3D Szene möglich sein, diese werden im Folgenden beschrieben.
+\newparagraph
+Im Klassenzimmer ist es möglich mit W A S D zu laufen, hierzu wird die Kamera auf einer Höhe durch den Raum bewegt, bei einer Kolision mit einem Gegenstand wird die Bewegung angehalten.
+Das Licht im Klassenzimmer kann durch drei Lichtschalter neben der Tür per Mausclick gesteuert werden. Außerdem können die Stühle auf- und abgestuhlt werden. Bei einem Blick aus dem Fenster
+soll die DHBW dargestellt werden, diese wird als \ac{HDR} Bild eingebunden. Zusätzlich kann man die Schränke öffnen und schließen und die Tafel hoch bzw. nach unten schieben.
+\newparagraph
+Aus den beschrieben Animationen und dem Plan aus Abbildung \ref{fig:KlassenzimmerEntwurf} ergeben sich alle Komponenten der Szene. Einige Maaße werden bereits durch
+den Plan vorgegeben in einem weiteren Schritt werden diese nun vollständig definiert.
+% Diese Definition sind in der Tabelle %\ref{} abgebildet
+%//TODO Tabelle einfügen.
+\newparagraph
+Aus den oben definierten Größen können anschließend die Blender Modelle erstellt werden.
+%//TODO FlugSim
