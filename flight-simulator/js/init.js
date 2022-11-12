@@ -204,63 +204,34 @@ function gameOver() {
     // set cursor to default
     document.body.style.cursor = "pointer";
 
+    const gameOverScreen = document.createElement("div");
+    gameOverScreen.classList.add("gameOverScreen");
+    document.body.appendChild(gameOverScreen);
+    const gameOverContent = document.createElement("div");
+    gameOverContent.classList.add("gameOverContent");
+    gameOverScreen.appendChild(gameOverContent);
+
     // show game over message and score in the middle of the screen
     const gameOverDiv = document.createElement("div");
-    gameOverDiv.id = "gameOverDiv";
     gameOverDiv.innerHTML = "Game over! </br> Your score is: " + torusScore;
-    gameOverDiv.style.position = "absolute";
-    gameOverDiv.style.top = "50%";
-    gameOverDiv.style.left = "50%";
-    gameOverDiv.style.transform = "translate(-50%, -50%)";
-    gameOverDiv.style.fontSize = "50px";
-    gameOverDiv.style.fontFamily = "Arial";
-    gameOverDiv.style.color = "white";
-    gameOverDiv.style.cursor = "pointer";
-    gameOverDiv.style.textAlign = "center";
-
-    document.body.appendChild(gameOverDiv);
+    gameOverDiv.classList.add("gameOverDiv");
+    gameOverContent.appendChild(gameOverDiv);
 
     // show restart button
     const restartButton = document.createElement("button");
-    restartButton.id = "restartButton";
     restartButton.innerHTML = "Restart";
-    restartButton.style.position = "absolute";
-    restartButton.style.top = "50%";
-    restartButton.style.left = "50%";
-    restartButton.style.transform = "translate(-50%, -50%)";
-    restartButton.style.fontSize = "50px";
-    restartButton.style.fontFamily = "Arial";
-    restartButton.style.color = "white";
-    restartButton.style.backgroundColor = "black";
-    restartButton.style.border = "none";
-    restartButton.style.padding = "20px";
-    restartButton.style.cursor = "pointer";
-    restartButton.style.marginTop = "100px";
+    restartButton.classList.add("restartButton");
     restartButton.onclick = () => {
         location.reload();
     }
-    document.body.appendChild(restartButton);
+    gameOverContent.appendChild(restartButton);
 
     // show a exit button
     const exitButton = document.createElement("button");
-    exitButton.id = "exitButton";
     exitButton.innerHTML = "Exit Flight Simulator";
-    exitButton.style.position = "absolute";
-    exitButton.style.top = "50%";
-    exitButton.style.left = "50%";
-    exitButton.style.transform = "translate(-50%, -50%)";
-    exitButton.style.fontSize = "50px";
-    exitButton.style.fontFamily = "Arial";
-    exitButton.style.color = "white";
-    exitButton.style.backgroundColor = "black";
-    exitButton.style.border = "none";
-    exitButton.style.padding = "20px";
-    exitButton.style.cursor = "pointer";
-    exitButton.style.marginTop = "200px";
+    exitButton.classList.add("exitButton");
     exitButton.onclick = () => {
         location.href = "/?redirect-from=flight-simulator";
     }
-    document.body.appendChild(exitButton);
-
-
+    gameOverContent.appendChild(exitButton);
 }

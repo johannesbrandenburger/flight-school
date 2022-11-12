@@ -1,0 +1,62 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.gameOverScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  cursor: initial;
+}
+
+.gameOverContent {
+  width: fit-content;
+  height: fit-content;
+  background-color: #222222;
+}
+
+.gameOverDiv {
+  font-size: 60px;
+  text-align: center;
+}
+
+.gameOverScreen button {
+  font-size: 30px;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+}
+
+.gameOverScreen button {
+  background-color: #FFFFFF;
+  color: #222222;
+  border: solid;
+  border-width: 1px;
+  border-radius: 2px;
+  border-color: #222222;
+  padding: 6px 18px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  height: fit-content;
+  width: fit-content;
+}
+
+.gameOverScreen button:hover {
+  background-color: #DADADA;
+  color: #222222;
+  /* border-color: var(--color-border-hover); */
+}
