@@ -187,11 +187,12 @@ function putStartScreenOnReady() {
   // remove the loading icon
   document.getElementById("loading-icon").style.display = "none";
 
-  if (redirectFromFlightSimulator) return true;
-
   // change button text to "Start" and enable the button
   document.getElementById("start-button").innerText = "Start";
   document.getElementById("start-button").removeAttribute("disabled");
+
+  if (redirectFromFlightSimulator) return true;
+
 
   return false;
 }
