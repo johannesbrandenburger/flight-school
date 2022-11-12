@@ -235,6 +235,10 @@ function gameOver() {
     gameOverDiv.classList.add("gameOverDiv");
     gameOverContent.appendChild(gameOverDiv);
 
+
+    const controlPanel = document.createElement("div");
+    controlPanel.classList.add("controlPanel");
+    gameOverContent.appendChild(controlPanel);
     // show restart button
     const restartButton = document.createElement("button");
     restartButton.innerHTML = "Restart";
@@ -242,7 +246,7 @@ function gameOver() {
     restartButton.onclick = () => {
         location.reload();
     }
-    gameOverContent.appendChild(restartButton);
+    controlPanel.appendChild(restartButton);
 
     // show a exit button
     const exitButton = document.createElement("button");
@@ -251,7 +255,7 @@ function gameOver() {
     exitButton.onclick = () => {
         location.href = "/?redirect-from=flight-simulator";
     }
-    gameOverContent.appendChild(exitButton);
+    controlPanel.appendChild(exitButton);
 }
 
 /**
