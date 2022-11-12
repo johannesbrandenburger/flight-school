@@ -43,7 +43,8 @@
 \usepackage{multirow}                                                                 % Mehrzeilige Tabelleneinträge
 \usepackage[addtotoc]{abstract}                                                       % Abstract
 \usepackage[nohyperlinks, printonlyused, withpage]{acronym}                           % Abkürzungen
-\usepackage{dirtree}                                                                  % Ordnerstruktur (z.B. für Anhang)
+\usepackage{dirtree}
+\usepackage{float}                                                                % Ordnerstruktur (z.B. für Anhang)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                      Angaben zur Arbeit                      %%%
@@ -88,6 +89,7 @@
 \newcommand{\textVariable}[1]{\texttt{#1}}
 \newcommand{\textKlasse}[1]{\texttt{#1}}
 \newcommand{\textFunktion}[1]{\texttt{#1}}
+\newcommand{\newparagraph}{\newline \newline}
 
 
 %%%%%%%%%%%%%%%%%%%% Zitatbibliothek einbinden %%%%%%%%%%%%%%%%%%%%%
@@ -163,6 +165,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \include{chapter/Einleitung}
   \include{chapter/Tools}
+  \include{chapter/Konzept.tex}
 
   %%%%%%%%%%%%%%%%%%%%%%% Literaturverzeichnis %%%%%%%%%%%%%%%%%%%%%%%
   \include{pages/literaturverzeichnis}
