@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: animate.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,37 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: animate.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @ts-check
 
+/**
+ * Animates the scene
+ */
+async function animate() {
 
-    <h3> </h3>
+  stats.update();
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+  handleWalking();
+  handleAnimateChairs();
+  handleAnimateClosets();
+  handleInfoDiv();
+  
+  deltaTime = clock.getDelta();
+  
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

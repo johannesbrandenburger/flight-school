@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: flight-simulator/js/animate.js</title>
+    <title>JSDoc: Source: js/place-lights.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: flight-simulator/js/animate.js</h1>
+    <h1 class="page-title">Source: js/place-lights.js</h1>
 
     
 
@@ -26,135 +26,64 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Animates the scene
- */
-async function animate() {
-
-    requestAnimationFrame(animate);
-
-    if (isFlying) {
-        handleFlying();
-        handleScore();
-        handleObstacleCollision();
-        handleTime();
-        handlePlaneOutOfBounds();
-    }
-    water.material.uniforms['time'].value += 0.05 * deltaTime;
-
-    deltaTime = clock.getDelta();
-
-    renderer.render(scene, camera);
-}
-
+            <pre class="prettyprint source linenums"><code>// @ts-check
 
 /**
- * Handles the collision detection between the plane and the torus objects
- * If plane collides with a torus, the torus is removed from the scene and the score is updated
+ * Places all lights in the scene
  */
-function handleScore() {
+function placeLights() {
 
-    if (!sceneObjects.modelPlane) return;
+    // room light
+    const bulbGeometry = new THREE.SphereGeometry(0.04, 16, 8);
+    const bulbMat = new THREE.MeshStandardMaterial({
+        emissive: 0xffffee,
+        emissiveIntensity: 1,
+        color: 0x000,
+    });
+    const roomLightColor = 0xffeebb;
+    const roomLightIntensity = 0.18;
+    const roomLightDecay = 1;
+    const roomLightHeight = 2.9;
+    const roomLightDistance = 10.5;
 
-    const planePosition = sceneObjects.modelPlane.position;
+    sceneObjects.bulbLights = [];
 
-    if (planePosition.y &lt; 0) {
-        gameOver();
-        return;
-    }
+    const roomLightConfig = [
+        { x: 4.326, z: 2.5, cluster: "1" },
+        { x: 3, z: 5.650, cluster: "2" },
+        { x: 3, z: 7.200, cluster: "2" },
+        { x: 3, z: 8.750, cluster: "2" },
+        { x: 6.326, z: 2.5, cluster: "1" },
+        { x: 7.426, z: 5.650, cluster: "3" },
+        { x: 7.426, z: 7.200, cluster: "3" },
+        { x: 7.426, z: 8.750, cluster: "3" },
+    ]
 
-    let nearestTorus = null;
+    // create a light for each config
+    roomLightConfig.forEach((lightConfig) => {
+        const bulbLight = new THREE.PointLight(roomLightColor, roomLightIntensity, roomLightDistance, roomLightDecay);
+        bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
+        bulbLight.position.set(lightConfig.x, roomLightHeight, lightConfig.z);
+        bulbLight.castShadow = true;
+        bulbLight.name = lightConfig.cluster;
+        bulbLight.shadow.mapSize.width = bulbLight.shadow.mapSize.height = 512;
+        scene.add(bulbLight);
+        sceneObjects.bulbLights.push(bulbLight);
+    });
 
-    // check if plane intersects with a torus
-    for (let i = 0; i &lt; scene.children.length; i++) {
-        if (scene.children[i].name !== "torus" &amp;&amp; scene.children[i].name !== "extraTorus") continue;
+    // hemispheric light
+    let hemiLight = new THREE.HemisphereLight(0xddeeff, 0x0f0e0d, 0.2);
+    scene.add(hemiLight);
 
-        // get nearest torus
-        const torus = scene.children[i];
-        if (!nearestTorus) {
-            nearestTorus = torus;
-        } else {
-            const distanceToTorus = torus.position.distanceTo(planePosition);
-            const distanceToNearestTorus = nearestTorus.position.distanceTo(planePosition);
-            if (distanceToTorus &lt; distanceToNearestTorus) {
-                nearestTorus = torus;
-            }
-        }
-    }
-
-    // check if plane intersects with the nearest torus
-    const distanceToCenter = nearestTorus.position.distanceTo(planePosition);
-
-    // check if the planes position is inside the torus
-    const boundingBox = new THREE.Box3().setFromObject(nearestTorus);
-    if (boundingBox.containsPoint(planePosition)) {
-
-        // check the distance to the center of the torus
-        if (distanceToCenter &lt; torusRadius - 0.5 * torusTube &amp;&amp; !hasScored) {
-            nearestTorus.material.color.set(0x00ff00);
-            nearestTorus.material.needsUpdate = true;
-            torusScore = nearestTorus.name === "extraTorus" ? torusScore + 5 : torusScore + 1;
-            hasScored = true;
-            document.getElementById("score").innerHTML = "Score: " + torusScore;
-
-            // remove the torus after 1 second
-            setTimeout(() => {
-                scene.remove(nearestTorus);
-                hasScored = false;
-            }, 500);
-        }
-
-        if (distanceToCenter > torusRadius - planeWingSize - 0.5 * torusTube &amp;&amp; distanceToCenter &lt; torusRadius + torusTube + planeWingSize) {
-            gameOver();
-        }
-    }
-}
+    // daylight
+    let dayLight = new THREE.PointLight(0xffffff, 0.2);
+    dayLight.position.set(-16, 4, 6);
+    dayLight.castShadow = true;
+    dayLight.shadow.mapSize.width = 512;
+    dayLight.shadow.mapSize.height = 512;
+    scene.add(dayLight);
 
 
-/**
- * Decreases the time and checks if the time is up
- */
-function handleTime() {
-    const currentTime = new Date().getTime();
-    timeLeft = 60 - Math.floor((currentTime - startTime) / 1000);
-    document.getElementById("time").innerHTML = "Time left: " + timeLeft;
-
-    if (timeLeft &lt;= 0) {
-        gameOver();
-    }
-}
-
-
-/*
- * Chechs if the plane collides with an object
- */
-function handleObstacleCollision() {
-    for (let i = 0; i &lt; scene.children.length; i++) {
-        if (scene.children[i].name !== "obstacle") continue;
-        if (scene.children[i].position.distanceTo(sceneObjects.modelPlane.position) &lt; obstacleRadius + planeWingSize) {
-            gameOver();
-        }
-    }
-}
-
-
-/**
- * Turns the plane around if to far away from the center
- * This is to prevent the plane from flying away
- */
-function handlePlaneOutOfBounds() {
-
-    if (sceneObjects.modelPlane.position.distanceTo(new THREE.Vector3(0, 0, 0)) - 5 > torusSpawnRadius) {
-
-        // turn the plane around
-        sceneObjects.modelPlane.lookAt(new THREE.Vector3(0, 10, 0));
-
-        // show outOfBounds div for 3 seconds
-        document.getElementById("outOfBounds").style.display = "block";
-        setTimeout(() => {
-            document.getElementById("outOfBounds").style.display = "none";
-        }, 3000);
-    }
 }</code></pre>
         </article>
     </section>
