@@ -42,13 +42,11 @@ async function init() {
   placeLights();
   initInteractions();
 
-  // enable walking with the keyboard
+  // enable walking with the keyboard and orientation controls
   initWalk();
-
-  // enable orientation controls
   initMouseClickMove();
 
-  // init stats and gui
+  // init stats and developer controls / keyboard shortcuts
   initStats();
   initDevControls();
 
@@ -91,7 +89,6 @@ async function init() {
 function initStats() {
   stats = new Stats();
   stats.setMode(0);
-
   stats.domElement.style.position = 'absolute';
   stats.domElement.style.left = '0';
   stats.domElement.style.top = '50px';
@@ -102,7 +99,7 @@ function initStats() {
 
 
 /**
- * Initialize developer controls and experimental features
+ * Initialize developer controls / keyboard shortcuts and experimental features
  * such as the ability to turn on/off all lights by pressing l
  * or the ability to turn on/off shadows of the chairs by pressing c
  */

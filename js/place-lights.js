@@ -1,5 +1,8 @@
 // @ts-check
 
+/**
+ * Places all lights in the scene
+ */
 function placeLights() {
 
     // room light

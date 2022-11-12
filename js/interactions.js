@@ -83,7 +83,6 @@ function initInfoDiv() {
 }
 
 
-
 /**
  * Adds the on click event listener to monitor to start the flight simulator
  */

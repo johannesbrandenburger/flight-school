@@ -83,11 +83,12 @@ function initWalk() {
 
 
 /**
- * Get the new position of the player/camera
- * @param {THREE.Vector3} position
- * @param {THREE.Vector3} lookAt
- * @param {number} distance
- * @param { { forward: boolean, backward: boolean, left: boolean, right: boolean } } isWalking
+ * Calculates the new position of the player/camera
+ * @param {THREE.Vector3} position current position of the player/camera
+ * @param {THREE.Vector3} lookAt current lookAt of the camera
+ * @param {number} distance distance the player should walk
+ * @param { { forward: boolean, backward: boolean, left: boolean, right: boolean } } isWalking object that stores if the user is walking in a direction
+ * @returns {THREE.Vector3} new position of the player/camera
  */
 function getNewPosition(position, lookAt, distance, isWalking) {
   const newPosition = new THREE.Vector3(position.x, position.y, position.z);

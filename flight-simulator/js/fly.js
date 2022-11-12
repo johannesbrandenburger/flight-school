@@ -20,8 +20,6 @@ async function initFlying() {
 
     camera.lookAt(planeStartPoint);
 
-    // createCrosshair();
-
     // as further the mouse is right/left of the cross the more the plane is moving right/left
     // headingTo = { right: int, up: int } stores values from 0 to 100 
     // headingTo = { right: -80, up: 5 } would move the plane a bit up and strongly to the left
@@ -142,62 +140,4 @@ async function createModelPlane() {
     sceneObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
     sceneObjects.modelPlane.scale.set(0.002, 0.003, 0.003);
     sceneObjects.modelPlane.lookAt(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z - 1);
-}
-
-
-/**
- * Turns a vector around the vertical axis (for plane movement)
- * @param { THREE.Vector3 } vector
- * @param { number } angle 
- */
-function turnVectorAroundVerticalAxis(vector, angle) {
-    let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
-    newVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle);
-    return newVector;
-}
-
-
-/**
- * Turns a vector around the horizontal axis (for plane movement)
- * @param {*} vector 
- * @param {*} angle 
- */
-function turnVectorAroundHorizontalAxis(vector, angle) {
-
-    let newVector = new THREE.Vector3(vector.x, vector.y + 0.5 * angle, vector.z);
-    return newVector;
-
-    // TODO: check if more complex calculation is needed
-
-    // // get the horizontal vector
-    // let horizontalVector = new THREE.Vector3(vector.x, 0, vector.z);
-    // horizontalVector.normalize();
-
-    // // get the vertical vector
-    // let verticalVector = new THREE.Vector3(0, vector.y, 0);
-    // verticalVector.normalize();
-
-    // // get the cross product of the horizontal and vertical vector
-    // let crossProduct = new THREE.Vector3();
-    // crossProduct.crossVectors(horizontalVector, verticalVector);
-    // crossProduct.normalize();
-
-    // // rotate the vector around the cross product
-    // let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
-    // newVector.applyAxisAngle(crossProduct, angle);
-
-    // return newVector;
-}
-
-
-/**
- * Checks if a mesh is a child of another mesh (recursive)
- * @param {THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>} possibleChild
- * @param {THREE.Mesh} parent
- */
-function meshIsChildOf(possibleChild, parent) {
-    if (possibleChild.parent === parent) return true;
-    if (possibleChild.parent === null) return false;
-    // @ts-ignore
-    return meshIsChildOf(possibleChild.parent, parent);
 }

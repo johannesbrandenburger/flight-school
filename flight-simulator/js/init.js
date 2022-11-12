@@ -136,7 +136,7 @@ async function init() {
 
 /**
  * Initializes the ocean and sky
- * This code and the textures are directly from three.js
+ * !!! This code and the textures are directly from three.js !!!
  */
 async function initOceanAndSky() {
 
@@ -183,7 +183,7 @@ async function initOceanAndSky() {
 
 
 /**
- * Quits the game and shows a game over message TODO: add a ui for this
+ * Quits the game and shows a game over message
  */
 function gameOver() {
 

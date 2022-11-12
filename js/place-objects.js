@@ -1,7 +1,7 @@
 // @ts-check
 
 /**
- * places all objects in the scene and adds them to the sceneObjects object
+ * Places all objects in the scene and adds them to the sceneObjects object
  */
 async function placeObjects() {
 
