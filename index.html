@@ -8,6 +8,99 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
+    <div id="start-screen" class="start-screen">
+        <h1>Flight School</h1>
+
+        <p>Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburger</p>
+
+        <div id="featurs">
+            <h2>Features</h2>
+            <ul>
+                <li>3D-Modeling of a Flight School</li>
+                <li>Flight Simulator Game</li>
+                <li>Animations and Interactions in the Scene triggered by Mouse</li>
+                <li>Realistic Lighting and Shadows</li>
+                <li>Walking Controls by WASD and with Collision Detection</li>
+                <li>Camera Controls by Mouse</li>
+                <li>Airplane Controls by Mouse</li>
+                <li>Keyboard Shortcuts for Fast Controls over Lights, Shadows and other Features</li>
+                <li>Information about Interactions when near Objects</li>
+            </ul>
+
+            
+            <h2>Keyboard Shortcuts in Flight School Scene</h2>
+            <table class="shortcut-table">
+                <tr>
+                    <th>Key</th>
+                    <th>Function</th>
+                </tr>
+                <tr>
+                    <td>WASD</td>
+                    <td>Walking Controls</td>
+                </tr>
+                <tr>
+                    <td>L</td>
+                    <td>Switch All Lights On/Off</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>Toggle Chair Shadows (Deactivated by Default for more Performance)</td>
+                </tr>
+                <tr>
+                    <td>F</td>
+                    <td>Start Flight Simulator</td>
+                </tr>
+                <tr>
+                    <td>J</td>
+                    <td>Toggle FPS Display Visibility</td>
+                </tr>
+                <tr>
+                    <td>H</td>
+                    <td>Show this Help</td>
+                </tr>
+            </table>
+
+            <h2>Keyboard Shortcuts in Flight Simulator</h2>
+
+            <table class="shortcut-table">
+                <tr>
+                    <th>Key</th>
+                    <th>Function</th>
+                </tr>
+                <tr>
+                    <td>P</td>
+                    <td>Pause</td>
+                </tr>
+                <tr>
+                    <td>I</td>
+                    <td>Invert Controls</td>
+                </tr>
+                <tr>
+                    <td>F</td>
+                    <td>Exit Flight Simulator and Return to Flight School Scene</td>
+                </tr>
+            </table>
+
+            <h2>Interactions in Flight School Scene</h2>
+            <ul>
+                <li>Click on the Chair to Put it on the Table (and back)</li>
+                <li>Click on the Computer to Start the Flight Simulator</li>
+                <li>Click on the Light Switch to Switch the Lights On/Off</li>
+                <li>Click on the Closet to Open/Close it</li>
+                <li>Move the Blackboard with the Mouse to Adjust its Height</li>
+            </ul>
+
+        </div>
+
+        <div id="loading-icon" class="loading-icon"></div>
+        <button class="start-button" id="start-button" disabled>Loading Content...
+        </button>
+
+    </div>
+
+
+
     <script src="threejs/three.js"></script>
     <script src="threejs/extra-utils/controls/OrbitControls.js"></script>
     <script src="threejs/extra-utils/loaders/GLTFLoader.js"></script>

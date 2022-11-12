@@ -2,11 +2,7 @@
 
 async function init() {
 
-  // add a loading div
-  const loadingDiv = document.createElement("div");
-  loadingDiv.id = "loading";
-  loadingDiv.innerHTML = "Loading...";
-  document.body.appendChild(loadingDiv);
+  initStartScreen();
 
   // config for three.js
   scene = new THREE.Scene();
@@ -34,12 +30,8 @@ async function init() {
   // add a clock
   clock = new THREE.Clock();
 
-  // remove the loading div
-  document.body.removeChild(loadingDiv);
-
   // add the renderer to the dom
   camera.position.set(4, 8, 17);
-  document.body.appendChild(renderer.domElement);
 
   // place all objects/lights and enable its interactions
   await placeObjects();
@@ -56,15 +48,36 @@ async function init() {
   initStats();
   initDevControls();
 
-
   // check if the user was redirected from the flight simulator if so look at the monitor
   const urlParams = new URLSearchParams(window.location.search);
   const redirect = urlParams.get("redirect-from");
   if (redirect === "flight-simulator") {
+    redirectFromFlightSimulator = true;
     myObjects.player.position.set(3.6, myObjects.player.position.y, 1.5);
     camera.lookAt(myObjects.monitor.position.x, -10, 100);
     camera.updateProjectionMatrix()
     window.history.replaceState({}, document.title, "/");
+  }
+
+  const startImmediately = putStartScreenOnReady();
+
+  if (!startImmediately) {
+
+    // wait till the user clicks on the start button or presses enter
+    await new Promise((resolve) => {
+      document.getElementById("start-button").addEventListener("click", () => {
+        startScene();
+        resolve();
+      });
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          startScene();
+          resolve();
+        }
+      });
+    });
+  } else {
+    startScene();
   }
 
 }
@@ -80,6 +93,8 @@ function initStats() {
   stats.domElement.style.position = 'absolute';
   stats.domElement.style.left = '0';
   stats.domElement.style.top = '50px';
+  stats.domElement.id = "stats";
+  stats.domElement.style.display = "none";
   document.body.appendChild(stats.domElement);
 }
 
@@ -96,10 +111,18 @@ function initDevControls() {
 
       case "l":
       case "L":
-      
+
         myObjects.bulbLights.forEach(light => light.visible = !light.visible);
+
         break;
 
+      case "j":
+      case "J":
+
+        // toggle stats visibility
+        stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
+
+        break;
 
       case "c":
       case "C":
@@ -109,7 +132,59 @@ function initDevControls() {
         });
 
         break;
+
+      case "h":
+      case "H":
+
+        // toggle help screen visibility
+        document.getElementById("start-screen").style.display = document.getElementById("start-screen").style.display === "none" ? "block" : "none";
+        break;
+
+      case "j":
+      case "J":
+
+        // toggle stats visibility
+        stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
+
+        break;
     }
   });
 
+}
+
+
+/**
+ * Initialize the start screen (landing page)
+ * and the ability to see the room by clicking on the start button or pressing enter
+ */
+function initStartScreen() {
+}
+
+
+/**
+ * Hides the start screen and starts the scene
+ */
+function startScene() {
+  document.body.appendChild(renderer.domElement);
+  document.getElementById("start-screen").style.display = "none";
+  document.getElementById("stats").style.display = "block";
+}
+
+
+/**
+ * Sets the button from "Loading..." to "Start" and enables it
+ * @returns {boolean} true if the start button should be clicked immediately (if the user was redirected from the flight simulator)
+ */
+function putStartScreenOnReady() {
+
+  // remove the loading icon
+  document.getElementById("loading-icon").style.display = "none";
+
+  if (redirectFromFlightSimulator) return true;
+
+  // change button text to "Start" and enable the button
+  document.getElementById("start-button").innerText = "Start";
+  document.getElementById("start-button").removeAttribute("disabled");
+
+  return false;
 }

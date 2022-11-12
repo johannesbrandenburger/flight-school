@@ -212,7 +212,7 @@ function handleWalking() {
  */
 function initMouseClickMove() {
 
-  window.addEventListener("mousedown", event => {
+  renderer.domElement.addEventListener("mousedown", event => {
     isMouseDown = true;
   });
 
@@ -222,14 +222,14 @@ function initMouseClickMove() {
     isMouseOnBlackboardBoard2 = false;
   });
 
-  window.addEventListener("mousemove", event => {
+  renderer.domElement.addEventListener("mousemove", event => {
     if (!isMouseDown || isMouseOnBlackboardBoard1 || isMouseOnBlackboardBoard2) return;
     isMovingCamera = true;
     camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), event.movementX * mouseRotateSpeed * deltaTime);
     camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), event.movementY * mouseRotateSpeed * deltaTime);
   });
 
-  window.addEventListener("wheel", event => {
+  renderer.domElement.addEventListener("wheel", event => {
     const delta = Math.sign(event.deltaY);
     if ((camera.fov + delta * mouseZoomSpeed) < 135 && (camera.fov + delta * mouseZoomSpeed) > 20) {
       camera.fov += delta * mouseZoomSpeed;

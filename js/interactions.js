@@ -27,6 +27,7 @@ function initInfoDiv() {
 
     // create the div (at the top left corner)
     infoDiv = document.createElement("div");
+    infoDiv.id = "info-div";
     infoDiv.style.position = "absolute";
     infoDiv.style.top = "10px";
     infoDiv.style.left = "10px";
@@ -89,6 +90,10 @@ function initTriggerFlightSimulator() {
     });
 }
 
+
+/**
+ * Adds the mouse event listener to the blackboard to adjust the height
+ */
 function initAdjustBlackboardHeight() {
     if (myObjects.blackboard === undefined) return;
 

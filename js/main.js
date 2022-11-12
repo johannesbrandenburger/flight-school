@@ -32,7 +32,9 @@ var container,
     activeCloset: null,
     open: true,
     timeSinceAnimationStart: 0,
-  };
+  },
+  redirectFromFlightSimulator = false
+  ;
 
 init().then(() => {
   console.log("init done");
