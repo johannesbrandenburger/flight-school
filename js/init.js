@@ -2,6 +2,10 @@
 
 async function init() {
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirect = urlParams.get("redirect-from");
+  if (redirect === "flight-simulator") redirectFromFlightSimulator = true;
+
   initStartScreen();
 
   // config for three.js
@@ -48,10 +52,8 @@ async function init() {
   initStats();
   initDevControls();
 
-  // check if the user was redirected from the flight simulator if so look at the monitor
-  const urlParams = new URLSearchParams(window.location.search);
-  const redirect = urlParams.get("redirect-from");
-  if (redirect === "flight-simulator") {
+  // if the user was redirected from the flight simulator look at the monitor
+  if (redirectFromFlightSimulator) {
     redirectFromFlightSimulator = true;
     myObjects.player.position.set(3.6, myObjects.player.position.y, 1.5);
     camera.lookAt(myObjects.monitor.position.x, -10, 100);
@@ -154,11 +156,9 @@ function initDevControls() {
 
 
 /**
- * Initialize the start screen (landing page)
- * and the ability to see the room by clicking on the start button or pressing enter
+ * Initialize the start screen / landing page (no js needed so far)
  */
-function initStartScreen() {
-}
+function initStartScreen() {}
 
 
 /**
