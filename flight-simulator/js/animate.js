@@ -17,7 +17,6 @@ async function animate() {
     deltaTime = clock.getDelta();
 
     renderer.render(scene, camera);
-    await new Promise(resolve => setTimeout(resolve, animationTimeoutMs));
 }
 
 
@@ -27,9 +26,9 @@ async function animate() {
  */
 function handleScore() {
 
-    if (!myObjects.modelPlane) return;
+    if (!sceneObjects.modelPlane) return;
 
-    const planePosition = myObjects.modelPlane.position;
+    const planePosition = sceneObjects.modelPlane.position;
 
     if (planePosition.y < 0) {
         gameOver();
@@ -104,7 +103,7 @@ function handleTime() {
 function handleObstacleCollision() {
     for (let i = 0; i < scene.children.length; i++) {
         if (scene.children[i].name !== "obstacle") continue;
-        if (scene.children[i].position.distanceTo(myObjects.modelPlane.position) < obstacleRadius + planeWingSize) {
+        if (scene.children[i].position.distanceTo(sceneObjects.modelPlane.position) < obstacleRadius + planeWingSize) {
             gameOver();
         }
     }
@@ -117,10 +116,10 @@ function handleObstacleCollision() {
  */
 function handlePlaneOutOfBounds() {
 
-    if (myObjects.modelPlane.position.distanceTo(new THREE.Vector3(0, 0, 0)) - 5 > torusSpawnRadius) {
+    if (sceneObjects.modelPlane.position.distanceTo(new THREE.Vector3(0, 0, 0)) - 5 > torusSpawnRadius) {
 
         // turn the plane around
-        myObjects.modelPlane.lookAt(new THREE.Vector3(0, 10, 0));
+        sceneObjects.modelPlane.lookAt(new THREE.Vector3(0, 10, 0));
 
         // show outOfBounds div for 3 seconds
         document.getElementById("outOfBounds").style.display = "block";

@@ -15,7 +15,7 @@ function placeLights() {
     const roomLightHeight = 2.9;
     const roomLightDistance = 10.5;
 
-    myObjects.bulbLights = [];
+    sceneObjects.bulbLights = [];
 
     const roomLightConfig = [
         { x: 4.326, z: 2.5, cluster: "1" },
@@ -37,7 +37,7 @@ function placeLights() {
         bulbLight.name = lightConfig.cluster;
         bulbLight.shadow.mapSize.width = bulbLight.shadow.mapSize.height = 512;
         scene.add(bulbLight);
-        myObjects.bulbLights.push(bulbLight);
+        sceneObjects.bulbLights.push(bulbLight);
     });
 
     // hemispheric light

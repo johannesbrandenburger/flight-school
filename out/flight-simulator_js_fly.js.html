@@ -1,4 +1,32 @@
-// @ts-check
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: flight-simulator/js/fly.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: flight-simulator/js/fly.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @ts-check
 
 /** @type {number} */
 let distancePerFly = 1.5;
@@ -34,9 +62,9 @@ async function initFlying() {
         headingTo.up = invertedControls ? (window.innerHeight / 2 - event.clientY) / 2 : - (window.innerHeight / 2 - event.clientY) / 2;
         document.body.style.cursor = "crosshair";
         if (headingTo.right > 100) { headingTo.right = 100; document.body.style.cursor = "e-resize"; }
-        if (headingTo.right < -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
+        if (headingTo.right &lt; -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
         if (headingTo.up > 100) { headingTo.up = 100; document.body.style.cursor = "n-resize"; }
-        if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
+        if (headingTo.up &lt; -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
     });
 
     // add touch support for mobile devices
@@ -45,9 +73,9 @@ async function initFlying() {
         headingTo.up = - (window.innerHeight / 2 - event.touches[0].clientY) / 2;
         document.body.style.cursor = "crosshair";
         if (headingTo.right > 100) { headingTo.right = 100; document.body.style.cursor = "e-resize"; }
-        if (headingTo.right < -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
+        if (headingTo.right &lt; -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
         if (headingTo.up > 100) { headingTo.up = 100; document.body.style.cursor = "n-resize"; }
-        if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
+        if (headingTo.up &lt; -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
     });
 
     await createModelPlane();
@@ -98,8 +126,8 @@ function handleFlying() {
     // check for collision
     let planeCollided = false;
     let allMeshs = getAllMeshsFromNestedGroup(scene);
-    for (let i = 0; i < allMeshs.length; i++) {
-        if (allMeshs[i] !== sceneObjects.modelPlane && !meshIsChildOf(allMeshs[i], sceneObjects.modelPlane) && allMeshs[i].name !== "" && !getAllMeshsFromNestedGroup(sceneObjects.environment).includes(allMeshs[i])) {
+    for (let i = 0; i &lt; allMeshs.length; i++) {
+        if (allMeshs[i] !== sceneObjects.modelPlane &amp;&amp; !meshIsChildOf(allMeshs[i], sceneObjects.modelPlane) &amp;&amp; allMeshs[i].name !== "" &amp;&amp; !getAllMeshsFromNestedGroup(sceneObjects.environment).includes(allMeshs[i])) {
             if (checkCollision(sceneObjects.modelPlane, allMeshs[i])) {
                 console.log("collision with ", allMeshs[i]);
                 planeCollided = true;
@@ -192,7 +220,7 @@ function turnVectorAroundHorizontalAxis(vector, angle) {
 
 /**
  * Checks if a mesh is a child of another mesh (recursive)
- * @param {THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>} possibleChild
+ * @param {THREE.Mesh&lt;THREE.BufferGeometry, THREE.Material | THREE.Material[]>} possibleChild
  * @param {THREE.Mesh} parent
  */
 function meshIsChildOf(possibleChild, parent) {
@@ -201,3 +229,26 @@ function meshIsChildOf(possibleChild, parent) {
     // @ts-ignore
     return meshIsChildOf(possibleChild.parent, parent);
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkForPlaneCollision">checkForPlaneCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createCrosshair">createCrosshair</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#distancePerFly">distancePerFly</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#getAllMeshsFromNestedGroup">getAllMeshsFromNestedGroup</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getHeightOfMesh">getHeightOfMesh</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#meshIsChildOf">meshIsChildOf</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#planeStartPoint">planeStartPoint</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#removeCrosshair">removeCrosshair</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Sat Nov 12 2022 13:59:58 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

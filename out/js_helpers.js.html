@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: js/helpers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: js/helpers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @ts-check
+
+/**
+ * 
+ * @param { string } path 
+ * @param { string } alternativePath
+ * @returns { Promise&lt;THREE.Mesh> } mesh
+ */
+async function getMashFromBlenderModel(path, alternativePath = "") {
+
+  // @ts-ignore
+  const loader = new THREE.GLTFLoader();
+  let mesh;
+
+  // check if file exists
+  const response = await fetch(path);
+  if (response.status === 404) {
+    console.warn("file of model not found, using alternative path");
+    if (alternativePath === "") {
+      console.error("no alternative path provided");
+      return;
+    }
+    path = alternativePath;
+  }
+
+  // use three.js to load the model
+  await loader.load(
+    path,
+    function (gltf) {
+      mesh = gltf.scene;
+      dispatchEvent(new Event("modelLoaded"));
+    },
+    undefined,
+    function (error) {
+      console.error(error);
+    }
+  )
+
+  // wait till the model is loaded
+  await new Promise(resolve => {
+    addEventListener("modelLoaded", resolve, { once: true });
+  });
+
+  return mesh;
+}
+
+
+/**
+ * @param { THREE.Vector3 } point
+ * @param { THREE.Mesh } mesh
+ */
+function checkIfPointIsInsideMesh(point, mesh) {
+  try {
+    mesh.updateMatrixWorld();
+    var localPt = mesh.worldToLocal(point.clone());
+
+    // TOFIX: got boundingBox is undefined at some meshes
+    return mesh.geometry?.boundingBox?.containsPoint(localPt);
+  } catch (error) {
+    console.warn(error);
+    return false;
+  }
+}
+
+
+/**
+ * @param group
+ * @returns { THREE.Mesh[] }
+ */
+function getAllMeshsFromNestedGroup(group) {
+  let meshs = [];
+  try {
+    if (group.type === "Mesh") {
+      meshs.push(group);
+    }
+    if (group.children.length === 0 || group.children === undefined)
+      return [ group ];
+    group.children.forEach(element => {
+      if (element.children.length === 0 || group.children === undefined) {
+        meshs.push(element);
+      } else {
+        meshs.push(...getAllMeshsFromNestedGroup(element));
+      }
+    });
+    return meshs;
+  } catch (error) {
+    console.warn(error);
+    return [];
+  }
+}
+
+
+/**
+ * @param { THREE.Mesh } mesh
+ */
+function getHeightOfMesh(mesh) {
+  let box = new THREE.Box3().setFromObject(mesh);
+  return box.max.y - box.min.y;
+}
+
+
+/**
+ * @param {THREE.PerspectiveCamera} cam
+ */
+function getCameraLookAt(cam) {
+  var vector = new THREE.Vector3(0, 0, -1);
+  vector.applyQuaternion(cam.quaternion);
+  return vector;
+}
+
+
+/**
+ * Converts degrees to radians
+ * @param {number} deg The angle in degrees
+ * @returns {number} The radian value of the given degree
+ */
+function degToRad(deg) {
+  return deg * Math.PI / 180;
+}
+
+
+/**
+ * This function checks if two meshes are intersecting with each other
+ * @param {THREE.Mesh} mesh1
+ * @param {THREE.Mesh} mesh2
+ * @returns {boolean} true if the two meshes are intersecting
+ */
+function checkCollision(mesh1, mesh2) {
+  const box1 = new THREE.Box3().setFromObject(mesh1);
+  const box2 = new THREE.Box3().setFromObject(mesh2);
+  return box1.intersectsBox(box2);
+}
+
+
+/**
+ * Creates a crosshair in the middle of the screen in the form of two divs
+ */
+function createCrosshair() {
+  const crossWidth = "20px";
+  const crossThickness = "5px";
+  const crossColor = "green";
+  const crossVertical = document.createElement("div");
+  crossVertical.style.position = "absolute";
+  crossVertical.style.top = "50%";
+  crossVertical.style.left = "50%";
+  crossVertical.style.width = crossWidth;
+  crossVertical.style.height = crossThickness;
+  crossVertical.style.backgroundColor = crossColor
+  crossVertical.style.transform = "translate(-50%, -50%)";
+  crossVertical.id = "crosshair-vertical";
+  document.body.appendChild(crossVertical);
+  const crossHorizontal = document.createElement("div");
+  crossHorizontal.style.position = "absolute";
+  crossHorizontal.style.top = "50%";
+  crossHorizontal.style.left = "50%";
+  crossHorizontal.style.width = crossThickness;
+  crossHorizontal.style.height = crossWidth;
+  crossHorizontal.style.backgroundColor = crossColor
+  crossHorizontal.style.transform = "translate(-50%, -50%)";
+  crossHorizontal.id = "crosshair-horizontal";
+  document.body.appendChild(crossHorizontal);
+}
+
+
+/**
+ * Removes the crosshair from the screen
+ */
+function removeCrosshair() {
+  document.getElementById("crosshair-vertical").remove();
+  document.getElementById("crosshair-horizontal").remove();
+}
+
+
+/**
+ * Creates a bounding box around the given mesh and shows it in the scene
+ * @param { THREE.Mesh } mesh 
+ */
+function showBoundingBox(mesh) {
+  const box = new THREE.Box3().setFromObject(mesh); 
+  const boxHelper = new THREE.Box3Helper(box, 0xffff00);
+  boxHelper.position.copy(mesh.position);
+  scene.add(boxHelper);
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkForPlaneCollision">checkForPlaneCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createCrosshair">createCrosshair</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#distancePerFly">distancePerFly</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#getAllMeshsFromNestedGroup">getAllMeshsFromNestedGroup</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getHeightOfMesh">getHeightOfMesh</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#meshIsChildOf">meshIsChildOf</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#planeStartPoint">planeStartPoint</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#removeCrosshair">removeCrosshair</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Sat Nov 12 2022 13:59:58 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

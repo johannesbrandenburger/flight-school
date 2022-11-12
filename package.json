@@ -22,5 +22,8 @@
   "homepage": "https://github.com/johannesbrandenburger/cg-hs-lb-jb#readme",
   "dependencies": {
     "@types/three": "^0.144.0"
+  },
+  "devDependencies": {
+    "jsdoc": "^4.0.0"
   }
 }

@@ -7,11 +7,9 @@
  * @returns { Promise<THREE.Mesh> } mesh
  */
 async function getMashFromBlenderModel(path, alternativePath = "") {
+
   // @ts-ignore
   const loader = new THREE.GLTFLoader();
-  console.log("loading blender model");
-  console.time("getMashFromBlenderModel");
-
   let mesh;
 
   // check if file exists
@@ -29,8 +27,6 @@ async function getMashFromBlenderModel(path, alternativePath = "") {
   await loader.load(
     path,
     function (gltf) {
-      console.log("inside loader.load");
-      console.timeEnd("getMashFromBlenderModel");
       mesh = gltf.scene;
       dispatchEvent(new Event("modelLoaded"));
     },
@@ -45,8 +41,6 @@ async function getMashFromBlenderModel(path, alternativePath = "") {
     addEventListener("modelLoaded", resolve, { once: true });
   });
 
-  console.log("loaded blender model");
-  console.log("mesh", mesh);
   return mesh;
 }
 
