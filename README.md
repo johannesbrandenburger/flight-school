@@ -22,6 +22,7 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 | WASD | Walking Controls |
 | L   | Switch All Lights On/Off |
 | C   | Toggle Chair Shadows (Deactivated by Default for more Performance) |
+| T   | Toggle Table Shadows (Activated by Default) |
 | F   | Start Flight Simulator |
 | J   | Toggle FPS Display Visibility |
 | H   | Show this Help |

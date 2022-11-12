@@ -126,8 +126,25 @@ function initDevControls() {
       case "c":
       case "C":
 
+        // toggle shadows of the chairs
         [...sceneObjects.chairs, sceneObjects.profChair].forEach((chair) => {
           chair.traverse((child) => { child.castShadow = !child.castShadow; });
+        });
+
+        break;
+
+      case "t":
+      case "T":
+
+        // toggle shadows of the table
+        [...sceneObjects.tables, sceneObjects.profTable].forEach(table => {
+          table.traverse((child) => {
+            child.castShadow = !child.castShadow;
+            if (child.name == "Tischplatte_Top") {
+              child.receiveShadow = true;
+              child.castShadow = false;
+            }
+          });
         });
 
         break;
@@ -137,6 +154,7 @@ function initDevControls() {
 
         // toggle help screen visibility
         document.getElementById("start-screen").style.display = document.getElementById("start-screen").style.display === "none" ? "block" : "none";
+        
         break;
 
       case "j":
@@ -155,7 +173,7 @@ function initDevControls() {
 /**
  * Initialize the start screen / landing page (no js needed so far)
  */
-function initStartScreen() {}
+function initStartScreen() { }
 
 
 /**
