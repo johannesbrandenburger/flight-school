@@ -115,14 +115,6 @@ function initDevControls() {
 
         break;
 
-      case "j":
-      case "J":
-
-        // toggle stats visibility
-        stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
-
-        break;
-
       case "c":
       case "C":
 

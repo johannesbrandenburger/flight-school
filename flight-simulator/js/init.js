@@ -74,6 +74,9 @@ async function init() {
     // add the renderer to the dom
     camera.position.set(4, 8, 17);
 
+    initStats();
+    initDevControls();
+
     placeTorusObjects();
     placeObstaclesObjects();
 
@@ -183,6 +186,21 @@ async function initOceanAndSky() {
 
 
 /**
+ * Initialize the FPS stats
+ */
+function initStats() {
+    stats = new Stats();
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0';
+    stats.domElement.style.top = '50px';
+    stats.domElement.id = "stats";
+    stats.domElement.style.display = "block";
+    document.body.appendChild(stats.domElement);
+}
+
+
+/**
  * Quits the game and shows a game over message
  */
 function gameOver() {
@@ -234,4 +252,25 @@ function gameOver() {
         location.href = "/?redirect-from=flight-simulator";
     }
     gameOverContent.appendChild(exitButton);
+}
+
+
+/**
+ * Initialize developer controls / keyboard shortcuts and experimental features
+ */
+ function initDevControls() {
+
+    window.addEventListener("keydown", event => {
+        switch (event.key) {
+
+            case "j":
+            case "J":
+
+                // toggle stats visibility
+                stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
+
+                break;
+        }
+    });
+
 }
