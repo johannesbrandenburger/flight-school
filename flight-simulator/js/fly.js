@@ -15,6 +15,9 @@ let checkForPlaneCollision = true;
 /** @type {boolean} */
 let showFlightVectors = true;
 
+/** @type {boolean} */
+let planeIsUpsideDown = false;
+
 /**
  * Initializes the flying controls
  */
@@ -70,8 +73,12 @@ function handleFlying() {
     planeLookAt.normalize();
 
     // manipulate the lookAt vector by the headingTo values
+    let turnedBeyondYAxis = false;
     planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - 0.01));
-    planeLookAt = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * 0.01));
+    let horizontalTurn = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * 0.01), planeIsUpsideDown);
+    planeLookAt = horizontalTurn.newVector;
+    turnedBeyondYAxis = horizontalTurn.turnedBeyondYAxis;
+    if (turnedBeyondYAxis) planeIsUpsideDown = !planeIsUpsideDown;
     planeLookAt.normalize();
 
     // set the new lookAt vector
@@ -91,7 +98,12 @@ function handleFlying() {
     camera.lookAt(newPlanePosition);
 
     // tend the plane a little bit to the right/left depending on the headingTo.right value
-    sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.4));
+    sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.5));
+
+    // if the plane is upside down, turn it 180°
+    if (planeIsUpsideDown) {
+        sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(180));
+    }
 
     if (!checkForPlaneCollision) return;
 

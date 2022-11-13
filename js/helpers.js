@@ -167,17 +167,10 @@ function turnVectorAroundVerticalAxis(vector, angle) {
 * Turns a vector around the horizontal axis (for plane movement)
 * @param {*} vector vector to turn
 * @param {*} angle angle to turn
+* @param {boolean} inverted if the vector should be inverted (plane is upside down)
+* @returns { { newVector: THREE.Vector3, turnedBeyondYAxis: boolean  } } new vector and if the vector turned beyond the y axis (to check if the plane is upside down)
 */
-function turnVectorAroundHorizontalAxis(vector, angle) {
-
-  // TEMP: if vector goes straight up or down, return the same vector
-  if (vector.x < 0.01 && vector.x > -0.01 && vector.z < 0.01 && vector.z > -0.01 && vector.y > 0 && angle > 0) {
-    console.log("vector is straight up or down");
-    return vector;
-  } else if (vector.x < 0.01 && vector.x > -0.01 && vector.z < 0.01 && vector.z > -0.01 && vector.y < 0 && angle < 0) {
-    console.log("vector is straight up or down");
-    return vector;
-  }
+function turnVectorAroundHorizontalAxis(vector, angle, inverted) {
 
   // get the horizontal vector
   let horizontalVector = new THREE.Vector3(vector.x, 0, vector.z);
@@ -214,7 +207,25 @@ function turnVectorAroundHorizontalAxis(vector, angle) {
   let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
   newVector.applyAxisAngle(crossProduct, -angle);
 
-  return newVector;
+  // check if the vector turned beyond the y axis
+  let turnedBeyondYAxis = false;
+  if (angle > 0 && newVector.y < vector.y) {
+    turnedBeyondYAxis = true;
+  } else if (angle < 0 && newVector.y > vector.y) {
+    turnedBeyondYAxis = true;
+  }
+
+  // if the vector turned beyond the y axis... 
+  if (turnedBeyondYAxis) {
+    console.log("turned beyond y axis");
+  }
+
+  // if the plane is upside down, invert the angle
+  if (inverted) {
+    newVector.applyAxisAngle(crossProduct, angle * 2);
+  }
+
+  return { newVector, turnedBeyondYAxis };
 }
 
 
