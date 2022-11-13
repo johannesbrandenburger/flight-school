@@ -12,6 +12,8 @@ const distanceOfCameraFromPlane = 1.5;
 /** @type {boolean} */
 let checkForPlaneCollision = true;
 
+/** @type {boolean} */
+let showFlightVectors = true;
 
 /**
  * Initializes the flying controls
@@ -69,7 +71,7 @@ function handleFlying() {
 
     // manipulate the lookAt vector by the headingTo values
     planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - 0.01));
-    planeLookAt = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * 0.03));
+    planeLookAt = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * 0.01));
     planeLookAt.normalize();
 
     // set the new lookAt vector

@@ -170,27 +170,64 @@ function turnVectorAroundVerticalAxis(vector, angle) {
 */
 function turnVectorAroundHorizontalAxis(vector, angle) {
 
-  let newVector = new THREE.Vector3(vector.x, vector.y + 0.5 * angle, vector.z);
+  // TEMP: if vector goes straight up or down, return the same vector
+  if (vector.x < 0.01 && vector.x > -0.01 && vector.z < 0.01 && vector.z > -0.01 && vector.y > 0 && angle > 0) {
+    console.log("vector is straight up or down");
+    return vector;
+  } else if (vector.x < 0.01 && vector.x > -0.01 && vector.z < 0.01 && vector.z > -0.01 && vector.y < 0 && angle < 0) {
+    console.log("vector is straight up or down");
+    return vector;
+  }
+
+  // get the horizontal vector
+  let horizontalVector = new THREE.Vector3(vector.x, 0, vector.z);
+  horizontalVector.normalize();
+
+  if (showFlightVectors) showVector(horizontalVector, sceneObjects.modelPlane.position, "horizontalVector", 0xff0000);
+
+  // get the vertical vector
+  let verticalVector = new THREE.Vector3(0, vector.y, 0);
+  verticalVector.normalize();
+
+  if (showFlightVectors) showVector(verticalVector, sceneObjects.modelPlane.position, "verticalVector", 0x00ff00);
+
+  // get the cross product of the horizontal and vertical vector
+  let crossProduct = new THREE.Vector3();
+  crossProduct.crossVectors(horizontalVector, verticalVector);
+  crossProduct.normalize();
+
+  // cross product always have to be the right vector (because of the right hand rule)
+  if (crossProduct.x < 0) {
+    crossProduct.x *= -1;
+    crossProduct.y *= -1;
+    crossProduct.z *= -1;
+  } 
+  if (vector.z < 0) {
+    crossProduct.x *= -1;
+    crossProduct.y *= -1;
+    crossProduct.z *= -1;
+  }
+
+  if (showFlightVectors) showVector(crossProduct, sceneObjects.modelPlane.position, "cross-product", 0x0000ff);
+
+  // rotate the vector around the cross product
+  let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
+  newVector.applyAxisAngle(crossProduct, -angle);
+
   return newVector;
+}
 
-  // TODO: check if more complex calculation is needed
 
-  // // get the horizontal vector
-  // let horizontalVector = new THREE.Vector3(vector.x, 0, vector.z);
-  // horizontalVector.normalize();
-
-  // // get the vertical vector
-  // let verticalVector = new THREE.Vector3(0, vector.y, 0);
-  // verticalVector.normalize();
-
-  // // get the cross product of the horizontal and vertical vector
-  // let crossProduct = new THREE.Vector3();
-  // crossProduct.crossVectors(horizontalVector, verticalVector);
-  // crossProduct.normalize();
-
-  // // rotate the vector around the cross product
-  // let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
-  // newVector.applyAxisAngle(crossProduct, angle);
-
-  // return newVector;
+/**
+ * Shows a vector in the scene and if the vector is already shown the previous one will be removed
+ * @param { THREE.Vector3 } vector vector to show
+ * @param { THREE.Vector3 } position position of the vector
+ * @param { string } name name of the vector
+ * @param { number } color color of the vector
+ */
+function showVector(vector, position, name, color = 0xffffff) {
+  scene.remove(scene.getObjectByName(name));
+  let helper = new THREE.ArrowHelper(vector, position, 1, color);
+  helper.name = name;
+  scene.add(helper);
 }
