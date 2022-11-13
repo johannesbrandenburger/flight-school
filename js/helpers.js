@@ -210,20 +210,31 @@ function turnVectorAroundHorizontalAxis(vector, angle, inverted) {
   // check if the vector turned beyond the y axis
   let turnedBeyondYAxis = false;
   if (angle > 0 && newVector.y < vector.y) {
+    console.log("turned beyond y axis (1)");
     turnedBeyondYAxis = true;
-  } else if (angle < 0 && newVector.y > vector.y) {
+  }
+  else if (angle < 0 && newVector.y > vector.y) {
+    console.log("turned beyond y axis (2)");
     turnedBeyondYAxis = true;
   }
 
   // if the vector turned beyond the y axis... 
   if (turnedBeyondYAxis) {
-    console.log("turned beyond y axis");
   }
 
-  // if the plane is upside down, invert the angle
-  if (inverted) {
-    newVector.applyAxisAngle(crossProduct, angle * 2);
-  }
+  // // if the plane is upside down, invert the angle
+  // if (inverted) {
+  //   newVector.applyAxisAngle(crossProduct, angle * 2);
+  // }
+
+  // if (angle < 0 && newVector.y < vector.y && inverted) {
+  //   console.log("turned beyond y axis (3)");
+  //   turnedBeyondYAxis = true;
+  // }
+  // else if (angle > 0 && newVector.y > vector.y && inverted) {
+  //   console.log("turned beyond y axis (4)");
+  //   turnedBeyondYAxis = true;
+  // }
 
   return { newVector, turnedBeyondYAxis };
 }

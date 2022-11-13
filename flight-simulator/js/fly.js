@@ -18,6 +18,9 @@ let showFlightVectors = true;
 /** @type {boolean} */
 let planeIsUpsideDown = false;
 
+/** @type {number} */
+let basePlaneRotateFactor = 0.01;
+
 /**
  * Initializes the flying controls
  */
@@ -72,10 +75,16 @@ function handleFlying() {
     planeLookAt.applyQuaternion(quaternion);
     planeLookAt.normalize();
 
+    // planeRotationFactor
+    let planeRotationFactor = basePlaneRotateFactor;
+    if (planeIsUpsideDown) {
+        planeRotationFactor = -basePlaneRotateFactor;
+    }
+
     // manipulate the lookAt vector by the headingTo values
     let turnedBeyondYAxis = false;
-    planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - 0.01));
-    let horizontalTurn = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * 0.01), planeIsUpsideDown);
+    planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - planeRotationFactor));
+    let horizontalTurn = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * planeRotationFactor), planeIsUpsideDown);
     planeLookAt = horizontalTurn.newVector;
     turnedBeyondYAxis = horizontalTurn.turnedBeyondYAxis;
     if (turnedBeyondYAxis) planeIsUpsideDown = !planeIsUpsideDown;
@@ -103,6 +112,9 @@ function handleFlying() {
     // if the plane is upside down, turn it 180°
     if (planeIsUpsideDown) {
         sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(180));
+        camera.up.set(0, -1, 0);
+    } else {
+        camera.up.set(0, 1, 0);
     }
 
     if (!checkForPlaneCollision) return;
