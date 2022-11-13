@@ -9,15 +9,16 @@ const distanceOfCameraFromPlane = 1.5;
 /** @type {boolean} */
 let checkForPlaneCollision = true;
 
+/** @type {number} */
+let basePlaneRotateFactor = 0.01;
 
+/** @type {number} */
 let speed = 1.5;
 
 /**
  * Initializes the flying controls
  */
 async function initFlying() {
-
-    camera.lookAt(planeStartPoint);
 
     // as further the mouse is right/left of the cross the more the plane is moving right/left
     // headingTo = { right: int, up: int } stores values from 0 to 100 
@@ -66,9 +67,22 @@ function handleFlying() {
     planeLookAt.applyQuaternion(quaternion);
     planeLookAt.normalize();
 
+    //TEMP
+    const oldPlaneLookAt = planeLookAt.clone();
+
+    // planeRotationFactor
+    let planeRotationFactor = basePlaneRotateFactor;
+    if (planeIsUpsideDown) {
+        planeRotationFactor = -basePlaneRotateFactor;
+    }
+
     // manipulate the lookAt vector by the headingTo values
-    planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - 0.01));
-    planeLookAt = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * 0.03));
+    let turnedBeyondYAxis = false;
+    planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - planeRotationFactor));
+    let horizontalTurn = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * planeRotationFactor));
+    planeLookAt = horizontalTurn.newVector;
+    turnedBeyondYAxis = horizontalTurn.turnedBeyondYAxis;
+    if (turnedBeyondYAxis) { planeIsUpsideDown = !planeIsUpsideDown; console.log("turnd");}
     planeLookAt.normalize();
 
     // set the new lookAt vector
@@ -82,14 +96,30 @@ function handleFlying() {
 
     // apply the new position
     sceneObjects.modelPlane.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
+    
+    // turn the camera and plane
+    if (turnedBeyondYAxis) {
+        camera.up.set(0, -camera.up.y, 0);
+        console.table({
+            "newPlanePosition": newPlanePosition,
+            "planeLookAt": planeLookAt,
+            "oldPlaneLookAt": oldPlaneLookAt,
+        });
+        console.count("turnedBeyondYAxis");
+    }
+    if (planeIsUpsideDown) {
+        sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(180));
+    }
 
     // move the camera behind the plane -lookAt
     camera.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
     camera.position.addScaledVector(planeLookAt, -distanceOfCameraFromPlane);
     camera.lookAt(newPlanePosition);
-
+    
     // tend the plane a little bit to the right/left depending on the headingTo.right value
-    sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.4));
+    sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.5));
+    sceneObjects.modelPlane.updateMatrixWorld();
+
 
     if (!checkForPlaneCollision) return;
 
