@@ -81,20 +81,20 @@ async function placeObjects() {
     scene.add(sideboardOne); sceneObjects.sideboardOne = sideboardOne;
     sceneObjects.sideboardOne.rotateY(degToRad(270));
     sceneObjects.sideboardOne.position.set(0, 0, 0);
-    sceneObjects.sideboardOne.receiveShadow = true;
+    sceneObjects.sideboardOne.traverse(child => { child.receiveShadow = true; })
 
     // sideboard 2
     let sideboardTwo = sideboardOne.clone();
     scene.add(sideboardTwo); sceneObjects.sideboardTwo = sideboardTwo;
     sceneObjects.sideboardTwo.position.set(1.5, 0, 0);
-    sceneObjects.sideboardTwo.receiveShadow = true;
+    sceneObjects.sideboardTwo.traverse(child => { child.receiveShadow = true; })
 
     // sideboard 3
     let sideboardThree = sideboardOne.clone();
     scene.add(sideboardThree); sceneObjects.sideboardThree = sideboardThree;
     sceneObjects.sideboardThree.rotateY(degToRad(-270));
     sceneObjects.sideboardThree.position.set(0, 0, 7.45);
-    sceneObjects.sideboardThree.receiveShadow = true;
+    sceneObjects.sideboardThree.traverse(child => { child.receiveShadow = true; })
 
     // load chair and table model one time and clone it for each char
     let chairModel = await getMashFromBlenderModel("../blender/chair.glb");
