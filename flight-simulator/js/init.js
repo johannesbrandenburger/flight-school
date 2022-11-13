@@ -248,7 +248,7 @@ function gameOver() {
 /**
  * Initialize developer controls / keyboard shortcuts and experimental features
  */
- function initDevControls() {
+function initDevControls() {
 
     window.addEventListener("keydown", event => {
         switch (event.key) {
@@ -258,6 +258,14 @@ function gameOver() {
 
                 // toggle stats visibility
                 stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
+
+                break;
+
+            case "k":
+            case "K":
+
+                // toogle vector visibility
+                showFlightVectors = !showFlightVectors;
 
                 break;
         }

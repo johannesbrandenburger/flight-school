@@ -167,10 +167,9 @@ function turnVectorAroundVerticalAxis(vector, angle) {
 * Turns a vector around the horizontal axis (for plane movement)
 * @param {*} vector vector to turn
 * @param {*} angle angle to turn
-* @param {boolean} inverted if the vector should be inverted (plane is upside down)
 * @returns { { newVector: THREE.Vector3, turnedBeyondYAxis: boolean  } } new vector and if the vector turned beyond the y axis (to check if the plane is upside down)
 */
-function turnVectorAroundHorizontalAxis(vector, angle, inverted) {
+function turnVectorAroundHorizontalAxis(vector, angle) {
 
   // get the horizontal vector
   let horizontalVector = new THREE.Vector3(vector.x, 0, vector.z);
@@ -194,7 +193,7 @@ function turnVectorAroundHorizontalAxis(vector, angle, inverted) {
     crossProduct.x *= -1;
     crossProduct.y *= -1;
     crossProduct.z *= -1;
-  } 
+  }
   if (vector.z < 0) {
     crossProduct.x *= -1;
     crossProduct.y *= -1;
@@ -206,35 +205,20 @@ function turnVectorAroundHorizontalAxis(vector, angle, inverted) {
   // rotate the vector around the cross product
   let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
   newVector.applyAxisAngle(crossProduct, -angle);
-
+  
+  // check if one of the x or z values are 0 to avoid division by 0
+  if (newVector.x === 0 || newVector.z === 0 || vector.x === 0 || vector.z === 0) {
+    return { newVector, turnedBeyondYAxis: false };
+  }
+  
   // check if the vector turned beyond the y axis
   let turnedBeyondYAxis = false;
-  if (angle > 0 && newVector.y < vector.y) {
-    console.log("turned beyond y axis (1)");
+  if ( 
+    (newVector.x / Math.abs(newVector.x)) !== (vector.x / Math.abs(vector.x)) || 
+    (newVector.z / Math.abs(newVector.z)) !== (vector.z / Math.abs(vector.z))
+    ) {
     turnedBeyondYAxis = true;
   }
-  else if (angle < 0 && newVector.y > vector.y) {
-    console.log("turned beyond y axis (2)");
-    turnedBeyondYAxis = true;
-  }
-
-  // if the vector turned beyond the y axis... 
-  if (turnedBeyondYAxis) {
-  }
-
-  // // if the plane is upside down, invert the angle
-  // if (inverted) {
-  //   newVector.applyAxisAngle(crossProduct, angle * 2);
-  // }
-
-  // if (angle < 0 && newVector.y < vector.y && inverted) {
-  //   console.log("turned beyond y axis (3)");
-  //   turnedBeyondYAxis = true;
-  // }
-  // else if (angle > 0 && newVector.y > vector.y && inverted) {
-  //   console.log("turned beyond y axis (4)");
-  //   turnedBeyondYAxis = true;
-  // }
 
   return { newVector, turnedBeyondYAxis };
 }

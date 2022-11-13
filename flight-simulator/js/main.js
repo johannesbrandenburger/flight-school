@@ -20,7 +20,9 @@ var container,
     timeLeft = 60,
     sun, water,
     planeWingSize = 0.08,
-    isFlying = true
+    isFlying = true,
+    showFlightVectors = false,
+    planeIsUpsideDown = false
     ;
 
 init().then(() => {
