@@ -1,8 +1,5 @@
 // @ts-check
 
-/** @type {number} */
-let distancePerFly = 1.5;
-
 /** @type {THREE.Vector3} */
 const planeStartPoint = new THREE.Vector3(4, 0.85, 3);
 
@@ -12,6 +9,8 @@ const distanceOfCameraFromPlane = 1.5;
 /** @type {boolean} */
 let checkForPlaneCollision = true;
 
+
+let speed = 1.5;
 
 /**
  * Initializes the flying controls
@@ -77,8 +76,9 @@ function handleFlying() {
     sceneObjects.modelPlane.lookAt(newPointToLookAt);
 
     // move the plane forward (always)
+    speed = calcSpeed(speed, planeLookAt.y);
     let newPlanePosition = sceneObjects.modelPlane.position.clone();
-    newPlanePosition.addScaledVector(planeLookAt, distancePerFly * deltaTime);
+    newPlanePosition.addScaledVector(planeLookAt, speed * deltaTime);
 
     // apply the new position
     sceneObjects.modelPlane.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
@@ -106,7 +106,7 @@ function handleFlying() {
         }
     }
     if (planeCollided) {
-        distancePerFly = 0;
+        speed = 0;
 
         // show the plane in red
         sceneObjects.modelPlane.traverse(function (child) {
@@ -140,4 +140,26 @@ async function createModelPlane() {
     sceneObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
     sceneObjects.modelPlane.scale.set(0.002, 0.003, 0.003);
     sceneObjects.modelPlane.lookAt(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z - 1);
+}
+
+
+/**
+ * Calculates the speed depending on the y value of the planeLookAt vector and the previous speed
+ * @param {number} speed previous speed
+ * @param {*} y y value of the planeLookAt vector 1 = straight up, -1 = straight down
+ */
+function calcSpeed(speed, y) {
+
+    const minSpeed = 1.5;
+    const maxSpeed = 3.5;
+    const baseSpeed = 2;
+    const yFactor = 0.1;
+
+    let newSpeed = speed * 0.9 + baseSpeed * 0.1;
+    newSpeed -= y * yFactor;
+
+    if (newSpeed < minSpeed) newSpeed = minSpeed;
+    if (newSpeed > maxSpeed) newSpeed = maxSpeed;
+
+    return newSpeed;
 }

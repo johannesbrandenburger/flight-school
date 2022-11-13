@@ -97,14 +97,9 @@ async function init() {
     // move the plane outside the torus radius
     sceneObjects.modelPlane.position.set(0, 5, torusSpawnRadius * 0.5 + 5,);
 
-    // add event listener on mouse down to speed up the plane by 100%
-    window.addEventListener("mousedown", () => {
-        distancePerFly = distancePerFly * 2;
-    });
-
-    // add event listener on mouse up to slow down the plane by 50%
-    window.addEventListener("mouseup", () => {
-        distancePerFly = distancePerFly / 2;
+    // add event listener on mouse click
+    document.addEventListener("click", () => {
+        speed += 5;
     });
 
     // TEMP add event listerner to redirect to homepage at pressing f
@@ -204,14 +199,6 @@ function initStats() {
  * Quits the game and shows a game over message
  */
 function gameOver() {
-
-    // remove all event listeners
-    window.removeEventListener("mousedown", () => {
-        distancePerFly = distancePerFly * 2;
-    });
-    window.removeEventListener("mouseup", () => {
-        distancePerFly = distancePerFly / 2;
-    });
 
     // remove the plane
     scene.remove(sceneObjects.modelPlane);
