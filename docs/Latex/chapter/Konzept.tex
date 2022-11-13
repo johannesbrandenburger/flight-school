@@ -7,8 +7,9 @@
 % --> Interaktionen definieren
 % Flugsimulator als erweiterung
 
-%TODO Mention Phong from Flightsimulator
+%//TODO Mention Phong from Flightsimulator
 
+\subsection{Klassenzimmer}
 Als grundlegende Idee wurde zunächst ein Vorlesungsaal vorgeschlagen.
 Um weitere Komponenten aus den Anforderungen an diese Arbeit sinnvoll umzusetzen,
 wurde die grundlegende Idee überdacht und neu definiert als Klassenzimmer einer Flugschule.
@@ -26,20 +27,43 @@ Diese Zeichnung ist in der Abbildung \ref{fig:KlassenzimmerEntwurf} dargestellt.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=1\textwidth]{images/roomModelVisio.pdf}
+  \includegraphics[width=1\textwidth]{images/classroom_draw.pdf}
   \caption{Klassenzimmer Entwurf mit Bemaßung}
   \label{fig:KlassenzimmerEntwurf}
+\end{figure}\noindent
+Um die Höhen der Fenster zu bestimmen wurde zusätzlich eine Seitenansicht erstellt.
+Diese ist in der Abbildung \ref{fig:KlassenzimmerEntwurfWindows} zu sehen.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{images/classroom_draw_windows.pdf}
+  \caption{Klassenzimmer Entwurf mit Fenster}
+  \label{fig:KlassenzimmerEntwurfWindows}
+\end{figure}\noindent
+Abschließend wurde eine weitere Zeichnung zur Platzierung der Lampen erstellt. Diese ist in der Abbildung \ref{fig:KlassenzimmerEntwurfLamps}
+dargestellt.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{images/classroom_draw_lamps.pdf}
+  \caption{Klassenzimmer Entwurf der Lampen}
+  \label{fig:KlassenzimmerEntwurfLamps}
 \end{figure}\noindent
 Um die Anforderungen vollständig zu erfüllen müssen Interaktionen mit der 3D Szene möglich sein, diese werden im Folgenden beschrieben.
 \newparagraph
 Im Klassenzimmer ist es möglich mit W A S D zu laufen, hierzu wird die Kamera auf einer Höhe durch den Raum bewegt, bei einer Kolision mit einem Gegenstand wird die Bewegung angehalten.
-Das Licht im Klassenzimmer kann durch drei Lichtschalter neben der Tür per Mausclick gesteuert werden. Außerdem können die Stühle auf- und abgestuhlt werden. Bei einem Blick aus dem Fenster
-soll die DHBW dargestellt werden, diese wird als \ac{HDR} Bild eingebunden. Zusätzlich kann man die Schränke öffnen und schließen und die Tafel hoch bzw. nach unten schieben.
+Das Licht im Klassenzimmer kann durch drei Lichtschalter neben der Tür per Mausklick gesteuert werden. Mit einem Schalter kann jeweils ein Cluster angesteuert werden, diese sind in Abb. \ref{fig:KlassenzimmerEntwurfLamps}
+farblich gekennzeichnet.
+Außerdem können die Stühle auf- und abgestuhlt werden. Bei einem Blick aus dem Fenster
+soll die DHBW dargestellt werden, diese wird als \ac{HDR} Bild eingebunden. Zusätzlich können die Schränke geöffnet und geschlossen werden und die Tafel hoch bzw. nach unten geschoben werden.
 \newparagraph
-Aus den beschrieben Animationen und dem Plan aus Abbildung \ref{fig:KlassenzimmerEntwurf} ergeben sich alle Komponenten der Szene. Einige Maaße werden bereits durch
+Aus den beschrieben Animationen und den Plänen aus den Abbildung \ref{fig:KlassenzimmerEntwurf}, \ref{fig:KlassenzimmerEntwurfWindows} und \ref{fig:KlassenzimmerEntwurfLamps} ergeben sich alle Komponenten der Szene. Einige Maaße werden bereits durch
 den Plan vorgegeben in einem weiteren Schritt werden diese nun vollständig definiert.
 % Diese Definition sind in der Tabelle %\ref{} abgebildet
 %//TODO Tabelle einfügen.
 \newparagraph
-Aus den oben definierten Größen können anschließend die Blender Modelle erstellt werden.
+Mit den oben definierten Größen können anschließend die Blender Modelle erstellt werden.
+Um das Klassenzimmer ansprechender darzustellen werden weitere Elemente aus dem Internet eingefügt, diese werden mit ihren Quellen in der untenstehenden Tabelle aufgezählt.
+%//TODO Tabelle externe Modells
 %//TODO FlugSim
+\subsection{Flugsimulator}
+Als Erweiterung der Flugschule, wurde ein Flugsimulator programmiert.
+Dieser kann durch einen Klick auf dem Monitor in dem Klassenraum gestartet werden.
