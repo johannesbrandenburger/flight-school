@@ -111,19 +111,6 @@ function showBoundingBox(mesh) {
 
 
 /**
- * Checks if a mesh is a child of another mesh (recursive)
- * @param {THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>} possibleChild possible child mesh
- * @param {THREE.Mesh} parent parent mesh
- */
-function meshIsChildOf(possibleChild, parent) {
-  if (possibleChild.parent === parent) return true;
-  if (possibleChild.parent === null) return false;
-  // @ts-ignore
-  return meshIsChildOf(possibleChild.parent, parent);
-}
-
-
-/**
  * Turns a vector around the vertical axis (for plane movement)
  * @param { THREE.Vector3 } vector vector to turn
  * @param { number } angle angle to turn
