@@ -133,13 +133,13 @@ async function placeObjects() {
     sceneObjects.tables = [];
 
     const tablePositions = [
-        {x: 2.026, y: 0, z: 5.9, rotation: 90},
+        {x: 2.026, y: 0, z: 5.9, rotation: 90}, //parallel to the window wall
         {x: 2.026, y: 0, z: 7.7, rotation: 90},
         {x: 2.026, y: 0, z: 9.5, rotation: 90},
-        {x: 2.926, y: 0, z: 4.1, rotation: 0},
+        {x: 2.926, y: 0, z: 4.1, rotation: 0}, 
         {x: 2.926, y: 0, z: 6.5, rotation: 0},
         {x: 2.926, y: 0, z: 8.6, rotation: 0},
-        {x: 7.726, y: 0, z: 5.9, rotation: 90},
+        {x: 7.726, y: 0, z: 5.9, rotation: 90}, //other wall
         {x: 7.726, y: 0, z: 7.7, rotation: 90},
         {x: 7.726, y: 0, z: 9.5, rotation: 90},
         {x: 5.926, y: 0, z: 4.1, rotation: 0},
@@ -153,6 +153,9 @@ async function placeObjects() {
         table.rotateY(degToRad(position.rotation));
         table.position.set(position.x, position.y, position.z);
         scene.add(table);
+        let axishelper = new THREE.AxesHelper(1);
+        table.add(axishelper);
+        //scene.add(new THREE.AxesHelper(1).position.set(position.x, position.y, position.z));
         sceneObjects.tables.push(table);
     });
 
