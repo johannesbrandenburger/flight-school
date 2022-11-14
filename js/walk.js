@@ -43,10 +43,6 @@ function initWalk() {
       case "shift":
         distancePerWalk = baseDistancePerWalk * 2;
         break;
-      // TEMP: remove later
-      case "f":
-        window.location.href = "/flight-simulator";
-        break;
     }
   });
 

@@ -8,6 +8,8 @@ async function init() {
 
   initStartScreen();
 
+  window.addEventListener("keydown", event => { if (event.key === "f" || event.key === "F") window.location.href = "/flight-simulator" });
+
   // config for three.js
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(
