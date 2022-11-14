@@ -4,9 +4,16 @@
  * Animates the scene
  */
 async function animate() {
-  requestAnimationFrame(animate);
+
+  stats.update();
+
   handleWalking();
-  //handleAnimateChairs();
+  handleAnimateChairs();
+  handleAnimateClosets();
+  handleInfoDiv();
+  
+  deltaTime = clock.getDelta();
+  
   renderer.render(scene, camera);
-  await new Promise(resolve => setTimeout(resolve, animationTimeoutMs));
+  requestAnimationFrame(animate);
 }

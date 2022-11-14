@@ -53,3 +53,6 @@
     - fliegt in Richtung Maus
     - Flugzeug kann nicht durch Objekte fliegen
     - Inspiration: Google Earth Flight Simulator
+
+
+low-poly_airplane.glb from https://sketchfab.com/3d-models/low-poly-airplane-65cc7c4349174f7bbb20ed70206377b5

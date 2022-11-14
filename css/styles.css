@@ -1,3 +1,155 @@
-body {
-    margin: 0;
+html, body {
+  margin: 0;
+  font-family: 'Nunito Sans', sans-serif;
+  height: 100%;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+  height: 10pt;
+  width: 10pt;
+  border: solid 5px transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  border: solid 5px transparent;
+  box-shadow: inset 0 0 10px 10px #222222;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: rgba(0, 0, 0, 0);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.start-screen {
+  height: 100%;
+  overflow: auto;
+  overflow-y: overlay;
+}
+
+.start-button {
+  background-color: #3498db;
+  color: #ffffff;
+  font-size: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  top: 10px;
+  right: 15px;
+  position: fixed;
+  transition: .5s;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.start-button:hover {
+  background-color: #2980b9;
+  transition: .5s;
+}
+
+.start-button:disabled {
+  background-color: rgb(115, 115, 115);
+  cursor: not-allowed;
+}
+
+.loading-icon {
+  width: 20px;
+  height: 20px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
+  height: 100vh;
+  background: url(../textures/FlightSimulator2.png);
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.headerContent {
+  position: sticky;
+  top: 0;
+  margin-top: 70vh;
+}
+
+.headerContent p {
+  color: white;
+}
+
+.headerContent p span {
+  color: #FF0033;
+}
+
+.shadow {
+  -webkit-filter: drop-shadow( 4px 4px 3px rgba(34, 34, 34, .7));
+  filter: drop-shadow( 4px 4px 3px rgba(34, 34, 34, .7));
+  max-width: 80vw;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.features h2 {
+  color: #222222;
+  font-size: 30px;
+  margin: 20px 0;
+}
+
+.features table {
+  border-spacing: 0;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.features table :is(td, th) {
+  padding: 6px;
+}
+
+.features table thead :is(td, th) {
+  border-bottom: 1px solid;
+}
+
+.features table tbody tr :first-child {
+  text-align: center;
+}
+
+.features table tbody tr:not(:last-of-type) :is(td, th) {
+  border-bottom: 1px solid;
+}
+
+footer {
+  padding: 20px 20px;
+  background-color: #DADADA;
 }

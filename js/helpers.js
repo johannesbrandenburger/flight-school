@@ -1,17 +1,15 @@
 // @ts-check
 
 /**
- * 
- * @param { string } path 
- * @param { string } alternativePath
- * @returns { Promise<THREE.Mesh> } mesh
+ * Fetches a gltf model from the given url and returns it
+ * @param { string } path the path to the gltf model
+ * @param { string } alternativePath the path to the gltf model if the first path is not working
+ * @returns { Promise<THREE.Mesh> } mesh mesh of the gltf model
  */
 async function getMashFromBlenderModel(path, alternativePath = "") {
+
   // @ts-ignore
   const loader = new THREE.GLTFLoader();
-  console.log("loading blender model");
-  console.time("getMashFromBlenderModel");
-
   let mesh;
 
   // check if file exists
@@ -29,8 +27,6 @@ async function getMashFromBlenderModel(path, alternativePath = "") {
   await loader.load(
     path,
     function (gltf) {
-      console.log("inside loader.load");
-      console.timeEnd("getMashFromBlenderModel");
       mesh = gltf.scene;
       dispatchEvent(new Event("modelLoaded"));
     },
@@ -45,22 +41,19 @@ async function getMashFromBlenderModel(path, alternativePath = "") {
     addEventListener("modelLoaded", resolve, { once: true });
   });
 
-  console.log("loaded blender model");
-  console.log("mesh", mesh);
   return mesh;
 }
 
 
 /**
- * @param { THREE.Vector3 } point
- * @param { THREE.Mesh } mesh
+ * Checks if a point is inside a mesh
+ * @param { THREE.Vector3 } point point to check
+ * @param { THREE.Mesh } mesh mesh to check
  */
 function checkIfPointIsInsideMesh(point, mesh) {
   try {
     mesh.updateMatrixWorld();
     var localPt = mesh.worldToLocal(point.clone());
-
-    // TOFIX: got boundingBox is undefined at some meshes
     return mesh.geometry?.boundingBox?.containsPoint(localPt);
   } catch (error) {
     console.warn(error);
@@ -70,8 +63,9 @@ function checkIfPointIsInsideMesh(point, mesh) {
 
 
 /**
- * @param group
- * @returns { THREE.Mesh[] }
+ * Flattens a nested group of meshes into a single array of meshes (recursive)
+ * @param group group of meshes
+ * @returns { THREE.Mesh[] } array of meshes
  */
 function getAllMeshsFromNestedGroup(group) {
   let meshs = [];
@@ -80,7 +74,7 @@ function getAllMeshsFromNestedGroup(group) {
       meshs.push(group);
     }
     if (group.children.length === 0 || group.children === undefined)
-      return [ group ];
+      return [group];
     group.children.forEach(element => {
       if (element.children.length === 0 || group.children === undefined) {
         meshs.push(element);
@@ -97,16 +91,9 @@ function getAllMeshsFromNestedGroup(group) {
 
 
 /**
- * @param { THREE.Mesh } mesh
- */
-function getHeightOfMesh(mesh) {
-  let box = new THREE.Box3().setFromObject(mesh);
-  return box.max.y - box.min.y;
-}
-
-
-/**
- * @param {THREE.PerspectiveCamera} cam
+ * Gets the vector where the camera is looking at
+ * @param {THREE.PerspectiveCamera} cam camera to get the vector from
+ * @returns {THREE.Vector3} vector where the camera is looking at
  */
 function getCameraLookAt(cam) {
   var vector = new THREE.Vector3(0, 0, -1);
@@ -126,9 +113,9 @@ function degToRad(deg) {
 
 
 /**
- * This function checks if two meshes are intersecting with each other
- * @param {THREE.Mesh} mesh1
- * @param {THREE.Mesh} mesh2
+ * Checks if two meshes are intersecting with each other
+ * @param {THREE.Mesh} mesh1 first mesh to check
+ * @param {THREE.Mesh} mesh2 second mesh to check
  * @returns {boolean} true if the two meshes are intersecting
  */
 function checkCollision(mesh1, mesh2) {
@@ -139,39 +126,114 @@ function checkCollision(mesh1, mesh2) {
 
 
 /**
- * Creates a crosshair in the middle of the screen in the form of two divs
+ * Creates a bounding box around the given mesh and shows it in the scene
+ * @param { THREE.Mesh } mesh mesh to create the bounding box around
  */
-function createCrosshair() {
-  const crossWidth = "20px";
-  const crossThickness = "5px";
-  const crossColor = "green";
-  const crossVertical = document.createElement("div");
-  crossVertical.style.position = "absolute";
-  crossVertical.style.top = "50%";
-  crossVertical.style.left = "50%";
-  crossVertical.style.width = crossWidth;
-  crossVertical.style.height = crossThickness;
-  crossVertical.style.backgroundColor = crossColor
-  crossVertical.style.transform = "translate(-50%, -50%)";
-  crossVertical.id = "crosshair-vertical";
-  document.body.appendChild(crossVertical);
-  const crossHorizontal = document.createElement("div");
-  crossHorizontal.style.position = "absolute";
-  crossHorizontal.style.top = "50%";
-  crossHorizontal.style.left = "50%";
-  crossHorizontal.style.width = crossThickness;
-  crossHorizontal.style.height = crossWidth;
-  crossHorizontal.style.backgroundColor = crossColor
-  crossHorizontal.style.transform = "translate(-50%, -50%)";
-  crossHorizontal.id = "crosshair-horizontal";
-  document.body.appendChild(crossHorizontal);
+function showBoundingBox(mesh) {
+  const box = new THREE.Box3().setFromObject(mesh);
+  // @ts-ignore
+  const boxHelper = new THREE.Box3Helper(box, 0xffff00);
+  boxHelper.position.copy(mesh.position);
+  scene.add(boxHelper);
 }
 
 
 /**
- * Removes the crosshair from the screen
+ * Checks if a mesh is a child of another mesh (recursive)
+ * @param {THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>} possibleChild possible child mesh
+ * @param {THREE.Mesh} parent parent mesh
  */
-function removeCrosshair() {
-  document.getElementById("crosshair-vertical").remove();
-  document.getElementById("crosshair-horizontal").remove();
+function meshIsChildOf(possibleChild, parent) {
+  if (possibleChild.parent === parent) return true;
+  if (possibleChild.parent === null) return false;
+  // @ts-ignore
+  return meshIsChildOf(possibleChild.parent, parent);
+}
+
+
+/**
+ * Turns a vector around the vertical axis (for plane movement)
+ * @param { THREE.Vector3 } vector vector to turn
+ * @param { number } angle angle to turn
+ */
+function turnVectorAroundVerticalAxis(vector, angle) {
+  let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
+  newVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+  return newVector;
+}
+
+
+/**
+* Turns a vector around the horizontal axis (for plane movement)
+* @param {*} vector vector to turn
+* @param {*} angle angle to turn
+* @returns { { newVector: THREE.Vector3, turnedBeyondYAxis: boolean  } } new vector and if the vector turned beyond the y axis (to check if the plane is upside down)
+*/
+function turnVectorAroundHorizontalAxis(vector, angle) {
+
+  // get the horizontal vector
+  let horizontalVector = new THREE.Vector3(vector.x, 0, vector.z);
+  horizontalVector.normalize();
+
+  if (showFlightVectors) showVector(horizontalVector, sceneObjects.modelPlane.position, "horizontalVector", 0xff0000);
+
+  // get the vertical vector
+  let verticalVector = new THREE.Vector3(0, vector.y, 0);
+  verticalVector.normalize();
+
+  if (showFlightVectors) showVector(verticalVector, sceneObjects.modelPlane.position, "verticalVector", 0x00ff00);
+
+  // get the cross product of the horizontal and vertical vector
+  let crossProduct = new THREE.Vector3();
+  crossProduct.crossVectors(horizontalVector, verticalVector);
+  crossProduct.normalize();
+
+  // cross product always have to be the right vector (because of the right hand rule)
+  if (crossProduct.x < 0) {
+    crossProduct.x *= -1;
+    crossProduct.y *= -1;
+    crossProduct.z *= -1;
+  }
+  if (vector.z < 0) {
+    crossProduct.x *= -1;
+    crossProduct.y *= -1;
+    crossProduct.z *= -1;
+  }
+
+  if (showFlightVectors) showVector(crossProduct, sceneObjects.modelPlane.position, "cross-product", 0x0000ff);
+
+  // rotate the vector around the cross product
+  let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
+  newVector.applyAxisAngle(crossProduct, -angle);
+  
+  // check if one of the x or z values are 0 to avoid division by 0
+  if (newVector.x === 0 || newVector.z === 0 || vector.x === 0 || vector.z === 0) {
+    return { newVector, turnedBeyondYAxis: false };
+  }
+  
+  // check if the vector turned beyond the y axis
+  let turnedBeyondYAxis = false;
+  if ( 
+    (newVector.x / Math.abs(newVector.x)) !== (vector.x / Math.abs(vector.x)) || 
+    (newVector.z / Math.abs(newVector.z)) !== (vector.z / Math.abs(vector.z))
+    ) {
+    turnedBeyondYAxis = true;
+  }
+
+  return { newVector, turnedBeyondYAxis };
+}
+
+
+/**
+ * Shows a vector in the scene and if the vector is already shown the previous one will be removed
+ * @param { THREE.Vector3 } vector vector to show
+ * @param { THREE.Vector3 } position position of the vector
+ * @param { string } name name of the vector
+ * @param { number } color color of the vector
+ */
+function showVector(vector, position, name, color = 0xffffff) {
+  scene.remove(scene.getObjectByName(name));
+  let helper = new THREE.ArrowHelper(vector, position, 1, color);
+  helper.name = name;
+  scene.add(helper);
 }

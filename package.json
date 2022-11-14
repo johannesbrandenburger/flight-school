@@ -7,7 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "jsdoc": "rm -rf jsdoc/root/*; rm -rf jsdoc/flight-simulator/*; jsdoc -c jsdoc-config.json; cd flight-simulator; jsdoc -c jsdoc-config.json; cd ..; mv flight-simulator/out/* jsdoc/flight-simulator; rm -rf flight-simulator/out; mv out/* jsdoc/root; rm -rf out;"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,10 @@
   },
   "homepage": "https://github.com/johannesbrandenburger/cg-hs-lb-jb#readme",
   "dependencies": {
-    "@types/three": "^0.144.0"
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/three": "^0.144.0",
+    "jsdoc": "^4.0.0"
   }
 }

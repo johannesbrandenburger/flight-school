@@ -1,57 +1,80 @@
 // @ts-check
 
 // create config
-const headHeight = 1.70;
-const startPoint = new THREE.Vector3(0.97, headHeight, 3);
-const distancePerWalk = 0.1;
-const mouseRotateSpeed = 0.002;
-const playerWidth = 1;
+const headHeight = 1.50;
+const startPoint = new THREE.Vector3(9, headHeight, 11);
+const mouseRotateSpeed = 0.2;
+const playerWidth = 0.4;
 const mouseZoomSpeed = 0.8;
-
+const baseDistancePerWalk = 4
+let distancePerWalk = baseDistancePerWalk;
 
 /**
  * Initialize the walking controls
  */
 function initWalk() {
 
-  // set cam on start position and look a bit right
-  // camera.position.set(startPoint.x, startPoint.y, startPoint.z);
   camera.lookAt(new THREE.Vector3(0, headHeight, 0));
 
   // register key events
   window.addEventListener("keydown", event => {
     switch (event.key) {
-      case "w" || "W":
+      case "ArrowUp":
+      case "w":
+      case "W":
         isWalking.forward = true;
         break;
-      case "s" || "S":
+      case "ArrowDown":
+      case "s":
+      case "S":
         isWalking.backward = true;
         break;
-      case "a" || "A":
+      case "ArrowLeft":
+      case "a":
+      case "A":
         isWalking.left = true;
         break;
-      case "d" || "D":
+      case "ArrowRight":
+      case "d":
+      case "D":
         isWalking.right = true;
         break;
+      case "Shift":
+      case "shift":
+        distancePerWalk = baseDistancePerWalk * 2;
+        break;
       // TEMP: remove later
-      case "f" || "F":
+      case "f":
         window.location.href = "/flight-simulator";
+        break;
     }
   });
 
   window.addEventListener("keyup", event => {
     switch (event.key) {
-      case "w" || "W":
+      case "ArrowUp":
+      case "w":
+      case "W":
         isWalking.forward = false;
         break;
-      case "s" || "S":
+      case "ArrowDown":
+      case "s":
+      case "S":
         isWalking.backward = false;
         break;
-      case "a" || "A":
+      case "ArrowLeft":
+      case "a":
+      case "A":
         isWalking.left = false;
         break;
-      case "d" || "D":
+      case "ArrowRight":
+      case "d":
+      case "D":
         isWalking.right = false;
+        break;
+      case "Shift":
+      case "shift":
+        distancePerWalk = baseDistancePerWalk;
         break;
     }
   });
@@ -60,11 +83,12 @@ function initWalk() {
 
 
 /**
- * Get the new position of the player/camera
- * @param {THREE.Vector3} position
- * @param {THREE.Vector3} lookAt
- * @param {number} distance
- * @param { { forward: boolean, backward: boolean, left: boolean, right: boolean } } isWalking
+ * Calculates the new position of the player/camera
+ * @param {THREE.Vector3} position current position of the player/camera
+ * @param {THREE.Vector3} lookAt current lookAt of the camera
+ * @param {number} distance distance the player should walk
+ * @param { { forward: boolean, backward: boolean, left: boolean, right: boolean } } isWalking object that stores if the user is walking in a direction
+ * @returns {THREE.Vector3} new position of the player/camera
  */
 function getNewPosition(position, lookAt, distance, isWalking) {
   const newPosition = new THREE.Vector3(position.x, position.y, position.z);
@@ -114,7 +138,7 @@ function createPlayer() {
   const player = new THREE.Mesh(playerGeometry, playerMaterial);
   player.position.set(startPoint.x, headHeight / 2 + 0.2, startPoint.z);
   scene.add(player);
-  myObjects.player = player;
+  sceneObjects.player = player;
 }
 
 
@@ -126,34 +150,32 @@ function handleWalking() {
 
   // store previous position of player to check for collision
   const previousPosition = new THREE.Vector3(
-    myObjects.player.position.x,
-    myObjects.player.position.y,
-    myObjects.player.position.z
+    sceneObjects.player.position.x,
+    sceneObjects.player.position.y,
+    sceneObjects.player.position.z
   );
   let isCollision = false;
 
   // walk if the user is pressing a key
   if (isWalking.forward || isWalking.backward || isWalking.left || isWalking.right) {
     const newPosition = getNewPosition(
-      myObjects.player.position,
+      sceneObjects.player.position,
       getCameraLookAt(camera),
-      distancePerWalk,
+      distancePerWalk * deltaTime,
       isWalking
     );
-    myObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
-    console.log(myObjects.player.position);
+    sceneObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
   }
 
   // check if the player is inside a mesh
   let allMeshs = getAllMeshsFromNestedGroup(scene);
   for (let i = 0; i < allMeshs.length; i++) {
-    if (allMeshs[i] !== myObjects.player) {
+    if (allMeshs[i] !== sceneObjects.player) {
 
-      // TODO: exceptions can be removed later
-      if (checkCollision(myObjects.player, allMeshs[i])
-        && !isCollision && allMeshs[i].type !== "AxesHelper" 
-        && allMeshs[i].name !== "Floor" 
-        && allMeshs[i].name !== "Ground_Material007_0" 
+      // TODO: some exceptions can be removed later
+      if (checkCollision(sceneObjects.player, allMeshs[i])
+        && allMeshs[i].name !== "Floor"
+        && allMeshs[i].name !== "Ground_Material007_0"
         && allMeshs[i].name !== "Trunk_Material001_0"
         && allMeshs[i].name !== "Trunk_Trunk_0"
         && allMeshs[i].name !== "Grass_Material_0"
@@ -161,8 +183,6 @@ function handleWalking() {
         && allMeshs[i].name !== "Watter_Material005_0"
         && allMeshs[i].name !== ""
       ) {
-        console.log("collision with");
-        console.log(allMeshs[i]);
         isCollision = true;
         break;
       }
@@ -170,19 +190,19 @@ function handleWalking() {
   }
 
   // if the player is inside a mesh, set the position back to the previous position
-  if (isCollision === true) {
-    myObjects.player.position.set(
-      previousPosition.x,
-      previousPosition.y,
-      previousPosition.z
-    );
-  }
+  // if (isCollision === true) {
+  //   sceneObjects.player.position.set(
+  //     previousPosition.x,
+  //     previousPosition.y,
+  //     previousPosition.z
+  //   );
+  // }
 
   // update the camera position
   camera.position.set(
-    myObjects.player.position.x,
+    sceneObjects.player.position.x,
     headHeight,
-    myObjects.player.position.z
+    sceneObjects.player.position.z
   );
 }
 
@@ -192,22 +212,24 @@ function handleWalking() {
  */
 function initMouseClickMove() {
 
-  window.addEventListener("mousedown", event => {
+  renderer.domElement.addEventListener("mousedown", event => {
     isMouseDown = true;
   });
 
   window.addEventListener("mouseup", event => {
     isMouseDown = false;
+    isMouseOnBlackboardBoard1 = false;
+    isMouseOnBlackboardBoard2 = false;
   });
 
-  window.addEventListener("mousemove", event => {
-    if (!isMouseDown) return;
+  renderer.domElement.addEventListener("mousemove", event => {
+    if (!isMouseDown || isMouseOnBlackboardBoard1 || isMouseOnBlackboardBoard2) return;
     isMovingCamera = true;
-    camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), event.movementX * mouseRotateSpeed);
-    camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), event.movementY * mouseRotateSpeed);
+    camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), event.movementX * mouseRotateSpeed * deltaTime);
+    camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), event.movementY * mouseRotateSpeed * deltaTime);
   });
 
-  window.addEventListener("wheel", event => {
+  renderer.domElement.addEventListener("wheel", event => {
     const delta = Math.sign(event.deltaY);
     if ((camera.fov + delta * mouseZoomSpeed) < 135 && (camera.fov + delta * mouseZoomSpeed) > 20) {
       camera.fov += delta * mouseZoomSpeed;

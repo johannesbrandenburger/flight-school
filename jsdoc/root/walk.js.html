@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: walk.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: walk.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// @ts-check
+
+// create config
+const headHeight = 1.50;
+const startPoint = new THREE.Vector3(9, headHeight, 11);
+const mouseRotateSpeed = 0.2;
+const playerWidth = 0.4;
+const mouseZoomSpeed = 0.8;
+const baseDistancePerWalk = 4
+let distancePerWalk = baseDistancePerWalk;
+
+/**
+ * Initialize the walking controls
+ */
+function initWalk() {
+
+  camera.lookAt(new THREE.Vector3(0, headHeight, 0));
+
+  // register key events
+  window.addEventListener("keydown", event => {
+    switch (event.key) {
+      case "ArrowUp":
+      case "w":
+      case "W":
+        isWalking.forward = true;
+        break;
+      case "ArrowDown":
+      case "s":
+      case "S":
+        isWalking.backward = true;
+        break;
+      case "ArrowLeft":
+      case "a":
+      case "A":
+        isWalking.left = true;
+        break;
+      case "ArrowRight":
+      case "d":
+      case "D":
+        isWalking.right = true;
+        break;
+      case "Shift":
+      case "shift":
+        distancePerWalk = baseDistancePerWalk * 2;
+        break;
+      // TEMP: remove later
+      case "f":
+        window.location.href = "/flight-simulator";
+        break;
+    }
+  });
+
+  window.addEventListener("keyup", event => {
+    switch (event.key) {
+      case "ArrowUp":
+      case "w":
+      case "W":
+        isWalking.forward = false;
+        break;
+      case "ArrowDown":
+      case "s":
+      case "S":
+        isWalking.backward = false;
+        break;
+      case "ArrowLeft":
+      case "a":
+      case "A":
+        isWalking.left = false;
+        break;
+      case "ArrowRight":
+      case "d":
+      case "D":
+        isWalking.right = false;
+        break;
+      case "Shift":
+      case "shift":
+        distancePerWalk = baseDistancePerWalk;
+        break;
+    }
+  });
+  createPlayer();
+}
+
+
+/**
+ * Calculates the new position of the player/camera
+ * @param {THREE.Vector3} position current position of the player/camera
+ * @param {THREE.Vector3} lookAt current lookAt of the camera
+ * @param {number} distance distance the player should walk
+ * @param { { forward: boolean, backward: boolean, left: boolean, right: boolean } } isWalking object that stores if the user is walking in a direction
+ * @returns {THREE.Vector3} new position of the player/camera
+ */
+function getNewPosition(position, lookAt, distance, isWalking) {
+  const newPosition = new THREE.Vector3(position.x, position.y, position.z);
+
+  // check if two keys are pressed at the same time
+  if ((isWalking.forward &amp;&amp; (isWalking.left || isWalking.right)) || (isWalking.backward &amp;&amp; (isWalking.left || isWalking.right))) {
+    distance = distance / 2;
+  }
+
+  if (isWalking.forward === true) {
+    newPosition.add(lookAt.clone().multiplyScalar(distance));
+  }
+
+  if (isWalking.backward === true) {
+    newPosition.add(lookAt.clone().multiplyScalar(-distance));
+  }
+
+  if (isWalking.left === true) {
+    newPosition.add(
+      lookAt
+        .clone()
+        .applyAxisAngle(new THREE.Vector3(0, 1, 0), degToRad(90))
+        .multiplyScalar(distance)
+    );
+  }
+
+  if (isWalking.right === true) {
+    newPosition.add(
+      lookAt
+        .clone()
+        .applyAxisAngle(new THREE.Vector3(0, 1, 0), degToRad(-90))
+        .multiplyScalar(distance)
+    );
+  }
+
+  newPosition.y = position.y;
+  return newPosition;
+}
+
+
+/**
+ * Creates a player mesh and adds it to the scene
+ */
+function createPlayer() {
+  const playerGeometry = new THREE.BoxGeometry(playerWidth, headHeight, playerWidth);
+  const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
+  const player = new THREE.Mesh(playerGeometry, playerMaterial);
+  player.position.set(startPoint.x, headHeight / 2 + 0.2, startPoint.z);
+  scene.add(player);
+  sceneObjects.player = player;
+}
+
+
+/**
+ * Handle the walking of the player
+ * Is called every frame in animate.js
+ */
+function handleWalking() {
+
+  // store previous position of player to check for collision
+  const previousPosition = new THREE.Vector3(
+    sceneObjects.player.position.x,
+    sceneObjects.player.position.y,
+    sceneObjects.player.position.z
+  );
+  let isCollision = false;
+
+  // walk if the user is pressing a key
+  if (isWalking.forward || isWalking.backward || isWalking.left || isWalking.right) {
+    const newPosition = getNewPosition(
+      sceneObjects.player.position,
+      getCameraLookAt(camera),
+      distancePerWalk * deltaTime,
+      isWalking
+    );
+    sceneObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
+  }
+
+  // check if the player is inside a mesh
+  let allMeshs = getAllMeshsFromNestedGroup(scene);
+  for (let i = 0; i &lt; allMeshs.length; i++) {
+    if (allMeshs[i] !== sceneObjects.player) {
+
+      // TODO: some exceptions can be removed later
+      if (checkCollision(sceneObjects.player, allMeshs[i])
+        &amp;&amp; allMeshs[i].name !== "Floor"
+        &amp;&amp; allMeshs[i].name !== "Ground_Material007_0"
+        &amp;&amp; allMeshs[i].name !== "Trunk_Material001_0"
+        &amp;&amp; allMeshs[i].name !== "Trunk_Trunk_0"
+        &amp;&amp; allMeshs[i].name !== "Grass_Material_0"
+        &amp;&amp; allMeshs[i].name !== "Mud_Material004_0"
+        &amp;&amp; allMeshs[i].name !== "Watter_Material005_0"
+        &amp;&amp; allMeshs[i].name !== ""
+      ) {
+        isCollision = true;
+        break;
+      }
+    }
+  }
+
+  // if the player is inside a mesh, set the position back to the previous position
+  // if (isCollision === true) {
+  //   sceneObjects.player.position.set(
+  //     previousPosition.x,
+  //     previousPosition.y,
+  //     previousPosition.z
+  //   );
+  // }
+
+  // update the camera position
+  camera.position.set(
+    sceneObjects.player.position.x,
+    headHeight,
+    sceneObjects.player.position.z
+  );
+}
+
+
+/**
+ * Lets user rotate the camera with the mouse
+ */
+function initMouseClickMove() {
+
+  renderer.domElement.addEventListener("mousedown", event => {
+    isMouseDown = true;
+  });
+
+  window.addEventListener("mouseup", event => {
+    isMouseDown = false;
+    isMouseOnBlackboardBoard1 = false;
+    isMouseOnBlackboardBoard2 = false;
+  });
+
+  renderer.domElement.addEventListener("mousemove", event => {
+    if (!isMouseDown || isMouseOnBlackboardBoard1 || isMouseOnBlackboardBoard2) return;
+    isMovingCamera = true;
+    camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), event.movementX * mouseRotateSpeed * deltaTime);
+    camera.rotateOnAxis(new THREE.Vector3(1, 0, 0), event.movementY * mouseRotateSpeed * deltaTime);
+  });
+
+  renderer.domElement.addEventListener("wheel", event => {
+    const delta = Math.sign(event.deltaY);
+    if ((camera.fov + delta * mouseZoomSpeed) &lt; 135 &amp;&amp; (camera.fov + delta * mouseZoomSpeed) > 20) {
+      camera.fov += delta * mouseZoomSpeed;
+      camera.updateProjectionMatrix();
+    }
+  });
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getAllMeshsFromNestedGroup">getAllMeshsFromNestedGroup</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#maxDistance">maxDistance</a></li><li><a href="global.html#meshIsChildOf">meshIsChildOf</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 08:42:13 GMT+0100 (Mitteleuropäische Normalzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

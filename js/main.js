@@ -7,18 +7,29 @@ var container,
   camera,
   renderer,
   controls,
-  effect,
-  animationTimeoutMs,
   domEvents,
-  myObjects = {},
+  sceneObjects = {},
   testBall,
   isWalking = { forward: false, backward: false, left: false, right: false },
   isMouseDown = false,
+  isMouseOnBlackboardBoard1 = false,
+  isMouseOnBlackboardBoard2 = false,
   isMovingCamera = false,
   clock,
-  planeLookAt,
-  headingTo = { right: 0, up: 0 },
-  arrowHelpers = []
+  deltaTime,
+  chairAnimation = {
+    activeChair: null,
+    initialPosition: null,
+    moveStep: 1,
+    up: true,
+    timeSinceAnimationStart: 0,
+  },
+  closetAnimation = { 
+    activeCloset: null,
+    open: true,
+    timeSinceAnimationStart: 0,
+  },
+  redirectFromFlightSimulator = false
   ;
 
 init().then(() => {
