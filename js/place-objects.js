@@ -58,7 +58,7 @@ async function placeObjects() {
 
     // closet 1
     sceneObjects.closets = [];
-    let closetOne = await getMashFromBlenderModel("../blender/Closet.glb");
+    let closetOne = await getMashFromBlenderModel("../blender/closet.glb");
     scene.add(closetOne);
     closetOne.rotateY(degToRad(180));
     closetOne.position.set(8.926, 0, 0);
