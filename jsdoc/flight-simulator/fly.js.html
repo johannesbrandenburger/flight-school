@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: flight-simulator/js/fly.js</title>
+    <title>JSDoc: Source: fly.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: flight-simulator/js/fly.js</h1>
+    <h1 class="page-title">Source: fly.js</h1>
 
     
 
@@ -28,9 +28,6 @@
         <article>
             <pre class="prettyprint source linenums"><code>// @ts-check
 
-/** @type {number} */
-let distancePerFly = 1.5;
-
 /** @type {THREE.Vector3} */
 const planeStartPoint = new THREE.Vector3(4, 0.85, 3);
 
@@ -40,13 +37,16 @@ const distanceOfCameraFromPlane = 1.5;
 /** @type {boolean} */
 let checkForPlaneCollision = true;
 
+/** @type {number} */
+let basePlaneRotateFactor = 0.01;
+
+/** @type {number} */
+let speed = 1.5;
 
 /**
  * Initializes the flying controls
  */
 async function initFlying() {
-
-    camera.lookAt(planeStartPoint);
 
     // as further the mouse is right/left of the cross the more the plane is moving right/left
     // headingTo = { right: int, up: int } stores values from 0 to 100 
@@ -95,9 +95,22 @@ function handleFlying() {
     planeLookAt.applyQuaternion(quaternion);
     planeLookAt.normalize();
 
+    //TEMP
+    const oldPlaneLookAt = planeLookAt.clone();
+
+    // planeRotationFactor
+    let planeRotationFactor = basePlaneRotateFactor;
+    if (planeIsUpsideDown) {
+        planeRotationFactor = -basePlaneRotateFactor;
+    }
+
     // manipulate the lookAt vector by the headingTo values
-    planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - 0.01));
-    planeLookAt = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * 0.03));
+    let turnedBeyondYAxis = false;
+    planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - planeRotationFactor));
+    let horizontalTurn = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * planeRotationFactor));
+    planeLookAt = horizontalTurn.newVector;
+    turnedBeyondYAxis = horizontalTurn.turnedBeyondYAxis;
+    if (turnedBeyondYAxis) { planeIsUpsideDown = !planeIsUpsideDown; console.log("turnd");}
     planeLookAt.normalize();
 
     // set the new lookAt vector
@@ -105,19 +118,36 @@ function handleFlying() {
     sceneObjects.modelPlane.lookAt(newPointToLookAt);
 
     // move the plane forward (always)
+    speed = calcSpeed(speed, planeLookAt.y);
     let newPlanePosition = sceneObjects.modelPlane.position.clone();
-    newPlanePosition.addScaledVector(planeLookAt, distancePerFly * deltaTime);
+    newPlanePosition.addScaledVector(planeLookAt, speed * deltaTime);
 
     // apply the new position
     sceneObjects.modelPlane.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
+    
+    // turn the camera and plane
+    if (turnedBeyondYAxis) {
+        camera.up.set(0, -camera.up.y, 0);
+        console.table({
+            "newPlanePosition": newPlanePosition,
+            "planeLookAt": planeLookAt,
+            "oldPlaneLookAt": oldPlaneLookAt,
+        });
+        console.count("turnedBeyondYAxis");
+    }
+    if (planeIsUpsideDown) {
+        sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(180));
+    }
 
     // move the camera behind the plane -lookAt
     camera.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
     camera.position.addScaledVector(planeLookAt, -distanceOfCameraFromPlane);
     camera.lookAt(newPlanePosition);
-
+    
     // tend the plane a little bit to the right/left depending on the headingTo.right value
-    sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.4));
+    sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.5));
+    sceneObjects.modelPlane.updateMatrixWorld();
+
 
     if (!checkForPlaneCollision) return;
 
@@ -134,7 +164,7 @@ function handleFlying() {
         }
     }
     if (planeCollided) {
-        distancePerFly = 0;
+        speed = 0;
 
         // show the plane in red
         sceneObjects.modelPlane.traverse(function (child) {
@@ -168,7 +198,30 @@ async function createModelPlane() {
     sceneObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
     sceneObjects.modelPlane.scale.set(0.002, 0.003, 0.003);
     sceneObjects.modelPlane.lookAt(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z - 1);
-}</code></pre>
+}
+
+
+/**
+ * Calculates the speed depending on the y value of the planeLookAt vector and the previous speed
+ * @param {number} speed previous speed
+ * @param {*} y y value of the planeLookAt vector 1 = straight up, -1 = straight down
+ */
+function calcSpeed(speed, y) {
+
+    const minSpeed = 1.5;
+    const maxSpeed = 3.5;
+    const baseSpeed = 2;
+    const yFactor = 0.1;
+
+    let newSpeed = speed * 0.9 + baseSpeed * 0.1;
+    newSpeed -= y * yFactor;
+
+    if (newSpeed &lt; minSpeed) newSpeed = minSpeed;
+    if (newSpeed > maxSpeed) newSpeed = maxSpeed;
+
+    return newSpeed;
+}
+</code></pre>
         </article>
     </section>
 
@@ -178,13 +231,13 @@ async function createModelPlane() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkForPlaneCollision">checkForPlaneCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#distancePerFly">distancePerFly</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#getAllMeshsFromNestedGroup">getAllMeshsFromNestedGroup</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#meshIsChildOf">meshIsChildOf</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#planeStartPoint">planeStartPoint</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#basePlaneRotateFactor">basePlaneRotateFactor</a></li><li><a href="global.html#calcSpeed">calcSpeed</a></li><li><a href="global.html#checkForPlaneCollision">checkForPlaneCollision</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#planeStartPoint">planeStartPoint</a></li><li><a href="global.html#speed">speed</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Sat Nov 12 2022 14:25:57 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 08:42:13 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>

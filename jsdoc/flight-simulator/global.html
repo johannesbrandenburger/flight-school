@@ -98,6 +98,74 @@
 
         
             
+<h4 class="name" id="basePlaneRotateFactor"><span class="type-signature"></span>basePlaneRotateFactor<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="checkForPlaneCollision"><span class="type-signature"></span>checkForPlaneCollision<span class="type-signature"> :boolean</span></h4>
 
 
@@ -148,7 +216,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line13">line 13</a>
+        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -216,75 +284,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line10">line 10</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="distancePerFly"><span class="type-signature"></span>distancePerFly<span class="type-signature"> :number</span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">number</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line4">line 4</a>
+        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line7">line 7</a>
     </li></ul></dd>
     
 
@@ -352,7 +352,75 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line7">line 7</a>
+        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line4">line 4</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="speed"><span class="type-signature"></span>speed<span class="type-signature"> :number</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -468,6 +536,166 @@
     
 
     
+    <h4 class="name" id="calcSpeed"><span class="type-signature"></span>calcSpeed<span class="signature">(speed, y)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Calculates the speed depending on the y value of the planeLookAt vector and the previous speed
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>speed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">previous speed</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">y value of the planeLookAt vector 1 = straight up, -1 = straight down</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line181">line 181</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="createModelPlane"><span class="type-signature">(async) </span>createModelPlane<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -520,7 +748,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line130">line 130</a>
+        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line160">line 160</a>
     </li></ul></dd>
     
 
@@ -608,7 +836,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line188">line 188</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line201">line 201</a>
     </li></ul></dd>
     
 
@@ -785,7 +1013,7 @@ This is to prevent the plane from flying away
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="animate.js.html">animate.js</a>, <a href="animate.js.html#line117">line 117</a>
+        <a href="animate.js.html">animate.js</a>, <a href="animate.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -874,7 +1102,7 @@ If plane collides with a torus, the torus is removed from the scene and the scor
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="animate.js.html">animate.js</a>, <a href="animate.js.html#line27">line 27</a>
+        <a href="animate.js.html">animate.js</a>, <a href="animate.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -962,7 +1190,7 @@ If plane collides with a torus, the torus is removed from the scene and the scor
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="animate.js.html">animate.js</a>, <a href="animate.js.html#line89">line 89</a>
+        <a href="animate.js.html">animate.js</a>, <a href="animate.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -1086,6 +1314,94 @@ If plane collides with a torus, the torus is removed from the scene and the scor
     
 
     
+    <h4 class="name" id="initDevControls"><span class="type-signature"></span>initDevControls<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Initialize developer controls / keyboard shortcuts and experimental features
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line251">line 251</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="initFlying"><span class="type-signature">(async) </span>initFlying<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -1138,7 +1454,7 @@ If plane collides with a torus, the torus is removed from the scene and the scor
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line19">line 19</a>
+        <a href="fly.js.html">fly.js</a>, <a href="fly.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -1227,7 +1543,95 @@ If plane collides with a torus, the torus is removed from the scene and the scor
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="init.js.html">init.js</a>, <a href="init.js.html#line141">line 141</a>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line139">line 139</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="initStats"><span class="type-signature"></span>initStats<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Initialize the FPS stats
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="init.js.html">init.js</a>, <a href="init.js.html#line186">line 186</a>
     </li></ul></dd>
     
 
@@ -1454,13 +1858,13 @@ Object types:
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkForPlaneCollision">checkForPlaneCollision</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#distancePerFly">distancePerFly</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#planeStartPoint">planeStartPoint</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#basePlaneRotateFactor">basePlaneRotateFactor</a></li><li><a href="global.html#calcSpeed">calcSpeed</a></li><li><a href="global.html#checkForPlaneCollision">checkForPlaneCollision</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#planeStartPoint">planeStartPoint</a></li><li><a href="global.html#speed">speed</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Sat Nov 12 2022 14:30:27 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 08:42:13 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>

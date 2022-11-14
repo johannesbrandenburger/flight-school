@@ -37,6 +37,9 @@ let infoDiv;
 /** @type {number} */
 let infoStartTime = null;
 
+/** @type {number} */
+let maxDistance = 4;
+
 /**
  * Calls the init functions to initialize the interactions
  */
@@ -117,6 +120,7 @@ function initInfoDiv() {
 function initTriggerFlightSimulator() {
     if (sceneObjects.monitor === undefined) return;
     domEvents.addEventListener(sceneObjects.monitor, "click", () => {
+        if (camera.position.distanceTo(sceneObjects.monitor.position) > maxDistance) return;
         console.log("clicked on monitor");
         location.href = "/flight-simulator";
     });
@@ -141,11 +145,13 @@ function initAdjustBlackboardHeight() {
     const distanceBetweenBoardAndChalkTray = chalkTray1.position.y - board1.position.y;
 
     domEvents.addEventListener(board1, "mousedown", () => {
+        if (camera.position.distanceTo(sceneObjects.blackboard.position) > maxDistance * 2) return;
         isMouseDown = isMouseOnBlackboardBoard2 = false;
         isMouseOnBlackboardBoard1 = true;
     });
 
     domEvents.addEventListener(board2, "mousedown", () => {
+        if (camera.position.distanceTo(sceneObjects.blackboard.position) > maxDistance * 2) return;
         isMouseDown = isMouseOnBlackboardBoard1 = false;
         isMouseOnBlackboardBoard2 = true;
     });
@@ -179,6 +185,7 @@ function initSwitchLight() {
 
     // add the event listeners
     domEvents.addEventListener(sceneObjects.lightSwitchOne, "click", () => {
+        if (camera.position.distanceTo(sceneObjects.lightSwitchOne.position) > maxDistance) return;
         console.log("clicked on light switch one");
         sceneObjects.bulbLights.forEach(light => {
             if (light.name === "1") {
@@ -193,6 +200,7 @@ function initSwitchLight() {
     });
 
     domEvents.addEventListener(sceneObjects.lightSwitchTwo, "click", () => {
+        if (camera.position.distanceTo(sceneObjects.lightSwitchTwo.position) > maxDistance) return;
         console.log("clicked on light switch two");
         sceneObjects.bulbLights.forEach(light => {
             if (light.name === "2") {
@@ -207,6 +215,7 @@ function initSwitchLight() {
     });
 
     domEvents.addEventListener(sceneObjects.lightSwitchThree, "click", () => {
+        if (camera.position.distanceTo(sceneObjects.lightSwitchThree.position) > maxDistance) return;
         console.log("clicked on light switch three");
         sceneObjects.bulbLights.forEach(light => {
             if (light.name === "3") {
@@ -250,6 +259,7 @@ function initPutChairOnTable() {
 
         // add the event listener
         domEvents.addEventListener(chair, "click", () => {
+            if (camera.position.distanceTo(chair.position) > maxDistance) return;
             console.log("clicked on chair:", chair);
             if (chairAnimation.activeChair !== null) return;
             chairAnimation.activeChair = chair;
@@ -268,6 +278,7 @@ function initOpenCloset() {
     sceneObjects.closets.forEach(closet => {
         closet.isOpen = false;
         domEvents.addEventListener(closet, "click", () => {
+            if (camera.position.distanceTo(closet.position) > maxDistance) return;
             console.log("clicked on closet:", closet);
             if (closetAnimation.activeCloset !== null) return;
 
@@ -611,13 +622,13 @@ function handleInfoDiv() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getAllMeshsFromNestedGroup">getAllMeshsFromNestedGroup</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#meshIsChildOf">meshIsChildOf</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getAllMeshsFromNestedGroup">getAllMeshsFromNestedGroup</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#maxDistance">maxDistance</a></li><li><a href="global.html#meshIsChildOf">meshIsChildOf</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Sat Nov 12 2022 14:29:28 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 08:42:13 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>

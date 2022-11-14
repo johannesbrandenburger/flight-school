@@ -102,6 +102,9 @@ async function init() {
     // add the renderer to the dom
     camera.position.set(4, 8, 17);
 
+    initStats();
+    initDevControls();
+
     placeTorusObjects();
     placeObstaclesObjects();
 
@@ -122,14 +125,9 @@ async function init() {
     // move the plane outside the torus radius
     sceneObjects.modelPlane.position.set(0, 5, torusSpawnRadius * 0.5 + 5,);
 
-    // add event listener on mouse down to speed up the plane by 100%
-    window.addEventListener("mousedown", () => {
-        distancePerFly = distancePerFly * 2;
-    });
-
-    // add event listener on mouse up to slow down the plane by 50%
-    window.addEventListener("mouseup", () => {
-        distancePerFly = distancePerFly / 2;
+    // add event listener on mouse click
+    document.addEventListener("click", () => {
+        speed += 5;
     });
 
     // TEMP add event listerner to redirect to homepage at pressing f
@@ -211,17 +209,24 @@ async function initOceanAndSky() {
 
 
 /**
+ * Initialize the FPS stats
+ */
+function initStats() {
+    stats = new Stats();
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0';
+    stats.domElement.style.top = '50px';
+    stats.domElement.id = "stats";
+    stats.domElement.style.display = "block";
+    document.body.appendChild(stats.domElement);
+}
+
+
+/**
  * Quits the game and shows a game over message
  */
 function gameOver() {
-
-    // remove all event listeners
-    window.removeEventListener("mousedown", () => {
-        distancePerFly = distancePerFly * 2;
-    });
-    window.removeEventListener("mouseup", () => {
-        distancePerFly = distancePerFly / 2;
-    });
 
     // remove the plane
     scene.remove(sceneObjects.modelPlane);
@@ -232,64 +237,67 @@ function gameOver() {
     // set cursor to default
     document.body.style.cursor = "pointer";
 
+    const gameOverScreen = document.createElement("div");
+    gameOverScreen.classList.add("gameOverScreen");
+    document.body.appendChild(gameOverScreen);
+    const gameOverContent = document.createElement("div");
+    gameOverContent.classList.add("gameOverContent");
+    gameOverScreen.appendChild(gameOverContent);
+
     // show game over message and score in the middle of the screen
     const gameOverDiv = document.createElement("div");
-    gameOverDiv.id = "gameOverDiv";
     gameOverDiv.innerHTML = "Game over! &lt;/br> Your score is: " + torusScore;
-    gameOverDiv.style.position = "absolute";
-    gameOverDiv.style.top = "50%";
-    gameOverDiv.style.left = "50%";
-    gameOverDiv.style.transform = "translate(-50%, -50%)";
-    gameOverDiv.style.fontSize = "50px";
-    gameOverDiv.style.fontFamily = "Arial";
-    gameOverDiv.style.color = "white";
-    gameOverDiv.style.cursor = "pointer";
-    gameOverDiv.style.textAlign = "center";
+    gameOverDiv.classList.add("gameOverDiv");
+    gameOverContent.appendChild(gameOverDiv);
 
-    document.body.appendChild(gameOverDiv);
 
+    const controlPanel = document.createElement("div");
+    controlPanel.classList.add("controlPanel");
+    gameOverContent.appendChild(controlPanel);
     // show restart button
     const restartButton = document.createElement("button");
-    restartButton.id = "restartButton";
     restartButton.innerHTML = "Restart";
-    restartButton.style.position = "absolute";
-    restartButton.style.top = "50%";
-    restartButton.style.left = "50%";
-    restartButton.style.transform = "translate(-50%, -50%)";
-    restartButton.style.fontSize = "50px";
-    restartButton.style.fontFamily = "Arial";
-    restartButton.style.color = "white";
-    restartButton.style.backgroundColor = "black";
-    restartButton.style.border = "none";
-    restartButton.style.padding = "20px";
-    restartButton.style.cursor = "pointer";
-    restartButton.style.marginTop = "100px";
+    restartButton.classList.add("restartButton");
     restartButton.onclick = () => {
         location.reload();
     }
-    document.body.appendChild(restartButton);
+    controlPanel.appendChild(restartButton);
 
     // show a exit button
     const exitButton = document.createElement("button");
-    exitButton.id = "exitButton";
     exitButton.innerHTML = "Exit Flight Simulator";
-    exitButton.style.position = "absolute";
-    exitButton.style.top = "50%";
-    exitButton.style.left = "50%";
-    exitButton.style.transform = "translate(-50%, -50%)";
-    exitButton.style.fontSize = "50px";
-    exitButton.style.fontFamily = "Arial";
-    exitButton.style.color = "white";
-    exitButton.style.backgroundColor = "black";
-    exitButton.style.border = "none";
-    exitButton.style.padding = "20px";
-    exitButton.style.cursor = "pointer";
-    exitButton.style.marginTop = "200px";
+    exitButton.classList.add("exitButton");
     exitButton.onclick = () => {
         location.href = "/?redirect-from=flight-simulator";
     }
-    document.body.appendChild(exitButton);
+    controlPanel.appendChild(exitButton);
+}
 
+/**
+ * Initialize developer controls / keyboard shortcuts and experimental features
+ */
+function initDevControls() {
+
+    window.addEventListener("keydown", event => {
+        switch (event.key) {
+
+            case "j":
+            case "J":
+
+                // toggle stats visibility
+                stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
+
+                break;
+
+            case "k":
+            case "K":
+
+                // toogle vector visibility
+                showFlightVectors = !showFlightVectors;
+
+                break;
+        }
+    });
 
 }</code></pre>
         </article>
@@ -301,13 +309,13 @@ function gameOver() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkForPlaneCollision">checkForPlaneCollision</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#distancePerFly">distancePerFly</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#planeStartPoint">planeStartPoint</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#basePlaneRotateFactor">basePlaneRotateFactor</a></li><li><a href="global.html#calcSpeed">calcSpeed</a></li><li><a href="global.html#checkForPlaneCollision">checkForPlaneCollision</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#planeStartPoint">planeStartPoint</a></li><li><a href="global.html#speed">speed</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Sat Nov 12 2022 14:30:27 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 08:42:13 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>
