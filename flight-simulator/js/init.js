@@ -82,9 +82,9 @@ async function init() {
 
     // add a point light to the top of the scene
     const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-    pointLight.position.set(0, torusSpawnRadius + 10, 0);
+    pointLight.position.set(0, torusSpawnRadius, -100);
     scene.add(pointLight);
-    scene.background = new THREE.Color(0x330000);
+    scene.add(new THREE.HemisphereLight(0xddeeff, 0x0f0e0d, 0.5))
 
     // init ocean and sky
     await initOceanAndSky();
@@ -93,9 +93,6 @@ async function init() {
     await initFlying();
     startTime = new Date().getTime();
     checkForPlaneCollision = false;
-
-    // move the plane outside the torus radius
-    sceneObjects.modelPlane.position.set(0, 5, torusSpawnRadius * 0.5 + 5,);
 
     // add event listener on mouse click
     document.addEventListener("click", () => {
@@ -124,6 +121,9 @@ async function init() {
             }
         }
     });
+
+    // // set the plane position
+    // sceneObjects.modelPlane.position.set(planeStartPoint)
 
     // add the canvas and remove the loading div
     document.body.appendChild(renderer.domElement);

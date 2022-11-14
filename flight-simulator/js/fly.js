@@ -1,8 +1,5 @@
 // @ts-check
 
-/** @type {THREE.Vector3} */
-const planeStartPoint = new THREE.Vector3(4, 0.85, 3);
-
 /** @type {number} */
 const distanceOfCameraFromPlane = 1.5;
 
@@ -159,6 +156,8 @@ function handleFlying() {
  */
 async function createModelPlane() {
 
+    const planeStartPoint = new THREE.Vector3(torusSpawnRadius * 0.5 + 2, 8, torusSpawnRadius * 0.5 + 2);
+
     // load the plane model
     const modelPlane = await getMashFromBlenderModel("../low-poly_airplane.glb-low", "https://download1591.mediafire.com/1ukswzole2ag/2otcm1ju178d63g/basic_plane.glb");
     scene.add(modelPlane);
@@ -169,7 +168,7 @@ async function createModelPlane() {
     // set the plane position
     sceneObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
     sceneObjects.modelPlane.scale.set(0.002, 0.003, 0.003);
-    sceneObjects.modelPlane.lookAt(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z - 1);
+    sceneObjects.modelPlane.lookAt(planeStartPoint.x - 1, planeStartPoint.y, planeStartPoint.z - 1);
 }
 
 
