@@ -3,9 +3,6 @@
 /** @type {number} */
 const distanceOfCameraFromPlane = 1.5;
 
-/** @type {boolean} */
-let checkForPlaneCollision = true;
-
 /** @type {number} */
 let basePlaneRotateFactor = 0.01;
 
@@ -116,37 +113,6 @@ function handleFlying() {
     // tend the plane a little bit to the right/left depending on the headingTo.right value
     sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.5));
     sceneObjects.modelPlane.updateMatrixWorld();
-
-
-    if (!checkForPlaneCollision) return;
-
-    // check for collision
-    let planeCollided = false;
-    let allMeshs = getAllMeshsFromNestedGroup(scene);
-    for (let i = 0; i < allMeshs.length; i++) {
-        if (allMeshs[i] !== sceneObjects.modelPlane && !meshIsChildOf(allMeshs[i], sceneObjects.modelPlane) && allMeshs[i].name !== "" && !getAllMeshsFromNestedGroup(sceneObjects.environment).includes(allMeshs[i])) {
-            if (checkCollision(sceneObjects.modelPlane, allMeshs[i])) {
-                console.log("collision with ", allMeshs[i]);
-                planeCollided = true;
-                break;
-            }
-        }
-    }
-    if (planeCollided) {
-        speed = 0;
-
-        // show the plane in red
-        sceneObjects.modelPlane.traverse(function (child) {
-            if (child.isMesh) {
-                child.material.color.setHex(0xff0000);
-            }
-        });
-
-        // timeout for 1 second
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000);
-    }
 
 }
 
