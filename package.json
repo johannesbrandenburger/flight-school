@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node server.js",
-    "jsdoc": "rm -rf jsdoc/root/*; rm -rf jsdoc/flight-simulator/*; jsdoc -c jsdoc-config.json; cd flight-simulator; jsdoc -c jsdoc-config.json; cd ..; mv flight-simulator/out/* jsdoc/flight-simulator; rm -rf flight-simulator/out; mv out/* jsdoc/root; rm -rf out;"
+    "jsdoc": "rm -rf jsdoc/root/*; rm -rf jsdoc/flight-simulator/*; jsdoc -c jsdoc-config.json; cd flight-simulator; jsdoc -c jsdoc-config.json; cd ..; mv flight-simulator/out/* jsdoc/flight-simulator; rm -rf flight-simulator/out; mv out/* jsdoc/root; rm -rf out;",
+    "code2flow" : "code2flow js/* flight-simulator/js/* --output function-call-graph.svg; rm -rf function-call-graph.gv"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@types/three": "^0.144.0",
+    "acorn": "^8.8.1",
     "jsdoc": "^4.0.0"
   }
 }
