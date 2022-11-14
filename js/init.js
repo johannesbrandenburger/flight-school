@@ -18,7 +18,8 @@ async function init() {
   );
   renderer = new THREE.WebGLRenderer();
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  // renderer.physicallyCorrectLights = true;
 
   // resize the renderer when the window is resized
   window.addEventListener("resize", () => {
@@ -39,7 +40,7 @@ async function init() {
 
   // place all objects/lights and enable its interactions
   await placeObjects();
-  placeLights();
+  await placeLights();
   initInteractions();
 
   // enable walking with the keyboard and orientation controls
