@@ -20,7 +20,7 @@ async function init() {
   );
   renderer = new THREE.WebGLRenderer();
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
 
   // resize the renderer when the window is resized
   window.addEventListener("resize", () => {

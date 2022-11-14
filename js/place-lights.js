@@ -17,6 +17,7 @@ async function placeLights() {
     const roomLightDecay = 1;
     const roomLightHeight = 2.85;
     const roomLightDistance = 10.5;
+    const shadowMapSize = 256;
 
     sceneObjects.bulbLights = [];
 
@@ -41,7 +42,7 @@ async function placeLights() {
         bulbLight.position.set(lightConfig.x, roomLightHeight, lightConfig.z);
         bulbLight.castShadow = true;
         bulbLight.name = lightConfig.cluster;
-        bulbLight.shadow.mapSize.width = bulbLight.shadow.mapSize.height = 512;
+        bulbLight.shadow.mapSize.width = bulbLight.shadow.mapSize.height = shadowMapSize;
         bulbLight.shadow.camera.near = 0.01;
         scene.add(bulbLight);
         sceneObjects.bulbLights.push(bulbLight);
@@ -62,8 +63,7 @@ async function placeLights() {
     let dayLight = new THREE.PointLight(0xffffff, 0.2);
     dayLight.position.set(-16, 4, 6);
     dayLight.castShadow = true;
-    dayLight.shadow.mapSize.width = 512;
-    dayLight.shadow.mapSize.height = 512;
+    dayLight.shadow.mapSize.width = dayLight.shadow.mapSize.height = shadowMapSize;
     scene.add(dayLight);
 
 

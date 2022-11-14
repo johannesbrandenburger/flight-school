@@ -3,7 +3,7 @@
 // create config
 const headHeight = 1.50;
 const startPoint = new THREE.Vector3(9, headHeight, 11);
-const mouseRotateSpeed = 0.2;
+const mouseRotateSpeed = 0.17;
 const playerWidth = 0.4;
 const mouseZoomSpeed = 0.8;
 const baseDistancePerWalk = 4
@@ -135,6 +135,11 @@ function createPlayer() {
   player.position.set(startPoint.x, headHeight / 2 + 0.2, startPoint.z);
   scene.add(player);
   sceneObjects.player = player;
+  camera.position.set(
+    sceneObjects.player.position.x,
+    headHeight,
+    sceneObjects.player.position.z
+  );
 }
 
 
@@ -144,6 +149,8 @@ function createPlayer() {
  */
 function handleWalking() {
 
+  if (!(isWalking.forward || isWalking.backward || isWalking.left || isWalking.right)) return;
+
   // store previous position of player to check for collision
   const previousPosition = new THREE.Vector3(
     sceneObjects.player.position.x,
@@ -152,22 +159,19 @@ function handleWalking() {
   );
   let isCollision = false;
 
-  // walk if the user is pressing a key
-  if (isWalking.forward || isWalking.backward || isWalking.left || isWalking.right) {
-    const newPosition = getNewPosition(
-      sceneObjects.player.position,
-      getCameraLookAt(camera),
-      distancePerWalk * deltaTime,
-      isWalking
-    );
-    sceneObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
-  }
+  // walk in the direction the player is looking at
+  const newPosition = getNewPosition(
+    sceneObjects.player.position,
+    getCameraLookAt(camera),
+    distancePerWalk * deltaTime,
+    isWalking
+  );
+  sceneObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
 
   // check if the player is inside a mesh
   let allMeshs = []
   scene.traverse((child) => { allMeshs.push(child) });
   for (let i = 0; i < allMeshs.length; i++) {
-    // TODO: some exceptions can be removed later
     if (
       allMeshs[i] !== sceneObjects.player
       && allMeshs[i].name !== "Scene"
