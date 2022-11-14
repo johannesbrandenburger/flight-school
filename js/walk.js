@@ -14,7 +14,7 @@ let distancePerWalk = baseDistancePerWalk;
  */
 function initWalk() {
 
-  camera.lookAt(new THREE.Vector3(0, headHeight, 0));
+  camera.lookAt(new THREE.Vector3(-1, 0, -1));
 
   // register key events
   window.addEventListener("keydown", event => {

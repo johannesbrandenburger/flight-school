@@ -21,7 +21,6 @@ async function init() {
   renderer = new THREE.WebGLRenderer();
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  // renderer.physicallyCorrectLights = true;
 
   // resize the renderer when the window is resized
   window.addEventListener("resize", () => {
@@ -36,9 +35,6 @@ async function init() {
 
   // add a clock
   clock = new THREE.Clock();
-
-  // add the renderer to the dom
-  camera.position.set(4, 8, 17);
 
   // place all objects/lights and enable its interactions
   await placeObjects();
@@ -64,25 +60,25 @@ async function init() {
 
   const startImmediately = putStartScreenOnReady();
 
-  if (!startImmediately) {
-
-    // wait till the user clicks on the start button or presses enter
-    await new Promise((resolve) => {
-      document.getElementById("start-button").addEventListener("click", () => {
-        startScene();
-        resolve();
-      });
-      window.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          startScene();
-          resolve();
-        }
-      });
-    });
-  } else {
+  if (startImmediately) {
     startScene();
+    return;
   }
 
+  // wait till the user clicks on the start button or presses enter
+  await new Promise((resolve) => {
+    document.getElementById("start-button").addEventListener("click", () => {
+      startScene();
+      resolve();
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        startScene();
+        resolve();
+      }
+    });
+  });
+  
 }
 
 
