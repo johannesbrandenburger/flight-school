@@ -50,11 +50,9 @@ async function placeObjects() {
 
     // blackboard
     let blackboard = await getMashFromBlenderModel("../blender/blackboard.glb");
+    blackboard.position.set(3.400, 0, 0.4);
+    blackboard.traverse(child => { child.receiveShadow = true; });
     scene.add(blackboard); sceneObjects.blackboard = blackboard;
-    sceneObjects.blackboard.position.set(3.400, 0, 0.4);
-    getAllMeshsFromNestedGroup(sceneObjects.blackboard).forEach(mesh => {
-        mesh.receiveShadow = true;
-    });
 
     // closet 1
     sceneObjects.closets = [];

@@ -168,24 +168,26 @@ function handleWalking() {
   }
 
   // check if the player is inside a mesh
-  let allMeshs = getAllMeshsFromNestedGroup(scene);
+  let allMeshs = []
+  scene.traverse((child) => { allMeshs.push(child) });
   for (let i = 0; i < allMeshs.length; i++) {
-    if (allMeshs[i] !== sceneObjects.player) {
-
-      // TODO: some exceptions can be removed later
-      if (checkCollision(sceneObjects.player, allMeshs[i])
-        && allMeshs[i].name !== "Floor"
-        && allMeshs[i].name !== "Ground_Material007_0"
-        && allMeshs[i].name !== "Trunk_Material001_0"
-        && allMeshs[i].name !== "Trunk_Trunk_0"
-        && allMeshs[i].name !== "Grass_Material_0"
-        && allMeshs[i].name !== "Mud_Material004_0"
-        && allMeshs[i].name !== "Watter_Material005_0"
-        && allMeshs[i].name !== ""
-      ) {
-        isCollision = true;
-        break;
-      }
+    // TODO: some exceptions can be removed later
+    if (
+      allMeshs[i] !== sceneObjects.player
+      && allMeshs[i].name !== "Scene"
+      && allMeshs[i].name !== "Floor"
+      && allMeshs[i].name !== "Ground_Material007_0"
+      && allMeshs[i].name !== "Trunk_Material001_0"
+      && allMeshs[i].name !== "Trunk_Trunk_0"
+      && allMeshs[i].name !== "Grass_Material_0"
+      && allMeshs[i].name !== "Mud_Material004_0"
+      && allMeshs[i].name !== "Watter_Material005_0"
+      && allMeshs[i].name !== ""
+      && checkCollision(sceneObjects.player, allMeshs[i])
+    ) {
+      console.log(allMeshs[i].name);
+      isCollision = true;
+      break;
     }
   }
 
