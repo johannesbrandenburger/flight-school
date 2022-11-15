@@ -34,6 +34,7 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 | P   | Pause |
 | I   | Invert Controls |
 | F   | Exit Flight Simulator and Return to Flight School Scene |
+| J   | Toggle FPS Display Visibility |
 
 ## Interactions in Flight School Scene
 
