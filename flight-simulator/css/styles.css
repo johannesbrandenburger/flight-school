@@ -56,13 +56,13 @@ html, body {
   cursor: pointer;
   height: fit-content;
   width: fit-content;
-  transition: .5s;
+  transition: .2s;
 }
 
 .controlPanel button:hover {
   background-color: #DADADA;
   color: #222222;
-  transition: .5s;
+  transition: .2s;
 }
 
 .controlPanel .restartButton:hover {
