@@ -13,35 +13,18 @@ async function init() {
     const scoreDiv = document.createElement("div");
     scoreDiv.id = "score";
     scoreDiv.innerHTML = "Score: 0";
-    scoreDiv.style.position = "absolute";
-    scoreDiv.style.top = "10px";
-    scoreDiv.style.left = "10px";
-    scoreDiv.style.color = "white";
-    scoreDiv.style.fontSize = "2em";
     document.body.appendChild(scoreDiv);
 
     // add a div for the time
     const timeDiv = document.createElement("div");
     timeDiv.id = "time";
     timeDiv.innerHTML = "Time left: " + timeLeft;
-    timeDiv.style.position = "absolute";
-    timeDiv.style.top = "10px";
-    timeDiv.style.right = "10px";
-    timeDiv.style.color = "white";
-    timeDiv.style.fontSize = "2em";
     document.body.appendChild(timeDiv);
 
     // add a div for telling the user to not fly out of bounds
     const outOfBoundsDiv = document.createElement("div");
     outOfBoundsDiv.id = "outOfBounds";
     outOfBoundsDiv.innerHTML = "Don't fly out of bounds!";
-    outOfBoundsDiv.style.position = "absolute";
-    outOfBoundsDiv.style.top = "10px";
-    outOfBoundsDiv.style.left = "50%";
-    outOfBoundsDiv.style.transform = "translateX(-50%)";
-    outOfBoundsDiv.style.color = "red";
-    outOfBoundsDiv.style.fontSize = "2em";
-    outOfBoundsDiv.style.display = "none";
     document.body.appendChild(outOfBoundsDiv);
 
     // config for three.js

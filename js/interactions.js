@@ -35,14 +35,7 @@ function initInfoDiv() {
     // create the div (at the top left corner)
     infoDiv = document.createElement("div");
     infoDiv.id = "info-div";
-    infoDiv.style.position = "absolute";
-    infoDiv.style.top = "10px";
-    infoDiv.style.left = "10px";
-    infoDiv.style.color = "white";
-    infoDiv.style.background = "rgba(0, 0, 0, 0.5)";
-    infoDiv.style.padding = "10px";
     infoDiv.innerHTML = "";
-    infoDiv.style.visibility = "hidden";
     document.body.appendChild(infoDiv);
 
     // get all positions of the chair and add them to the info table
@@ -80,7 +73,7 @@ function initInfoDiv() {
     infoTable.push({
         x: sceneObjects.blackboard.position.x + 2,
         z: sceneObjects.blackboard.position.z + 1,
-        text: "Move the boards with the mousea up and down to adjust the height"
+        text: "Move the boards with the mouse up and down to adjust the height"
     });
 
 }
