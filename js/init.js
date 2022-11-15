@@ -53,6 +53,7 @@ async function init() {
   if (redirectFromFlightSimulator) {
     redirectFromFlightSimulator = true;
     sceneObjects.player.position.set(3.6, sceneObjects.player.position.y, 1.5);
+    camera.position.set(sceneObjects.player.position.x, headHeight, sceneObjects.player.position.z);
     camera.lookAt(sceneObjects.monitor.position.x, -10, 100);
     camera.updateProjectionMatrix()
     window.history.replaceState({}, document.title, "/");
@@ -89,8 +90,8 @@ function initStats() {
   stats = new Stats();
   stats.setMode(0);
   stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0';
-  stats.domElement.style.top = '50px';
+  stats.domElement.style.left = '10px';
+  stats.domElement.style.top = '80px';
   stats.domElement.id = "stats";
   stats.domElement.style.display = "none";
   document.body.appendChild(stats.domElement);
@@ -173,7 +174,6 @@ function initStartScreen() { }
 function startScene() {
   document.body.appendChild(renderer.domElement);
   document.getElementById("start-screen").style.display = "none";
-  document.getElementById("stats").style.display = "block";
 }
 
 

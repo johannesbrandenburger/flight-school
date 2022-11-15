@@ -187,10 +187,10 @@ function initStats() {
     stats = new Stats();
     stats.setMode(0);
     stats.domElement.style.position = 'absolute';
-    stats.domElement.style.left = '0';
-    stats.domElement.style.top = '50px';
+    stats.domElement.style.left = '10px';
+    stats.domElement.style.top = '80px';
     stats.domElement.id = "stats";
-    stats.domElement.style.display = "block";
+    stats.domElement.style.display = "none";
     document.body.appendChild(stats.domElement);
 }
 
@@ -255,6 +255,7 @@ function initDevControls() {
 
             case "j":
             case "J":
+
 
                 // toggle stats visibility
                 stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
