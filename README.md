@@ -26,6 +26,7 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 | F   | Start Flight Simulator |
 | J   | Toggle FPS Display Visibility |
 | H   | Show this Help |
+| U   | Toggle Collision Detection |
 
 ## Keyboard Shortcuts in Flight Simulator
 

@@ -29,7 +29,8 @@ var container,
     open: true,
     timeSinceAnimationStart: 0,
   },
-  redirectFromFlightSimulator = false
+  redirectFromFlightSimulator = false,
+  collisionDetectionEnabled = true
   ;
 
 init().then(() => {

@@ -192,13 +192,13 @@ function handleWalking() {
   }
 
   // if the player is inside a mesh, set the position back to the previous position
-  // if (isCollision === true) {
-  //   sceneObjects.player.position.set(
-  //     previousPosition.x,
-  //     previousPosition.y,
-  //     previousPosition.z
-  //   );
-  // }
+  if (isCollision === true && collisionDetectionEnabled) {
+    sceneObjects.player.position.set(
+      previousPosition.x,
+      previousPosition.y,
+      previousPosition.z
+    );
+  }
 
   // update the camera position
   camera.position.set(

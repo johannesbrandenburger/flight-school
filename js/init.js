@@ -156,6 +156,14 @@ function initDevControls() {
         stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
 
         break;
+
+      case "u":
+      case "U":
+
+        // toggle collision detection
+        collisionDetectionEnabled = !collisionDetectionEnabled;
+
+        break;
     }
   });
 
