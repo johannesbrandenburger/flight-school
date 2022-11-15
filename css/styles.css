@@ -1,6 +1,6 @@
 html, body {
   margin: 0;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
   height: 100%;
   width: 100vw;
   overflow: hidden;
@@ -270,7 +270,7 @@ footer {
   left: 10px;
   color: white;
   visibility: hidden;
-  background-color: #222222;
+  background-color: rgb(34, 34, 34, 0.7);
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 0 20px black;
