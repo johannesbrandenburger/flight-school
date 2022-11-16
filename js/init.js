@@ -63,6 +63,8 @@ async function init() {
 
   if (startImmediately) {
     startScene();
+    document.getElementById("start-button").addEventListener("click", () => { startScene() });
+    window.addEventListener("keydown", (event) => { if (event.key === "Enter") startScene() });
     return;
   }
 
