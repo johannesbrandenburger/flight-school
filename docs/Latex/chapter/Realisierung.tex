@@ -29,7 +29,7 @@ Zusätzlich darf maximal ein Abstand von vier Metern zwischen dem Objekt und dem
 Um den das Flugsimulator-Spiel umzusetzen, wird zunächst eine Umgebung benötigt.
 Diese wird mit Hilfe von vorgefertigten ThreeJs Elementen wie einem Meer und einem Himmel erstellt.
 Anschließend wird ein Flugzeugmodell im .glb Format eingelesen und der Szene hinzugefügt.
-
+\newparagraph
 Da die FlyControls von ThreeJs nicht den Ansprüchen des Spiels genügen, wird eine eigene Steuerung für das Bewegen des Flugzeugs implementiert.
 Dabei wird die Cursorposition mit Abstand zum Mittelpunkt des Bildschirms verglichen und die Flugrichtung (Vektor) entsprechend angepasst.
 Für diese Anpassung werden die Helper-Funktionen \texttt{turnVectorAroundVerticalAxis} und \texttt{turnVectorAroundHorizontalAxis} implementiert und in jeder Animationsschleife aufgerufen.
@@ -37,15 +37,14 @@ Speziell für das Drehen eines Vektors um die horizontale Achse, ist die Mathema
 Eine besondere Herausforderung bei der Flugsteuerung stellen die Überschläge des Flugzeugs dar.
 Diese müssen vom Programm erkannt werden, um aktiv die Kamera, das Flugzeug und die Steuerung zu invertieren.
 Um die Geschwindigkeit des Flugzeugs zu möglichst realistisch zu gestalten, wird diese proportional zur Neigung beim Sinkflug erhöht und beim Steigen verringert bis bestimmte Minimal- und Maximalwerte erreicht sind.
-
+\newparagraph
 Die Ringe werden in einer Schleife als ThreeJs Torus-Objekte erstellt und zufällig in der Szene platziert.
 Außerdem werden der Szene Hindernisse hinzugefügt, die das Flugzeug nicht berühren darf.
 Diese werden aus Dodekaeder, Icosahedron, Oktaeder und Tetraeder Elementen erstellt und zufällig in der Szene angeordnet.
-
+\newparagraph
 Um zu erkennen, ob ein das Flugzeug erfolgreich durch einen Ring geflogen ist oder mit einem Ring oder einem sonstigen Hindernis kollidiert ist, wird Kollisionserkennung benötigt.
 Dazu wird zunächst das Element mit dem geringssten Abstand zum Flugzeug ermittelt.
 Von diesem Objekt wird anschließend eine BoundingBox bzw. ein BoundingSphere erstellt und geprüft, ob diese die Flugzeugposition beinhaltet.
 Bei den Ringen wird zusätzlich auf den Abstand zum Mittelpunkt des Torus-Objekts geprüft und so determiniert, ob das Flugzeug den Ring durchfliegt, in den Rand des Rings fliegt oder außerhalb am Rand des Rings vorbeifliegt.
 Die Kollisionserkennung wird in jeder Animationsschleife aufgerufen und die Punktezahl entsprechend angepasst.
-
 Bei einem Kollisionsereignis oder beim Ablaufen der Zeit, wird die Flug-Animation unterbrochen, die aktuelle Punktezahl in einem "Game Over"-Overlay angezeigt und der User bekommt die Möglichkeit, das Spiel neu zu starten oder zurück zur Flugschule zu gelangen.
