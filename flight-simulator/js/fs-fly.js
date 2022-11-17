@@ -61,9 +61,6 @@ function handleFlying() {
     planeLookAt.applyQuaternion(quaternion);
     planeLookAt.normalize();
 
-    //TEMP
-    const oldPlaneLookAt = planeLookAt.clone();
-
     // planeRotationFactor
     let planeRotationFactor = basePlaneRotateFactor;
     if (planeIsUpsideDown) {
@@ -94,12 +91,6 @@ function handleFlying() {
     // turn the camera and plane
     if (turnedBeyondYAxis) {
         camera.up.set(0, -camera.up.y, 0);
-        console.table({
-            "newPlanePosition": newPlanePosition,
-            "planeLookAt": planeLookAt,
-            "oldPlaneLookAt": oldPlaneLookAt,
-        });
-        console.count("turnedBeyondYAxis");
     }
     if (planeIsUpsideDown) {
         sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(180));

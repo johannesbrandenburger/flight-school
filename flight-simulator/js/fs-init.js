@@ -82,17 +82,6 @@ async function init() {
         speed += 5;
     });
 
-    // TEMP add event listerner to redirect to homepage at pressing f
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "f") {
-            location.href = "/?redirect-from=flight-simulator";
-        }
-
-        if (e.key === "i") {
-            invertedControls = !invertedControls;
-        }
-    });
-
     // add event listener to pause the game
     window.addEventListener("keydown", (e) => {
         if (e.key === "p") {
@@ -252,6 +241,21 @@ function initDevControls() {
                 showFlightVectors = !showFlightVectors;
 
                 break;
+
+            case "f":
+            case "F":
+
+                // go back to flight school
+                location.href = "/?redirect-from=flight-simulator";
+
+                break;
+
+            case "i":
+            case "I":
+
+                // invert controls
+                invertedControls = !invertedControls;
+    
         }
     });
 
