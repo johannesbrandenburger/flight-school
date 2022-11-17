@@ -35,8 +35,8 @@ async function initFlying() {
     // if its a mobile device, use the gyroscope or the touch controls
     if (isMobileDevice()) {
         window.addEventListener("deviceorientation", event => {
-            headingTo.right = invertedControls ? event.gamma / 2 : -event.gamma / 2;
-            headingTo.up = invertedControls ? event.beta / 2 : -event.beta / 2;
+            headingTo.right = invertedControls ? event.gamma * 1 : -event.gamma * 1;
+            headingTo.up = invertedControls ? event.beta * 1 : -event.beta * 1;
         });
 
         // touch controls independent of the startpoint of the move
@@ -51,8 +51,8 @@ async function initFlying() {
         window.addEventListener("touchmove", event => {
             touchEndX = event.touches[0].clientX;
             touchEndY = event.touches[0].clientY;
-            headingTo.right = invertedControls ? (touchEndX - touchStartX) / 2 : -(touchEndX - touchStartX) / 2;
-            headingTo.up = invertedControls ? (touchStartY - touchEndY) / 2 : -(touchStartY - touchEndY) / 2;
+            headingTo.right = invertedControls ? (touchEndX - touchStartX) * 1 : -(touchEndX - touchStartX) * 1;
+            headingTo.up = invertedControls ? (touchStartY - touchEndY) * 1 : -(touchStartY - touchEndY) * 1;
         });
     }
 
