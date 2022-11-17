@@ -24,7 +24,7 @@ var container,
     up: true,
     timeSinceAnimationStart: 0,
   },
-  closetAnimation = { 
+  closetAnimation = {
     activeCloset: null,
     open: true,
     timeSinceAnimationStart: 0,

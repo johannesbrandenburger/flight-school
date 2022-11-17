@@ -81,7 +81,7 @@ async function init() {
       }
     });
   });
-  
+
 }
 
 
@@ -148,7 +148,7 @@ function initDevControls() {
 
         // toggle help screen visibility
         document.getElementById("start-screen").style.display = document.getElementById("start-screen").style.display === "none" ? "block" : "none";
-        
+
         break;
 
       case "j":

@@ -5,7 +5,7 @@ async function animate() {
 
     requestAnimationFrame(animate);
     stats.update();
-    
+
     if (isFlying) {
         handleFlying();
         handleScore();

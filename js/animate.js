@@ -11,9 +11,9 @@ async function animate() {
   handleAnimateChairs();
   handleAnimateClosets();
   handleInfoDiv();
-  
+
   deltaTime = clock.getDelta();
-  
+
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }

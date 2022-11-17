@@ -164,18 +164,18 @@ function turnVectorAroundHorizontalAxis(vector, angle) {
   // rotate the vector around the cross product
   let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
   newVector.applyAxisAngle(crossProduct, -angle);
-  
+
   // check if one of the x or z values are 0 to avoid division by 0
   if (newVector.x === 0 || newVector.z === 0 || vector.x === 0 || vector.z === 0) {
     return { newVector, turnedBeyondYAxis: false };
   }
-  
+
   // check if the vector turned beyond the y axis
   let turnedBeyondYAxis = false;
-  if ( 
-    (newVector.x / Math.abs(newVector.x)) !== (vector.x / Math.abs(vector.x)) || 
+  if (
+    (newVector.x / Math.abs(newVector.x)) !== (vector.x / Math.abs(vector.x)) ||
     (newVector.z / Math.abs(newVector.z)) !== (vector.z / Math.abs(vector.z))
-    ) {
+  ) {
     turnedBeyondYAxis = true;
   }
 

@@ -25,7 +25,7 @@ async function placeObjects() {
     sceneObjects.room.children.find(child => child.name === "Wall_2_Outside").castShadow = true;
     sceneObjects.room.children.find(child => child.name === "Wall_3_Outside").castShadow = true;
     sceneObjects.room.children.find(child => child.name === "Wall_4_Outside").castShadow = true;
-    
+
     // windows
     const windowMaterial = new THREE.MeshPhysicalMaterial({
         metalness: 0,
@@ -131,18 +131,18 @@ async function placeObjects() {
     sceneObjects.tables = [];
 
     const tablePositions = [
-        {x: 2.026, y: 0, z: 5.9, rotation: 90},
-        {x: 2.026, y: 0, z: 7.7, rotation: 90},
-        {x: 2.026, y: 0, z: 9.5, rotation: 90},
-        {x: 2.926, y: 0, z: 4.1, rotation: 0},
-        {x: 2.926, y: 0, z: 6.5, rotation: 0},
-        {x: 2.926, y: 0, z: 8.6, rotation: 0},
-        {x: 7.726, y: 0, z: 5.9, rotation: 90},
-        {x: 7.726, y: 0, z: 7.7, rotation: 90},
-        {x: 7.726, y: 0, z: 9.5, rotation: 90},
-        {x: 5.926, y: 0, z: 4.1, rotation: 0},
-        {x: 5.926, y: 0, z: 6.5, rotation: 0},
-        {x: 5.926, y: 0, z: 8.6, rotation: 0},  
+        { x: 2.026, y: 0, z: 5.9, rotation: 90 },
+        { x: 2.026, y: 0, z: 7.7, rotation: 90 },
+        { x: 2.026, y: 0, z: 9.5, rotation: 90 },
+        { x: 2.926, y: 0, z: 4.1, rotation: 0 },
+        { x: 2.926, y: 0, z: 6.5, rotation: 0 },
+        { x: 2.926, y: 0, z: 8.6, rotation: 0 },
+        { x: 7.726, y: 0, z: 5.9, rotation: 90 },
+        { x: 7.726, y: 0, z: 7.7, rotation: 90 },
+        { x: 7.726, y: 0, z: 9.5, rotation: 90 },
+        { x: 5.926, y: 0, z: 4.1, rotation: 0 },
+        { x: 5.926, y: 0, z: 6.5, rotation: 0 },
+        { x: 5.926, y: 0, z: 8.6, rotation: 0 },
     ];
 
     // create tables 
@@ -172,30 +172,30 @@ async function placeObjects() {
     sceneObjects.chairs = [];
 
     const chairPositions = [
-        {x: 1.8, y: 0, z: 4.65, rotation: 270},
-        {x: 1.8, y: 0, z: 5.35, rotation: 270},
-        {x: 1.8, y: 0, z: 6.45, rotation: 270},
-        {x: 1.8, y: 0, z: 7.15, rotation: 270},
-        {x: 1.8, y: 0, z: 8.25, rotation: 270},
-        {x: 1.8, y: 0, z: 8.95, rotation: 270},
-        {x: 3.5, y: 0, z: 5.3, rotation: 0},
-        {x: 4.2, y: 0, z: 5.3, rotation: 0},
-        {x: 3.5, y: 0, z: 7.65, rotation: 0},
-        {x: 4.2, y: 0, z: 7.65, rotation: 0},
-        {x: 3.5, y: 0, z: 9.75, rotation: 0},
-        {x: 4.2, y: 0, z: 9.75, rotation: 0},
-        {x: 8.9, y: 0, z: 4.65, rotation: 90},
-        {x: 8.9, y: 0, z: 5.35, rotation: 90},
-        {x: 8.9, y: 0, z: 6.45, rotation: 90},
-        {x: 8.9, y: 0, z: 7.15, rotation: 90},
-        {x: 8.9, y: 0, z: 8.25, rotation: 90},
-        {x: 8.9, y: 0, z: 8.95, rotation: 90},
-        {x: 6.5, y: 0, z: 5.3, rotation: 0},
-        {x: 7.2, y: 0, z: 5.3, rotation: 0},
-        {x: 6.5, y: 0, z: 7.65, rotation: 0},
-        {x: 7.2, y: 0, z: 7.65, rotation: 0},
-        {x: 6.5, y: 0, z: 9.75, rotation: 0},
-        {x: 7.2, y: 0, z: 9.75, rotation: 0},
+        { x: 1.8, y: 0, z: 4.65, rotation: 270 },
+        { x: 1.8, y: 0, z: 5.35, rotation: 270 },
+        { x: 1.8, y: 0, z: 6.45, rotation: 270 },
+        { x: 1.8, y: 0, z: 7.15, rotation: 270 },
+        { x: 1.8, y: 0, z: 8.25, rotation: 270 },
+        { x: 1.8, y: 0, z: 8.95, rotation: 270 },
+        { x: 3.5, y: 0, z: 5.3, rotation: 0 },
+        { x: 4.2, y: 0, z: 5.3, rotation: 0 },
+        { x: 3.5, y: 0, z: 7.65, rotation: 0 },
+        { x: 4.2, y: 0, z: 7.65, rotation: 0 },
+        { x: 3.5, y: 0, z: 9.75, rotation: 0 },
+        { x: 4.2, y: 0, z: 9.75, rotation: 0 },
+        { x: 8.9, y: 0, z: 4.65, rotation: 90 },
+        { x: 8.9, y: 0, z: 5.35, rotation: 90 },
+        { x: 8.9, y: 0, z: 6.45, rotation: 90 },
+        { x: 8.9, y: 0, z: 7.15, rotation: 90 },
+        { x: 8.9, y: 0, z: 8.25, rotation: 90 },
+        { x: 8.9, y: 0, z: 8.95, rotation: 90 },
+        { x: 6.5, y: 0, z: 5.3, rotation: 0 },
+        { x: 7.2, y: 0, z: 5.3, rotation: 0 },
+        { x: 6.5, y: 0, z: 7.65, rotation: 0 },
+        { x: 7.2, y: 0, z: 7.65, rotation: 0 },
+        { x: 6.5, y: 0, z: 9.75, rotation: 0 },
+        { x: 7.2, y: 0, z: 9.75, rotation: 0 },
     ];
 
     // create chairs

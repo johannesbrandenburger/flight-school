@@ -255,7 +255,7 @@ function initDevControls() {
 
                 // invert controls
                 invertedControls = !invertedControls;
-    
+
         }
     });
 
