@@ -32,7 +32,7 @@ async function initFlying() {
     });
 
     // if its a mobile device, use touch controls
-    if (isMobileDevice()) {
+    if ((typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1)) {
         let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
         window.addEventListener("touchstart", event => {
             touchStartX = event.touches[0].clientX;
@@ -153,7 +153,3 @@ function calcSpeed(speed, y) {
 
     return newSpeed;
 }
-function isMobileDevice() {
-    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-}
-
