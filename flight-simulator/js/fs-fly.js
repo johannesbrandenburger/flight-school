@@ -31,16 +31,20 @@ async function initFlying() {
         if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
     });
 
-    // add touch support for mobile devices
-    window.addEventListener("touchmove", event => {
-        headingTo.right = - (event.touches[0].clientX - window.innerWidth / 2) / 2;
-        headingTo.up = - (window.innerHeight / 2 - event.touches[0].clientY) / 2;
-        document.body.style.cursor = "crosshair";
-        if (headingTo.right > 100) { headingTo.right = 100; document.body.style.cursor = "e-resize"; }
-        if (headingTo.right < -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
-        if (headingTo.up > 100) { headingTo.up = 100; document.body.style.cursor = "n-resize"; }
-        if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
-    });
+    // if its a mobile device, use touch controls
+    if ((typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1)) {
+        let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
+        window.addEventListener("touchstart", event => {
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+        });
+        window.addEventListener("touchmove", event => {
+            touchEndX = event.touches[0].clientX;
+            touchEndY = event.touches[0].clientY;
+            headingTo.right = invertedControls ? (touchEndX - touchStartX) * 1 : -(touchEndX - touchStartX) * 1;
+            headingTo.up = invertedControls ? (touchStartY - touchEndY) * 1 : -(touchStartY - touchEndY) * 1;
+        });
+    }
 
     await createModelPlane();
 
@@ -73,7 +77,7 @@ function handleFlying() {
     let horizontalTurn = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * planeRotationFactor));
     planeLookAt = horizontalTurn.newVector;
     turnedBeyondYAxis = horizontalTurn.turnedBeyondYAxis;
-    if (turnedBeyondYAxis) { planeIsUpsideDown = !planeIsUpsideDown; console.log("turnd");}
+    if (turnedBeyondYAxis) { planeIsUpsideDown = !planeIsUpsideDown; console.log("turnd"); }
     planeLookAt.normalize();
 
     // set the new lookAt vector
@@ -87,7 +91,7 @@ function handleFlying() {
 
     // apply the new position
     sceneObjects.modelPlane.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
-    
+
     // turn the camera and plane
     if (turnedBeyondYAxis) {
         camera.up.set(0, -camera.up.y, 0);
@@ -100,7 +104,7 @@ function handleFlying() {
     camera.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
     camera.position.addScaledVector(planeLookAt, -distanceOfCameraFromPlane);
     camera.lookAt(newPlanePosition);
-    
+
     // tend the plane a little bit to the right/left depending on the headingTo.right value
     sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.5));
     sceneObjects.modelPlane.updateMatrixWorld();
