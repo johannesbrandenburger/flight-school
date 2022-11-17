@@ -1,6 +1,6 @@
 html, body {
   margin: 0;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   height: 100%;
   width: 100vw;
   overflow: hidden;
@@ -27,6 +27,10 @@ html, body {
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
+}
+
+.inverted {
+  filter: invert(1);
 }
 
 .start-screen {
@@ -84,6 +88,8 @@ html, body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   min-height: 100vh;
   height: 100vh;
+  width: 100%;
+  overflow: hidden;
   background: url(../textures/FlightSimulator2.png);
   background-position: center;
   background-size: cover;
@@ -94,6 +100,11 @@ html, body {
   position: sticky;
   top: 0;
   margin-top: 70vh;
+  width: fit-content;
+}
+
+.headerContent svg {
+  width: 100%;
 }
 
 .headerContent p {
@@ -110,7 +121,16 @@ html, body {
   max-width: 80vw;
 }
 
-.features {
+.section {
+  width: 100%;
+  padding: 40px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#features .content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -118,38 +138,140 @@ html, body {
   background-color: #ffffff;
   min-height: 100vh;
   width: fit-content;
+  max-width: 100%;
   margin: 0 auto;
+  overflow-x: auto;
 }
 
-.features h2 {
+.section h2 {
   color: #222222;
   font-size: 30px;
   margin: 20px 0;
 }
 
-.features table {
+.section table {
   border-spacing: 0;
   white-space: nowrap;
   width: 100%;
 }
 
-.features table :is(td, th) {
+.section table :is(td, th) {
   padding: 6px;
 }
 
-.features table thead :is(td, th) {
+.section table thead :is(td, th) {
   border-bottom: 1px solid;
 }
 
-.features table tbody tr :first-child {
+.section table tbody tr :first-child {
   text-align: center;
 }
 
-.features table tbody tr:not(:last-of-type) :is(td, th) {
+.section table tbody tr:not(:last-of-type) :is(td, th) {
   border-bottom: 1px solid;
+}
+
+.section button {
+  background-color: #222222;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px black;
+}
+
+#documentation {
+  background-color: #222222;
+  color: white;
+}
+
+#documentation h2 {
+  color: white;
+}
+
+#documentation button {
+  background-color: #FFFFFF;
+  color: #222222;
+  border: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  border-color: #222222;
+  padding: 6px 18px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  cursor: pointer;
+  height: fit-content;
+  width: fit-content;
+  transition: .5s;
+}
+
+#documentation button:hover {
+  background-color: #DADADA;
+  color: #222222;
+  transition: .5s;
+}
+
+#documentation .itemCollection {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 10px;
+  justify-content: center;
+  gap: 30px;
+}
+
+#documentation .itemCollection .item {
+  display: grid;
+  grid-template-rows: 25% 75%;
+  width: 250px;
+  height: 300px;
+  border-radius: 10px;
+  background-color: #111111;
+  transition: 0.5s;
+  text-decoration: none;
+  color: white;
+}
+
+#documentation .itemCollection .item:hover {
+  box-shadow: 0 0 10px white;
+  transform: scale(1.02);
+  transition: 0.5s;
+}
+
+#documentation .itemCollection .item h3 {
+  align-self: flex-end;
+  justify-self: center;
+  /* font-size: 25px; */
+}
+
+#documentation .itemCollection .item img {
+  max-width: 80%;
+  max-height: 75%;
+  border-radius: 10px;
+  align-self: center;
+  justify-self: center;
+  background-size: cover;
+  background-position: center;
+}
+
+#documentation .itemCollection .item a {
+  align-self: center;
+  justify-self: center;
 }
 
 footer {
   padding: 20px 20px;
   background-color: #DADADA;
+}
+
+#info-div {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  visibility: hidden;
+  background-color: rgb(34, 34, 34, 0.7);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px black;
 }
