@@ -233,13 +233,14 @@ async function placeObjects() {
 
     // #region 360 degree environment/background
 
-    // sphere shape
-    let geometry = new THREE.SphereGeometry(400, 800, 800);
+    // sphere almost half sphere to create a 360° like view outside the window
+    let geometry = new THREE.SphereGeometry(400, 10, 10, degToRad(80), degToRad(210), degToRad(-15), degToRad(180));
     geometry.scale(-1, 1, 1);
 
     const loader = new THREE.TextureLoader();
-    const texture = loader.load("./../textures/background.jpeg")
+    const texture = loader.load("./../img/dhbw-view.jpg")
     let material = new THREE.MeshBasicMaterial({ map: texture });
+    material.side = THREE.DoubleSide;
 
     let backgroundSphere = new THREE.Mesh(geometry, material);
     backgroundSphere.position.set(5.213, 10, 5.75);
