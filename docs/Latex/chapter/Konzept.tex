@@ -59,7 +59,7 @@ soll die DHBW dargestellt werden, diese wird als \ac{HDR} Bild eingebunden. Zus�
 Aus den beschrieben Animationen und den Plänen aus den Abbildung \ref{fig:KlassenzimmerEntwurf}, \ref{fig:KlassenzimmerEntwurfWindows} und \ref{fig:KlassenzimmerEntwurfLamps} ergeben sich alle Komponenten der Szene. 
 Einige Maße werden bereits durch den Plan vorgegeben in einem weiteren Schritt werden diese nun vollständig definiert.
 Diese Definition sind in der Tabelle \ref{tab:Komponenten} abgebildet.
-\begin{table}
+\begin{table}[H]
   \centering
   \begin{tabular}{|l|c|c|c|c|}
     \hline
@@ -85,10 +85,10 @@ Diese Definition sind in der Tabelle \ref{tab:Komponenten} abgebildet.
   \caption{Modell-Maße in Meter}
   \label{tab:Komponenten}  
 \end{table}
-\newparagraph
-Mit den oben definierten Größen können anschließend die Blender Modelle erstellt werden.
+\noindent
+Mit den definierten Größen aus Tabelle \ref{tab:Komponenten} können anschließend die Blender Modelle erstellt werden.
 Um das Klassenzimmer ansprechender darzustellen werden weitere Elemente aus dem Internet eingefügt, diese werden mit ihren Quellen in Tabelle \ref{tab:KomponentenExtern} aufgezählt.
-\begin{table}
+\begin{table}[H]
   \centering
   \begin{tabular}{|c|c|c|}
     \hline
@@ -105,23 +105,23 @@ Um das Klassenzimmer ansprechender darzustellen werden weitere Elemente aus dem 
   \caption{Modelle aus dem Internet}
   \label{tab:KomponentenExtern}
 \end{table}
-%//TODO FlugSim
 \subsection{Flugsimulator}
 %johannes
 
 Als Erweiterung der Flugschule, wird ein Flugsimulator-Spiel integriert, welcher folgende Funktionen beinhaltet:
-
+\newparagraph
 Durch einen Klick auf den Monitor in der Flugschule wird auf eine Unterseite weitergeleitet und der Flugsimulator wird gestartet.
 Ein Flugzeug-Modell wird in der Mitte einer Szene platziert.
-Dessen Flugrichtung ist mit der Maus veränderbar, wodurch eine Steuerung des Flugzeugs möglich ist.
+Dessen Flugrichtung ist mit der Maus veränderbar, wodurch eine Steuerung des Flugzeugs ermöglicht wird.
 Die Geschwindigkeit des Flugzeugs wird nicht durch den Benutzer verändert, sondern passt sich anhand der Neigung des Flugzeugs an.
-
+Mit einem Mausklick kann dem Flugzeug ein kleiner Boost gegeben werden.
+\newparagraph
 Beim Starten des Flugsimulator-Spiels wird ein Countdown gestartet, welcher 60 Sekunden lang dauert.
 In dieser Zeit kann der Benutzer durch zufällig generierte Ringe fliegen und dabei (je nach Art des Rings) einen oder fünf Punkte sammeln.
 Zur zusätzlichen Herausforderung werden Hindernisse generiert.
 Wenn das Flugzeug in eines dieser Hindernisse oder gegen einen der Ringe fliegt oder die Zeit abläuft, wird das Spiel beendet.
 Der Benutzer bekommt hierbei die erreichte Punktzahl angezeigt und kann das Spiel erneut starten oder zur Flugschule zurückkehren.
-
+\newparagraph
 Im Hindergrund des Spiels wird ein Ozean und ein Himmel dargestellt.
 Die Kamera bewegt sich während des Fluges mit dem Flugzeug mit.
 Die Steuerung kann durch das Drücken der Taste \texttt{I} invertiert werden, um allen Benutzern das bestmögliche Spielerlebnis zu ermöglichen.

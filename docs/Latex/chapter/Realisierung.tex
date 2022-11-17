@@ -26,11 +26,11 @@ Zusätzlich darf maximal ein Abstand von vier Metern zwischen dem Objekt und dem
 % Kollisionserkennung
 % Score
 
-Um den das Flugsimulator-Spiel umzusetzen, wird zunächst eine Umgebung benötigt.
-Diese wird mit Hilfe von vorgefertigten ThreeJs Elementen wie einem Meer und einem Himmel erstellt.
+Um den das Flugsimulator-Spiel zu realisieren, wird zunächst eine Umgebung benötigt.
+Diese wird mit Hilfe von vorgefertigten three.js Elementen wie einem Meer und einem Himmel erstellt.
 Anschließend wird ein Flugzeugmodell im .glb Format eingelesen und der Szene hinzugefügt.
 \newparagraph
-Da die FlyControls von ThreeJs nicht den Ansprüchen des Spiels genügen, wird eine eigene Steuerung für das Bewegen des Flugzeugs implementiert.
+Da die FlyControls von three.js nicht den Ansprüchen des Spiels genügen, wird eine eigene Steuerung für das Bewegen des Flugzeugs implementiert.
 Dabei wird die Cursorposition mit Abstand zum Mittelpunkt des Bildschirms verglichen und die Flugrichtung (Vektor) entsprechend angepasst.
 Für diese Anpassung werden die Helper-Funktionen \texttt{turnVectorAroundVerticalAxis} und \texttt{turnVectorAroundHorizontalAxis} implementiert und in jeder Animationsschleife aufgerufen.
 Speziell für das Drehen eines Vektors um die horizontale Achse, ist die Mathematik nicht trivial, da zunächst eine Rotationsachse berechnet werden muss, die senkrecht zur Flugrichtung steht und bei jeder Position des Flugzeugs die gleiche Richtung hat.
@@ -38,7 +38,7 @@ Eine besondere Herausforderung bei der Flugsteuerung stellen die Überschläge d
 Diese müssen vom Programm erkannt werden, um aktiv die Kamera, das Flugzeug und die Steuerung zu invertieren.
 Um die Geschwindigkeit des Flugzeugs zu möglichst realistisch zu gestalten, wird diese proportional zur Neigung beim Sinkflug erhöht und beim Steigen verringert bis bestimmte Minimal- und Maximalwerte erreicht sind.
 \newparagraph
-Die Ringe werden in einer Schleife als ThreeJs Torus-Objekte erstellt und zufällig in der Szene platziert.
+Die Ringe werden in einer Schleife als three.js Torus-Objekte erstellt und zufällig in der Szene platziert.
 Außerdem werden der Szene Hindernisse hinzugefügt, die das Flugzeug nicht berühren darf.
 Diese werden aus Dodekaeder, Icosahedron, Oktaeder und Tetraeder Elementen erstellt und zufällig in der Szene angeordnet.
 \newparagraph
