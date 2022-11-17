@@ -63,34 +63,6 @@ function checkIfPointIsInsideMesh(point, mesh) {
 
 
 /**
- * Flattens a nested group of meshes into a single array of meshes (recursive)
- * @param group group of meshes
- * @returns { THREE.Mesh[] } array of meshes
- */
-function getAllMeshsFromNestedGroup(group) {
-  let meshs = [];
-  try {
-    if (group.type === "Mesh") {
-      meshs.push(group);
-    }
-    if (group.children.length === 0 || group.children === undefined)
-      return [group];
-    group.children.forEach(element => {
-      if (element.children.length === 0 || group.children === undefined) {
-        meshs.push(element);
-      } else {
-        meshs.push(...getAllMeshsFromNestedGroup(element));
-      }
-    });
-    return meshs;
-  } catch (error) {
-    console.warn(error);
-    return [];
-  }
-}
-
-
-/**
  * Gets the vector where the camera is looking at
  * @param {THREE.PerspectiveCamera} cam camera to get the vector from
  * @returns {THREE.Vector3} vector where the camera is looking at
@@ -135,19 +107,6 @@ function showBoundingBox(mesh) {
   const boxHelper = new THREE.Box3Helper(box, 0xffff00);
   boxHelper.position.copy(mesh.position);
   scene.add(boxHelper);
-}
-
-
-/**
- * Checks if a mesh is a child of another mesh (recursive)
- * @param {THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>} possibleChild possible child mesh
- * @param {THREE.Mesh} parent parent mesh
- */
-function meshIsChildOf(possibleChild, parent) {
-  if (possibleChild.parent === parent) return true;
-  if (possibleChild.parent === null) return false;
-  // @ts-ignore
-  return meshIsChildOf(possibleChild.parent, parent);
 }
 
 

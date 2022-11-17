@@ -15,7 +15,7 @@ async function placeObjects() {
     sceneObjects.room.children.find(child => child.name === "Floor_Outside").castShadow = true;
     sceneObjects.room.children.find(child => child.name === "Door").receiveShadow = true;
     sceneObjects.room.children.find(child => child.name === "Door_Outside").castShadow = true;
-    sceneObjects.room.children.find(child => child.name === "Ceiling").receiveShadow = true;
+    sceneObjects.room.children.find(child => child.name === "Ceiling").traverse(child => { child.receiveShadow = true; });
     sceneObjects.room.children.find(child => child.name === "Ceiling_Outside").castShadow = true;
     sceneObjects.room.children.find(child => child.name === "Wall_1").traverse(child => { child.receiveShadow = true; });
     sceneObjects.room.children.find(child => child.name === "Wall_2").traverse(child => { child.receiveShadow = true; });
@@ -25,7 +25,7 @@ async function placeObjects() {
     sceneObjects.room.children.find(child => child.name === "Wall_2_Outside").castShadow = true;
     sceneObjects.room.children.find(child => child.name === "Wall_3_Outside").castShadow = true;
     sceneObjects.room.children.find(child => child.name === "Wall_4_Outside").castShadow = true;
-
+    
     // windows
     const windowMaterial = new THREE.MeshPhysicalMaterial({
         metalness: 0,
@@ -50,11 +50,9 @@ async function placeObjects() {
 
     // blackboard
     let blackboard = await getMashFromBlenderModel("../blender/blackboard.glb");
+    blackboard.position.set(3.400, 0, 0.4);
+    blackboard.traverse(child => { child.receiveShadow = true; });
     scene.add(blackboard); sceneObjects.blackboard = blackboard;
-    sceneObjects.blackboard.position.set(3.400, 0, 0.4);
-    getAllMeshsFromNestedGroup(sceneObjects.blackboard).forEach(mesh => {
-        mesh.receiveShadow = true;
-    });
 
     // closet 1
     sceneObjects.closets = [];

@@ -8,6 +8,8 @@ async function init() {
 
   initStartScreen();
 
+  window.addEventListener("keydown", event => { if (event.key === "f" || event.key === "F") window.location.href = "/flight-simulator" });
+
   // config for three.js
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(
@@ -18,7 +20,7 @@ async function init() {
   );
   renderer = new THREE.WebGLRenderer();
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap
+  renderer.shadowMap.type = THREE.PCFShadowMap;
 
   // resize the renderer when the window is resized
   window.addEventListener("resize", () => {
@@ -34,12 +36,9 @@ async function init() {
   // add a clock
   clock = new THREE.Clock();
 
-  // add the renderer to the dom
-  camera.position.set(4, 8, 17);
-
   // place all objects/lights and enable its interactions
   await placeObjects();
-  placeLights();
+  await placeLights();
   initInteractions();
 
   // enable walking with the keyboard and orientation controls
@@ -54,6 +53,7 @@ async function init() {
   if (redirectFromFlightSimulator) {
     redirectFromFlightSimulator = true;
     sceneObjects.player.position.set(3.6, sceneObjects.player.position.y, 1.5);
+    camera.position.set(sceneObjects.player.position.x, headHeight, sceneObjects.player.position.z);
     camera.lookAt(sceneObjects.monitor.position.x, -10, 100);
     camera.updateProjectionMatrix()
     window.history.replaceState({}, document.title, "/");
@@ -61,25 +61,27 @@ async function init() {
 
   const startImmediately = putStartScreenOnReady();
 
-  if (!startImmediately) {
-
-    // wait till the user clicks on the start button or presses enter
-    await new Promise((resolve) => {
-      document.getElementById("start-button").addEventListener("click", () => {
-        startScene();
-        resolve();
-      });
-      window.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          startScene();
-          resolve();
-        }
-      });
-    });
-  } else {
+  if (startImmediately) {
     startScene();
+    document.getElementById("start-button").addEventListener("click", () => { startScene() });
+    window.addEventListener("keydown", (event) => { if (event.key === "Enter") startScene() });
+    return;
   }
 
+  // wait till the user clicks on the start button or presses enter
+  await new Promise((resolve) => {
+    document.getElementById("start-button").addEventListener("click", () => {
+      startScene();
+      resolve();
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        startScene();
+        resolve();
+      }
+    });
+  });
+  
 }
 
 
@@ -90,8 +92,8 @@ function initStats() {
   stats = new Stats();
   stats.setMode(0);
   stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0';
-  stats.domElement.style.top = '50px';
+  stats.domElement.style.left = '10px';
+  stats.domElement.style.top = '80px';
   stats.domElement.id = "stats";
   stats.domElement.style.display = "none";
   document.body.appendChild(stats.domElement);
@@ -156,6 +158,14 @@ function initDevControls() {
         stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
 
         break;
+
+      case "u":
+      case "U":
+
+        // toggle collision detection
+        collisionDetectionEnabled = !collisionDetectionEnabled;
+
+        break;
     }
   });
 
@@ -174,7 +184,6 @@ function initStartScreen() { }
 function startScene() {
   document.body.appendChild(renderer.domElement);
   document.getElementById("start-screen").style.display = "none";
-  document.getElementById("stats").style.display = "block";
 }
 
 

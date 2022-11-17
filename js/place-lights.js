@@ -3,7 +3,7 @@
 /**
  * Places all lights in the scene
  */
-function placeLights() {
+async function placeLights() {
 
     // room light
     const bulbGeometry = new THREE.SphereGeometry(0.04, 16, 8);
@@ -15,8 +15,9 @@ function placeLights() {
     const roomLightColor = 0xffeebb;
     const roomLightIntensity = 0.18;
     const roomLightDecay = 1;
-    const roomLightHeight = 2.9;
+    const roomLightHeight = 2.85;
     const roomLightDistance = 10.5;
+    const shadowMapSize = 256;
 
     sceneObjects.bulbLights = [];
 
@@ -31,16 +32,27 @@ function placeLights() {
         { x: 7.426, z: 8.750, cluster: "3" },
     ]
 
-    // create a light for each config
+    // create a light and a lamp for each light config
+    const lampModel = await getMashFromBlenderModel("../blender/lamp.glb");
     roomLightConfig.forEach((lightConfig) => {
+
+        // create the light
         const bulbLight = new THREE.PointLight(roomLightColor, roomLightIntensity, roomLightDistance, roomLightDecay);
         bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
         bulbLight.position.set(lightConfig.x, roomLightHeight, lightConfig.z);
         bulbLight.castShadow = true;
         bulbLight.name = lightConfig.cluster;
-        bulbLight.shadow.mapSize.width = bulbLight.shadow.mapSize.height = 512;
+        bulbLight.shadow.mapSize.width = bulbLight.shadow.mapSize.height = shadowMapSize;
+        bulbLight.shadow.camera.near = 0.01;
         scene.add(bulbLight);
         sceneObjects.bulbLights.push(bulbLight);
+
+        // create the lamp
+        const lamp = lampModel.clone();
+        lamp.position.set(lightConfig.x, roomLightHeight + 0.15, lightConfig.z);
+        lamp.traverse((child) => { child.castShadow = true; });
+        lamp.scale.set(1, 1, 1);
+        scene.add(lamp);
     });
 
     // hemispheric light
@@ -51,8 +63,7 @@ function placeLights() {
     let dayLight = new THREE.PointLight(0xffffff, 0.2);
     dayLight.position.set(-16, 4, 6);
     dayLight.castShadow = true;
-    dayLight.shadow.mapSize.width = 512;
-    dayLight.shadow.mapSize.height = 512;
+    dayLight.shadow.mapSize.width = dayLight.shadow.mapSize.height = shadowMapSize;
     scene.add(dayLight);
 
 
