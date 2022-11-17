@@ -1,11 +1,24 @@
 \section{Realisierung}
 \subsection{Klassenzimmer}
 % Exportierung der Blender Modelle in  GTLF Blender
+Zunächst werden alle Modelle aus Blender in das GL Transmission Format (.glb) exportiert.
 % Einbindung der Modelle in ThreeJs
 % Platzierung der Modelle gemäß der Zeichnung aus Abb.
-% Einstellen der Shader... @johannes
+Anschließend werden diese Modelle in three.js eingebunden und gemäß dem Plan in Abbildung \ref{fig:KlassenzimmerEntwurf}
+platziert.
+Abschließend müssen die Scheiben in die Fenster eingefügt werden, da dies nicht mit einem Export aus Blender möglich ist.
+\newparagraph
 % Bewegungen / Kollisionserkennungen / sonst. Interaktionen
-
+Nachdem die Szene vollständig erstellt wurde, müssen nachfolgend die definierten Interaktionen hinzugefügt werden.
+Um sich im Raum zu bewegen, wird eine unsichtbarer Quader hinzugefügt, der die Person darstellt. Dieser Quader enthält auch die Kamera
+und kann mit W A S D durch den Raum bewegt werden. Um Kollisionsen zu erkennen wird vor Ausführung der Bewegung überprüft,
+ob die Bewegung ausgeführt werden darf, würde der Quader innerhalb eines anderen Objekts sein, wird die Bewegung nicht ausgeführt.
+\newparagraph
+Damit die Tafel nach oben bzw. nach unten bewegt werden kann, wird die Tafel mit der Maus angewählt und verschoben.
+Hierzu wir bei einem Mausklick überprüft ob auf die Tafel geklickt wurde und anschließend abhängig von der Maus Bewegung in die X-Achsen Richtung die Tafel verschoben.
+Das Auf- und Abstuhlen der Stühle funktioniert ähnlich. Es wird ebenfalls überprüft ob bei einem Mausklick auf einen Stuhl geklickt wurde und anschließend wird dieser auf- oder abgestuhlt.
+Das öffnen oder schließen der Schranktüren funktioniert analog zu den Stühlen.
+Zusätzlich darf maximal ein Abstand von vier Metern zwischen dem Objekt und dem Personen-Quader sein um die Animation auszuführen.
 % // lukas
 \subsection{Flugsimulator}
 % ThreeJs Meer + Licht,
