@@ -2,7 +2,7 @@
 
 % Klassenzimmer --> Flugschule um weiteren Komponenten sinnvoll einzufügen
 %--> erstellung eines händischen drahtmodells -->
-% --> Definition der einzelnen Komponenten --> Maaße definieren
+% --> Definition der einzelnen Komponenten --> Maße definieren
 % --> Visio Zeichnung 
 % --> Interaktionen definieren
 % Flugsimulator als erweiterung
@@ -10,7 +10,7 @@
 %//TODO Mention Phong from Flightsimulator
 
 \subsection{Klassenzimmer}
-Als grundlegende Idee wurde zunächst ein Vorlesungsaal vorgeschlagen.
+Als grundlegende Idee wurde zunächst ein Vorlesungssaal vorgeschlagen.
 Um weitere Komponenten aus den Anforderungen an diese Arbeit sinnvoll umzusetzen,
 wurde die grundlegende Idee überdacht und neu definiert als Klassenzimmer einer Flugschule.
 \newparagraph
@@ -22,7 +22,7 @@ Diese ist in der Abbildung \ref{fig:KlassenzimmerSkizze} dargestellt.
   \caption{Klassenzimmer Skizze}
   \label{fig:KlassenzimmerSkizze}
 \end{figure}\noindent
-Anschließend wurde der Raum maßstabsgetreu in einem Bauplan gezeichnet um so die Abstände und Maaße teilweise zu definieren.
+Anschließend wurde der Raum maßstabsgetreu in einem Bauplan gezeichnet um so die Abstände und Maße teilweise zu definieren.
 Diese Zeichnung ist in der Abbildung \ref{fig:KlassenzimmerEntwurf} dargestellt.
 
 \begin{figure}[H]
@@ -49,22 +49,61 @@ dargestellt.
 \end{figure}\noindent
 Um die Anforderungen vollständig zu erfüllen müssen Interaktionen mit der 3D Szene möglich sein, diese werden im Folgenden beschrieben.
 \newparagraph
-Im Klassenzimmer ist es möglich zu laufen, bei einer Kolision mit einem Gegenstand wird die Bewegung angehalten.
+Im Klassenzimmer ist es möglich zu laufen, bei einer Kollision mit einem Gegenstand wird die Bewegung angehalten.
 Das Licht im Klassenzimmer kann durch drei Lichtschalter neben der Tür per Mausklick gesteuert werden. Mit einem Schalter kann jeweils ein Cluster angesteuert werden, diese sind in Abb. \ref{fig:KlassenzimmerEntwurfLamps}
 farblich gekennzeichnet.
 Außerdem können die Stühle auf- und abgestuhlt werden. Bei einem Blick aus dem Fenster
-soll die DHBW dargestellt werden, diese wird als \ac{HDR} Bild eingebunden. Zusätzlich können die Schränke geöffnet und geschlossen werden und die Tafel hoch bzw. nach unten geschoben werden.
+soll die DHBW dargestellt werden, diese wird als \ac{HDR} Bild eingebunden. Zusätzlich können die Schränke geöffnet und geschlossen werden und die Tafel nach oben bzw. nach unten geschoben werden.
 \newparagraph
-Aus den beschrieben Animationen und den Plänen aus den Abbildung \ref{fig:KlassenzimmerEntwurf}, \ref{fig:KlassenzimmerEntwurfWindows} und \ref{fig:KlassenzimmerEntwurfLamps} ergeben sich alle Komponenten der Szene. Einige Maaße werden bereits durch
-den Plan vorgegeben in einem weiteren Schritt werden diese nun vollständig definiert.
-% Diese Definition sind in der Tabelle %\ref{} abgebildet
-%//TODO Tabelle einfügen.
-% henry
+Aus den beschrieben Animationen und den Plänen aus den Abbildung \ref{fig:KlassenzimmerEntwurf}, \ref{fig:KlassenzimmerEntwurfWindows} und \ref{fig:KlassenzimmerEntwurfLamps} ergeben sich alle Komponenten der Szene. 
+Einige Maße werden bereits durch den Plan vorgegeben in einem weiteren Schritt werden diese nun vollständig definiert.
+Diese Definition sind in der Tabelle \ref{tab:Komponenten} abgebildet.
+\begin{table}
+  \centering
+  \begin{tabular}{|l|c|c|c|c|}
+    \hline
+    \textbf{Komponente} & \textbf{x} & \textbf{y} & \textbf{z} & \textbf{file} \\
+    \hline
+    Blackboard & 03,600 & 00,240 & 02,500 & /blender/blackboard.glb \\
+    \hline
+    Chair & 00,470 & 00,480 & 00,870 & /blender/chair.glb \\
+    \hline
+    Closet & 01,000 & 00,725 & 02,200 & /blender/closet.glb \\
+    \hline
+    Lamp & 00,328 & 00,328 & 00,700 & /blender/lamp.glb \\
+    \hline
+    LightSwitch & 00,080 & 00,014 & 00,080 & /blender/lightswitch.glb \\
+    \hline
+    Sideboard & 00,600 & 01,500 & 00,700 & /blender/sideboard.glb \\
+    \hline
+    Table & 01,800 & 00,900 & 00,790 & /blender/table.glb \\
+    \hline
+    Room & 10,710 & 11,820 & 03,300 & /blender/room\_door.glb \\
+    \hline
+  \end{tabular}
+  \caption{Modell-Maße in Meter}
+  \label{tab:Komponenten}  
+\end{table}
 \newparagraph
 Mit den oben definierten Größen können anschließend die Blender Modelle erstellt werden.
-Um das Klassenzimmer ansprechender darzustellen werden weitere Elemente aus dem Internet eingefügt, diese werden mit ihren Quellen in der untenstehenden Tabelle aufgezählt.
-%//TODO Tabelle externe Modells
-%henry
+Um das Klassenzimmer ansprechender darzustellen werden weitere Elemente aus dem Internet eingefügt, diese werden mit ihren Quellen in Tabelle \ref{tab:KomponentenExtern} aufgezählt.
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Komponente} & \textbf{Quelle} & \textbf{file} \\
+    \hline
+    Monitor & https://poly.pizza/m/e8cELDeDuTr & /blender/monitor.glb \\
+    \hline
+    Keyboard & https://www.thingiverse.com/thing:4230507 & /blender/Keyboard.glb \\
+    \hline
+    \multirow{2}{*}{Plane}  & https://sketchfab.com/3d-models/low-poly-  & \multirow{2}{*}{/blender/basic\_plane.glb} \\ 
+                            & airplane-65cc7c4349174f7bbb20ed70206377b5                                  & \\
+    \hline
+  \end{tabular}
+  \caption{Modelle aus dem Internet}
+  \label{tab:KomponentenExtern}
+\end{table}
 %//TODO FlugSim
 \subsection{Flugsimulator}
 Als Erweiterung der Flugschule, wurde ein Flugsimulator programmiert.
