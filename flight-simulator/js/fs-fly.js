@@ -43,6 +43,10 @@ async function initFlying() {
             touchEndY = event.touches[0].clientY;
             headingTo.right = invertedControls ? (touchEndX - touchStartX) * 1 : -(touchEndX - touchStartX) * 1;
             headingTo.up = invertedControls ? (touchStartY - touchEndY) * 1 : -(touchStartY - touchEndY) * 1;
+            if (headingTo.right > 100) { headingTo.right = 100; }
+            if (headingTo.right < -100) { headingTo.right = -100; }
+            if (headingTo.up > 100) { headingTo.up = 100; }
+            if (headingTo.up < -100) { headingTo.up = -100; }
         });
     }
 
