@@ -1,41 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: fly.js</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
-
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: fly.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>// @ts-check
-
-/** @type {THREE.Vector3} */
-const planeStartPoint = new THREE.Vector3(4, 0.85, 3);
+// @ts-check
 
 /** @type {number} */
 const distanceOfCameraFromPlane = 1.5;
-
-/** @type {boolean} */
-let checkForPlaneCollision = true;
 
 /** @type {number} */
 let basePlaneRotateFactor = 0.01;
@@ -60,9 +26,9 @@ async function initFlying() {
         headingTo.up = invertedControls ? (window.innerHeight / 2 - event.clientY) / 2 : - (window.innerHeight / 2 - event.clientY) / 2;
         document.body.style.cursor = "crosshair";
         if (headingTo.right > 100) { headingTo.right = 100; document.body.style.cursor = "e-resize"; }
-        if (headingTo.right &lt; -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
+        if (headingTo.right < -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
         if (headingTo.up > 100) { headingTo.up = 100; document.body.style.cursor = "n-resize"; }
-        if (headingTo.up &lt; -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
+        if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
     });
 
     // add touch support for mobile devices
@@ -71,9 +37,9 @@ async function initFlying() {
         headingTo.up = - (window.innerHeight / 2 - event.touches[0].clientY) / 2;
         document.body.style.cursor = "crosshair";
         if (headingTo.right > 100) { headingTo.right = 100; document.body.style.cursor = "e-resize"; }
-        if (headingTo.right &lt; -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
+        if (headingTo.right < -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
         if (headingTo.up > 100) { headingTo.up = 100; document.body.style.cursor = "n-resize"; }
-        if (headingTo.up &lt; -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
+        if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
     });
 
     await createModelPlane();
@@ -148,37 +114,6 @@ function handleFlying() {
     sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.5));
     sceneObjects.modelPlane.updateMatrixWorld();
 
-
-    if (!checkForPlaneCollision) return;
-
-    // check for collision
-    let planeCollided = false;
-    let allMeshs = getAllMeshsFromNestedGroup(scene);
-    for (let i = 0; i &lt; allMeshs.length; i++) {
-        if (allMeshs[i] !== sceneObjects.modelPlane &amp;&amp; !meshIsChildOf(allMeshs[i], sceneObjects.modelPlane) &amp;&amp; allMeshs[i].name !== "" &amp;&amp; !getAllMeshsFromNestedGroup(sceneObjects.environment).includes(allMeshs[i])) {
-            if (checkCollision(sceneObjects.modelPlane, allMeshs[i])) {
-                console.log("collision with ", allMeshs[i]);
-                planeCollided = true;
-                break;
-            }
-        }
-    }
-    if (planeCollided) {
-        speed = 0;
-
-        // show the plane in red
-        sceneObjects.modelPlane.traverse(function (child) {
-            if (child.isMesh) {
-                child.material.color.setHex(0xff0000);
-            }
-        });
-
-        // timeout for 1 second
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000);
-    }
-
 }
 
 
@@ -186,6 +121,8 @@ function handleFlying() {
  * Creates the plane model and adds it to the scene
  */
 async function createModelPlane() {
+
+    const planeStartPoint = new THREE.Vector3(torusSpawnRadius * 0.5 + 2, 8, torusSpawnRadius * 0.5 + 2);
 
     // load the plane model
     const modelPlane = await getMashFromBlenderModel("../low-poly_airplane.glb-low", "https://download1591.mediafire.com/1ukswzole2ag/2otcm1ju178d63g/basic_plane.glb");
@@ -197,7 +134,7 @@ async function createModelPlane() {
     // set the plane position
     sceneObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
     sceneObjects.modelPlane.scale.set(0.002, 0.003, 0.003);
-    sceneObjects.modelPlane.lookAt(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z - 1);
+    sceneObjects.modelPlane.lookAt(planeStartPoint.x - 1, planeStartPoint.y, planeStartPoint.z - 1);
 }
 
 
@@ -216,31 +153,8 @@ function calcSpeed(speed, y) {
     let newSpeed = speed * 0.9 + baseSpeed * 0.1;
     newSpeed -= y * yFactor;
 
-    if (newSpeed &lt; minSpeed) newSpeed = minSpeed;
+    if (newSpeed < minSpeed) newSpeed = minSpeed;
     if (newSpeed > maxSpeed) newSpeed = maxSpeed;
 
     return newSpeed;
 }
-</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#basePlaneRotateFactor">basePlaneRotateFactor</a></li><li><a href="global.html#calcSpeed">calcSpeed</a></li><li><a href="global.html#checkForPlaneCollision">checkForPlaneCollision</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#planeStartPoint">planeStartPoint</a></li><li><a href="global.html#speed">speed</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 08:42:13 GMT+0100 (Mitteleuropäische Normalzeit)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
-</body>
-</html>

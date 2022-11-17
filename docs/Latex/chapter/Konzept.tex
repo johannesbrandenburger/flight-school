@@ -52,6 +52,7 @@ Um die Anforderungen vollständig zu erfüllen müssen Interaktionen mit der 3D 
 Im Klassenzimmer ist es möglich zu laufen, bei einer Kolision mit einem Gegenstand wird die Bewegung angehalten.
 Das Licht im Klassenzimmer kann durch drei Lichtschalter neben der Tür per Mausklick gesteuert werden. Mit einem Schalter kann jeweils ein Cluster angesteuert werden, diese sind in Abb. \ref{fig:KlassenzimmerEntwurfLamps}
 farblich gekennzeichnet.
+% TODO: change!
 Außerdem können die Stühle auf- und abgestuhlt werden. Bei einem Blick aus dem Fenster
 soll die DHBW dargestellt werden, diese wird als \ac{HDR} Bild eingebunden. Zusätzlich können die Schränke geöffnet und geschlossen werden und die Tafel hoch bzw. nach unten geschoben werden.
 \newparagraph
@@ -67,6 +68,21 @@ Um das Klassenzimmer ansprechender darzustellen werden weitere Elemente aus dem 
 %henry
 %//TODO FlugSim
 \subsection{Flugsimulator}
-Als Erweiterung der Flugschule, wurde ein Flugsimulator programmiert.
-Dieser kann durch einen Klick auf dem Monitor in dem Klassenraum gestartet werden.
 %johannes
+
+Als Erweiterung der Flugschule, wird ein Flugsimulator-Spiel integriert, welcher folgende Funktionen beinhaltet:
+
+Durch einen Klick auf den Monitor in der Flugschule wird auf eine Unterseite weitergeleitet und der Flugsimulator wird gestartet.
+Ein Flugzeug-Modell wird in der Mitte einer Szene platziert.
+Dessen Flugrichtung ist mit der Maus veränderbar, wodurch eine Steuerung des Flugzeugs möglich ist.
+Die Geschwindigkeit des Flugzeugs wird nicht durch den Benutzer verändert, sondern passt sich anhand der Neigung des Flugzeugs an.
+
+Beim Starten des Flugsimulator-Spiels wird ein Countdown gestartet, welcher 60 Sekunden lang dauert.
+In dieser Zeit kann der Benutzer durch zufällig generierte Ringe fliegen und dabei (je nach Art des Rings) einen oder fünf Punkte sammeln.
+Zur zusätzlichen Herausforderung werden Hindernisse generiert.
+Wenn das Flugzeug in eines dieser Hindernisse oder gegen einen der Ringe fliegt oder die Zeit abläuft, wird das Spiel beendet.
+Der Benutzer bekommt hierbei die erreichte Punktzahl angezeigt und kann das Spiel erneut starten oder zur Flugschule zurückkehren.
+
+Im Hindergrund des Spiels wird ein Ozean und ein Himmel dargestellt.
+Die Kamera bewegt sich während des Fluges mit dem Flugzeug mit.
+Die Steuerung kann durch das Drücken der Taste \texttt{I} invertiert werden, um allen Benutzern das bestmögliche Spielerlebnis zu ermöglichen.

@@ -1,13 +1,3 @@
-const torusScale = 0.2;
-const torusRadius = 2 * torusScale;
-const torusTube = 0.3 * torusScale;
-const torusSpawnRadius = 100 * torusScale;
-const torusAmount = 300;
-const extraTorusAmount = 30;
-const obstacleAmount = 300;
-const obstacleRadius = 0.2;
-
-
 /**
  * Places torus objects in the scene at random positions+
  */

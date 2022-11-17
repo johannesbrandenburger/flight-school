@@ -26,6 +26,7 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 | F   | Start Flight Simulator |
 | J   | Toggle FPS Display Visibility |
 | H   | Show this Help |
+| U   | Toggle Collision Detection |
 
 ## Keyboard Shortcuts in Flight Simulator
 
@@ -34,6 +35,7 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 | P   | Pause |
 | I   | Invert Controls |
 | F   | Exit Flight Simulator and Return to Flight School Scene |
+| J   | Toggle FPS Display Visibility |
 
 ## Interactions in Flight School Scene
 
@@ -42,3 +44,13 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 - Click on the Light Switch to Switch the Lights On/Off
 - Click on the Closet to Open/Close it
 - Move the Blackboard with the Mouse to Adjust its Height
+
+# Installation
+
+1. If node and npm are not already installed, install them from [nodejs.org](https://nodejs.org/en/).
+2. Run `npm run start` to install all dependencies and start the server on port 3000.
+3. Open [localhost:3000](http://localhost:3000) in your browser.
+
+1. Wenn node und npm noch nicht installiert sind, installieren Sie sie von [nodejs.org](https://nodejs.org/en/).
+2. Führen Sie `npm run start` aus, um alle Abhängigkeiten zu installieren und den Server auf Port 3000 zu starten.
+3. Öffnen Sie [localhost:3000](http://localhost:3000) in Ihrem Browser.

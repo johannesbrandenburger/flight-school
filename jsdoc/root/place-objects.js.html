@@ -43,7 +43,7 @@ async function placeObjects() {
     sceneObjects.room.children.find(child => child.name === "Floor_Outside").castShadow = true;
     sceneObjects.room.children.find(child => child.name === "Door").receiveShadow = true;
     sceneObjects.room.children.find(child => child.name === "Door_Outside").castShadow = true;
-    sceneObjects.room.children.find(child => child.name === "Ceiling").receiveShadow = true;
+    sceneObjects.room.children.find(child => child.name === "Ceiling").traverse(child => { child.receiveShadow = true; });
     sceneObjects.room.children.find(child => child.name === "Ceiling_Outside").castShadow = true;
     sceneObjects.room.children.find(child => child.name === "Wall_1").traverse(child => { child.receiveShadow = true; });
     sceneObjects.room.children.find(child => child.name === "Wall_2").traverse(child => { child.receiveShadow = true; });
@@ -53,7 +53,7 @@ async function placeObjects() {
     sceneObjects.room.children.find(child => child.name === "Wall_2_Outside").castShadow = true;
     sceneObjects.room.children.find(child => child.name === "Wall_3_Outside").castShadow = true;
     sceneObjects.room.children.find(child => child.name === "Wall_4_Outside").castShadow = true;
-
+    
     // windows
     const windowMaterial = new THREE.MeshPhysicalMaterial({
         metalness: 0,
@@ -78,15 +78,13 @@ async function placeObjects() {
 
     // blackboard
     let blackboard = await getMashFromBlenderModel("../blender/blackboard.glb");
+    blackboard.position.set(3.400, 0, 0.4);
+    blackboard.traverse(child => { child.receiveShadow = true; });
     scene.add(blackboard); sceneObjects.blackboard = blackboard;
-    sceneObjects.blackboard.position.set(3.400, 0, 0.4);
-    getAllMeshsFromNestedGroup(sceneObjects.blackboard).forEach(mesh => {
-        mesh.receiveShadow = true;
-    });
 
     // closet 1
     sceneObjects.closets = [];
-    let closetOne = await getMashFromBlenderModel("../blender/Closet.glb");
+    let closetOne = await getMashFromBlenderModel("../blender/closet.glb");
     scene.add(closetOne);
     closetOne.rotateY(degToRad(180));
     closetOne.position.set(8.926, 0, 0);
@@ -294,13 +292,13 @@ async function placeObjects() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getAllMeshsFromNestedGroup">getAllMeshsFromNestedGroup</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#maxDistance">maxDistance</a></li><li><a href="global.html#meshIsChildOf">meshIsChildOf</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#maxDistance">maxDistance</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 08:42:13 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 16:19:01 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>
