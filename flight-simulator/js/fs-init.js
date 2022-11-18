@@ -229,7 +229,11 @@ function showInvertedControlsDiv() {
     const TextIfFalse = "Inverted Controls: Off <br/> The control direction is realisitc like in a real airplane. <br/> This setting is saved in your browser and can be toggled by pressing 'I'.";
     document.getElementById("invertedControls").innerHTML = invertedControls ? TextIfTrue : TextIfFalse;
     document.getElementById("invertedControls").style.display = "block";
-    setTimeout(() => {
+    if (invertedControlsDivTimeout != null) {
+        clearTimeout(invertedControlsDivTimeout);
+        invertedControlsDivTimeout = null;
+    }
+    invertedControlsDivTimeout = setTimeout(() => {
         document.getElementById("invertedControls").style.display = "none";
     }, 3000);
 }

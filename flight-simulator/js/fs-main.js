@@ -22,7 +22,8 @@ var container,
     planeWingSize = 0.08,
     isFlying = true,
     showFlightVectors = false,
-    planeIsUpsideDown = false
+    planeIsUpsideDown = false,
+    invertedControlsDivTimeout = null
     ;
 
 const torusScale = 0.2;
