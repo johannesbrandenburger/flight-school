@@ -27,6 +27,12 @@ async function init() {
     outOfBoundsDiv.innerHTML = "Don't fly out of bounds!";
     document.body.appendChild(outOfBoundsDiv);
 
+    // add a div for telling the user that the controls are inverted
+    const invertedControlsDiv = document.createElement("div");
+    invertedControlsDiv.id = "invertedControls";
+    invertedControlsDiv.style.display = "none";
+    document.body.appendChild(invertedControlsDiv);
+
     // config for three.js
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(
@@ -77,10 +83,12 @@ async function init() {
     startTime = new Date().getTime();
     checkForPlaneCollision = false;
 
-    // add event listener on mouse click
-    document.addEventListener("click", () => {
-        speed += 5;
-    });
+    // add event listener on mouse click for a boost
+    document.addEventListener("click", () => { speed += 10 });
+
+    // check if the controls should be inverted
+    if (localStorage.getItem("invertedControls") === "true") invertedControls = true;
+    showInvertedControlsDiv();
 
     // add the canvas and remove the loading div
     document.body.appendChild(renderer.domElement);
@@ -202,6 +210,31 @@ function gameOver() {
     controlPanel.appendChild(exitButton);
 }
 
+
+/**
+ * Inverts the controls and saves the setting in the local storage
+ */
+function invertControls() {
+    invertedControls = !invertedControls;
+    localStorage.setItem("invertedControls", invertedControls);
+    showInvertedControlsDiv();
+}
+
+
+/**
+ * Shows a alert with if the controls are inverted or not for 3 seconds
+ */
+function showInvertedControlsDiv() {
+    const TextIfTrue = "Inverted Controls: On <br/> The airplane will follow your mouse cursor. <br/> This setting is saved in your browser and can be toggled by pressing 'I'.";
+    const TextIfFalse = "Inverted Controls: Off <br/> The control direction is realisitc like in a real airplane. <br/> This setting is saved in your browser and can be toggled by pressing 'I'.";
+    document.getElementById("invertedControls").innerHTML = invertedControls ? TextIfTrue : TextIfFalse;
+    document.getElementById("invertedControls").style.display = "block";
+    setTimeout(() => {
+        document.getElementById("invertedControls").style.display = "none";
+    }, 3000);
+}
+
+
 /**
  * Initialize developer controls / keyboard shortcuts and experimental features
  */
@@ -238,8 +271,7 @@ function initDevControls() {
             case "i":
             case "I":
 
-                // invert controls
-                invertedControls = !invertedControls;
+                invertControls();
 
                 break;
 
