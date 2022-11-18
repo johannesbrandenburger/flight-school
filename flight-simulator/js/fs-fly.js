@@ -7,7 +7,7 @@ const distanceOfCameraFromPlane = 1.5;
 let basePlaneRotateFactor = 0.01;
 
 /** @type {number} */
-let speed = 1.5;
+let speed = 0;
 
 /**
  * Initializes the flying controls

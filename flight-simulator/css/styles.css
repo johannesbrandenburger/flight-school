@@ -73,7 +73,7 @@ html, body {
   background-color: #E74C3C;
 }
 
-#score, #time {
+#score, #time, #invertedControls {
   background-color: rgb(34, 34, 34, 0.7);
   padding: 10px;
   border-radius: 10px;
@@ -104,4 +104,12 @@ html, body {
   color: red;
   font-size: 2em;
   display: none;
+}
+
+#invertedControls {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  text-align: center;
+  color:white
 }
