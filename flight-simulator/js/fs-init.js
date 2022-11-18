@@ -170,6 +170,7 @@ function gameOver() {
 
     // stop the game
     isFlying = false;
+    isGameOver = true;
 
     // set cursor to default
     document.body.style.cursor = "pointer";
@@ -283,11 +284,14 @@ function initDevControls() {
             case "P":
 
                 // pause the game
-                if (isFlying) {
-                    isFlying = false;
-                    document.getElementById("time").innerHTML = "Paused";
-                } else {
-                    isFlying = true;
+                if (!isGameOver) {
+
+                    if (isFlying) {
+                        isFlying = false;
+                        document.getElementById("time").innerHTML = "Paused";
+                    } else {
+                        isFlying = true;
+                    }
                 }
 
                 break;

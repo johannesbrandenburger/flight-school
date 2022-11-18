@@ -23,7 +23,8 @@ var container,
     isFlying = true,
     showFlightVectors = false,
     planeIsUpsideDown = false,
-    invertedControlsDivTimeout = null
+    invertedControlsDivTimeout = null,
+    isGameOver = false
     ;
 
 const torusScale = 0.2;
