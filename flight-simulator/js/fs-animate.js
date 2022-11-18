@@ -123,7 +123,7 @@ function handleObstacleCollision() {
  */
 function handlePlaneOutOfBounds() {
 
-    if (sceneObjects.modelPlane.position.distanceTo(new THREE.Vector3(0, 0, 0)) - 5 > torusSpawnRadius) {
+    if (sceneObjects.modelPlane.position.distanceTo(new THREE.Vector3(0, 0, 0)) - 10 > torusSpawnRadius) {
 
         // turn the plane around
         sceneObjects.modelPlane.lookAt(new THREE.Vector3(0, 10, 0));
