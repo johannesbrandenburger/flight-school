@@ -6,17 +6,17 @@ async function animate() {
     requestAnimationFrame(animate);
     stats.update();
 
+    deltaTime = clock.getDelta();
+
     if (isFlying) {
         handleFlying();
         handleScore();
         handleObstacleCollision();
-        handleTime();
         handlePlaneOutOfBounds();
     }
+    handleTime();
+    
     water.material.uniforms['time'].value += 0.05 * deltaTime;
-
-    deltaTime = clock.getDelta();
-
     renderer.render(scene, camera);
 }
 
@@ -88,6 +88,12 @@ function handleScore() {
  * Decreases the time and checks if the time is up
  */
 function handleTime() {
+
+    if (isFlying == false) {
+        startTime += deltaTime * 1000;
+        return;
+    }
+
     const currentTime = new Date().getTime();
     timeLeft = 60 - Math.floor((currentTime - startTime) / 1000);
     document.getElementById("time").innerHTML = "Time left: " + timeLeft;

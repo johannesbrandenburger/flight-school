@@ -82,21 +82,6 @@ async function init() {
         speed += 5;
     });
 
-    // add event listener to pause the game
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "p") {
-            if (isFlying) {
-                isFlying = false;
-                document.getElementById("time").innerHTML = "Paused";
-            } else {
-                isFlying = true;
-            }
-        }
-    });
-
-    // // set the plane position
-    // sceneObjects.modelPlane.position.set(planeStartPoint)
-
     // add the canvas and remove the loading div
     document.body.appendChild(renderer.domElement);
     document.body.removeChild(loadingDiv);
@@ -255,6 +240,21 @@ function initDevControls() {
 
                 // invert controls
                 invertedControls = !invertedControls;
+
+                break;
+
+            case "p":
+            case "P":
+
+                // pause the game
+                if (isFlying) {
+                    isFlying = false;
+                    document.getElementById("time").innerHTML = "Paused";
+                } else {
+                    isFlying = true;
+                }
+
+                break;
 
         }
     });
