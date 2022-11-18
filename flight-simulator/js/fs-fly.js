@@ -139,21 +139,19 @@ async function createModelPlane() {
 
 /**
  * Calculates the speed depending on the y value of the planeLookAt vector and the previous speed
- * @param {number} speed previous speed
+ * @param {number} v0 previous speed
  * @param {*} y y value of the planeLookAt vector 1 = straight up, -1 = straight down
  */
-function calcSpeed(speed, y) {
+function calcSpeed(v0, y) {
 
-    const minSpeed = 1.5;
-    const maxSpeed = 3.5;
-    const baseSpeed = 2;
-    const yFactor = 0.1;
+    const g = 9.81;
+    const aGravity = g * -y;
+    const aThrust = 10;
+    const aAirResistance = - v0 * v0 * 0.9;
 
-    let newSpeed = speed * 0.9 + baseSpeed * 0.1;
-    newSpeed -= y * yFactor;
+    const a = aGravity + aThrust + aAirResistance;
 
-    if (newSpeed < minSpeed) newSpeed = minSpeed;
-    if (newSpeed > maxSpeed) newSpeed = maxSpeed;
+    const v1 = v0 + a * deltaTime;
 
-    return newSpeed;
+    return v1;
 }
