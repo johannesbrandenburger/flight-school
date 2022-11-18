@@ -41,36 +41,25 @@ async function init() {
     const scoreDiv = document.createElement("div");
     scoreDiv.id = "score";
     scoreDiv.innerHTML = "Score: 0";
-    scoreDiv.style.position = "absolute";
-    scoreDiv.style.top = "10px";
-    scoreDiv.style.left = "10px";
-    scoreDiv.style.color = "white";
-    scoreDiv.style.fontSize = "2em";
     document.body.appendChild(scoreDiv);
 
     // add a div for the time
     const timeDiv = document.createElement("div");
     timeDiv.id = "time";
     timeDiv.innerHTML = "Time left: " + timeLeft;
-    timeDiv.style.position = "absolute";
-    timeDiv.style.top = "10px";
-    timeDiv.style.right = "10px";
-    timeDiv.style.color = "white";
-    timeDiv.style.fontSize = "2em";
     document.body.appendChild(timeDiv);
 
     // add a div for telling the user to not fly out of bounds
     const outOfBoundsDiv = document.createElement("div");
     outOfBoundsDiv.id = "outOfBounds";
     outOfBoundsDiv.innerHTML = "Don't fly out of bounds!";
-    outOfBoundsDiv.style.position = "absolute";
-    outOfBoundsDiv.style.top = "10px";
-    outOfBoundsDiv.style.left = "50%";
-    outOfBoundsDiv.style.transform = "translateX(-50%)";
-    outOfBoundsDiv.style.color = "red";
-    outOfBoundsDiv.style.fontSize = "2em";
-    outOfBoundsDiv.style.display = "none";
     document.body.appendChild(outOfBoundsDiv);
+
+    // add a div for telling the user that the controls are inverted
+    const invertedControlsDiv = document.createElement("div");
+    invertedControlsDiv.id = "invertedControls";
+    invertedControlsDiv.style.display = "none";
+    document.body.appendChild(invertedControlsDiv);
 
     // config for three.js
     scene = new THREE.Scene();
@@ -122,36 +111,12 @@ async function init() {
     startTime = new Date().getTime();
     checkForPlaneCollision = false;
 
-    // add event listener on mouse click
-    document.addEventListener("click", () => {
-        speed += 5;
-    });
+    // add event listener on mouse click for a boost
+    document.addEventListener("click", () => { speed += 10 });
 
-    // TEMP add event listerner to redirect to homepage at pressing f
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "f") {
-            location.href = "/?redirect-from=flight-simulator";
-        }
-
-        if (e.key === "i") {
-            invertedControls = !invertedControls;
-        }
-    });
-
-    // add event listener to pause the game
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "p") {
-            if (isFlying) {
-                isFlying = false;
-                document.getElementById("time").innerHTML = "Paused";
-            } else {
-                isFlying = true;
-            }
-        }
-    });
-
-    // // set the plane position
-    // sceneObjects.modelPlane.position.set(planeStartPoint)
+    // check if the controls should be inverted
+    if (localStorage.getItem("invertedControls") === "true") invertedControls = true;
+    showInvertedControlsDiv();
 
     // add the canvas and remove the loading div
     document.body.appendChild(renderer.domElement);
@@ -215,10 +180,10 @@ function initStats() {
     stats = new Stats();
     stats.setMode(0);
     stats.domElement.style.position = 'absolute';
-    stats.domElement.style.left = '0';
-    stats.domElement.style.top = '50px';
+    stats.domElement.style.left = '10px';
+    stats.domElement.style.top = '80px';
     stats.domElement.id = "stats";
-    stats.domElement.style.display = "block";
+    stats.domElement.style.display = "none";
     document.body.appendChild(stats.domElement);
 }
 
@@ -233,6 +198,7 @@ function gameOver() {
 
     // stop the game
     isFlying = false;
+    isGameOver = true;
 
     // set cursor to default
     document.body.style.cursor = "pointer";
@@ -273,6 +239,35 @@ function gameOver() {
     controlPanel.appendChild(exitButton);
 }
 
+
+/**
+ * Inverts the controls and saves the setting in the local storage
+ */
+function invertControls() {
+    invertedControls = !invertedControls;
+    localStorage.setItem("invertedControls", invertedControls);
+    showInvertedControlsDiv();
+}
+
+
+/**
+ * Shows a alert with if the controls are inverted or not for 3 seconds
+ */
+function showInvertedControlsDiv() {
+    const TextIfTrue = "Inverted Controls: On &lt;br/> The airplane will follow your mouse cursor. &lt;br/> This setting is saved in your browser and can be toggled by pressing 'I'.";
+    const TextIfFalse = "Inverted Controls: Off &lt;br/> The control direction is realisitc like in a real airplane. &lt;br/> This setting is saved in your browser and can be toggled by pressing 'I'.";
+    document.getElementById("invertedControls").innerHTML = invertedControls ? TextIfTrue : TextIfFalse;
+    document.getElementById("invertedControls").style.display = "block";
+    if (invertedControlsDivTimeout != null) {
+        clearTimeout(invertedControlsDivTimeout);
+        invertedControlsDivTimeout = null;
+    }
+    invertedControlsDivTimeout = setTimeout(() => {
+        document.getElementById("invertedControls").style.display = "none";
+    }, 3000);
+}
+
+
 /**
  * Initialize developer controls / keyboard shortcuts and experimental features
  */
@@ -283,6 +278,7 @@ function initDevControls() {
 
             case "j":
             case "J":
+
 
                 // toggle stats visibility
                 stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
@@ -296,6 +292,38 @@ function initDevControls() {
                 showFlightVectors = !showFlightVectors;
 
                 break;
+
+            case "f":
+            case "F":
+
+                // go back to flight school
+                location.href = "/?redirect-from=flight-simulator";
+
+                break;
+
+            case "i":
+            case "I":
+
+                invertControls();
+
+                break;
+
+            case "p":
+            case "P":
+
+                // pause the game
+                if (!isGameOver) {
+
+                    if (isFlying) {
+                        isFlying = false;
+                        document.getElementById("time").innerHTML = "Paused";
+                    } else {
+                        isFlying = true;
+                    }
+                }
+
+                break;
+
         }
     });
 
@@ -309,13 +337,13 @@ function initDevControls() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#basePlaneRotateFactor">basePlaneRotateFactor</a></li><li><a href="global.html#calcSpeed">calcSpeed</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#speed">speed</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#basePlaneRotateFactor">basePlaneRotateFactor</a></li><li><a href="global.html#calcSpeed">calcSpeed</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#invertControls">invertControls</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#showInvertedControlsDiv">showInvertedControlsDiv</a></li><li><a href="global.html#speed">speed</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 16:19:01 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Fri Nov 18 2022 16:05:38 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>
