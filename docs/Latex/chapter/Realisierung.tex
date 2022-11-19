@@ -44,7 +44,7 @@ Für diese Anpassung werden die Helper-Funktionen \textFunktion{turn\-Vector\-Ar
 Speziell für das Drehen eines Vektors um die horizontale Achse, ist die Mathematik nicht trivial, da zunächst eine Rotationsachse berechnet werden muss, die senkrecht zur Flugrichtung steht und bei jeder Position des Flugzeugs die gleiche Richtung hat.
 Eine besondere Herausforderung bei der Flugsteuerung stellen die Überschläge des Flugzeugs dar.
 Diese müssen vom Programm erkannt werden, um aktiv die Kamera, das Flugzeug und die Steuerung zu invertieren.
-Um die Geschwindigkeit des Flugzeugs möglichst realistisch zu gestalten, wird diese proportional zur Neigung beim Sinkflug erhöht und beim Steigen verringert bis bestimmte Minimal- und Maximalwerte erreicht sind.
+Um die Geschwindigkeit des Flugzeugs möglichst realistisch zu gestalten, wird diese über die Beschleunigung des Flugzeugs, der Erdbeschleunigung (proportional zur Neigung des Flugzeugs) und des Luftwiderstands berechnet und in jeder Animationsschleife angepasst.
 \newparagraph
 Die Ringe werden in einer Schleife als three.js Torus-Objekte erstellt und zufällig in der Szene platziert.
 Außerdem werden der Szene Hindernisse hinzugefügt, die das Flugzeug nicht berühren darf.
