@@ -26,6 +26,10 @@ Allgemein gilt für alle Aktionen, dass der Abstand zwischen Personen-Quader und
 \newparagraph
 Das Rendern der Schatten aller Elemente führt zu hohen Auslastungen mancher Systeme, deshalb wurde ein Performance Mode hinzugefügt, so können über die Tasten \textKeyboradKey{C} bzw. \textKeyboradKey{T}
 die Schatten für die Stühle bzw. Tische aktiviert oder deaktiviert werden.
+\newparagraph
+Das Laden der verschiedenen Modelle in die Szene benötigt einen längeren Zeitraum, weshalb zusätzlich eine Landingpage hinzugefügt wurde, sodass die Modelle im Hintergrund gelanden werden können.
+Die Landingpage gibt einen Ausblick über die Features des erstellten Programms und listet die Interaktionen und Hotkeys im Klassenzimmer und im Flugsimulator.
+Die Loadingpage kann jederzeit mit dem Hotekey \textKeyboradKey{H} aufgerufen werden und dient somit als Hilfe.
 % // lukas
 \subsection{Flugsimulator}
 % ThreeJs Meer + Licht,
@@ -37,6 +41,7 @@ die Schatten für die Stühle bzw. Tische aktiviert oder deaktiviert werden.
 Um das Flugsimulator-Spiel zu realisieren, wird zunächst eine Umgebung benötigt.
 Diese wird mit Hilfe von vorgefertigten three.js Elementen wie einem Meer und einem Himmel erstellt.
 Anschließend wird ein Flugzeugmodell im .glb Format eingelesen und der Szene hinzugefügt.
+%//TODO Phong Beleuchtungsmodell
 \newparagraph
 Da die FlyControls von three.js nicht den Ansprüchen des Spiels genügen, wird eine eigene Steuerung für das Bewegen des Flugzeugs implementiert.
 Dabei wird die Cursorposition mit Abstand zum Mittelpunkt des Bildschirms verglichen und die Flugrichtung (Vektor) entsprechend angepasst.
