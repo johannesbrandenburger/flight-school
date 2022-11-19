@@ -56,3 +56,26 @@ Von diesem Objekt wird anschließend eine BoundingBox bzw. ein BoundingSphere er
 Bei den Ringen wird zusätzlich auf den Abstand zum Mittelpunkt des Torus-Objekts geprüft und so determiniert, ob das Flugzeug den Ring durchfliegt, in den Rand des Rings fliegt oder außerhalb am Rand des Rings vorbeifliegt.
 Die Kollisionserkennung wird in jeder Animationsschleife aufgerufen und die Punktezahl entsprechend angepasst.
 Bei einem Kollisionsereignis oder beim Ablaufen der Zeit, wird die Flug-Animation unterbrochen, die aktuelle Punktezahl in einem \gqq{Game Over}-Overlay angezeigt und der User bekommt die Möglichkeit, das Spiel neu zu starten oder zurück zur Flugschule zu gelangen.
+
+\subsection{Architektur}
+Im folgenden wird die Architektur des Programmenwurfs in Form von Flowcharts beschrieben.
+Die Abbildung \ref{fig:FlowchartComplete} beschreibt die Funktionsaufrufe des kompletten Programmenwurfs, die Grafiken
+\ref{fig:FlowchartRoot} und \ref{fig:FlowchartFlightSim} beschreiben die Funktionsaufrufe im Klassenzimmer bzw. im Flugsimulator.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{images/flowchart/complete.pdf}
+  \caption{Flowchart des kompletten Projekts}
+  \label{fig:FlowchartComplete}
+\end{figure}\noindent
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{images/flowchart/root.pdf}
+  \caption{Flowchart des Klassenzimmers}
+  \label{fig:FlowchartRoot}
+\end{figure}\noindent
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1\textwidth]{images/flowchart/flight-simulator.pdf}
+  \caption{Flowchart des Flugsimulators}
+  \label{fig:FlowchartFlightSim}
+\end{figure}\noindent
