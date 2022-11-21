@@ -40,7 +40,6 @@ Die Landingpage kann jederzeit mit dem Hotkey \textKeyboradKey{H} aufgerufen wer
 Um das Flugsimulator-Spiel zu realisieren, wird zunächst eine Umgebung benötigt.
 Diese wird mit Hilfe von vorgefertigten three.js Elementen wie einem Meer und einem Himmel erstellt.
 Anschließend wird ein Flugzeugmodell im .glb Format eingelesen und der Szene hinzugefügt.
-%//TODO Phong Beleuchtungsmodell
 \newparagraph
 Da die FlyControls von three.js nicht den Ansprüchen des Spiels genügen, wird eine eigene Steuerung für das Bewegen des Flugzeugs implementiert.
 Dabei wird die Cursorposition mit Abstand zum Mittelpunkt des Bildschirms verglichen und die Flugrichtung (Vektor) entsprechend angepasst.
@@ -53,6 +52,8 @@ Um die Geschwindigkeit des Flugzeugs möglichst realistisch zu gestalten, wird d
 Die Ringe werden in einer Schleife als three.js Torus-Objekte erstellt und zufällig in der Szene platziert.
 Außerdem werden der Szene Hindernisse hinzugefügt, die das Flugzeug nicht berühren darf.
 Diese werden aus Dodekaeder, Icosahedron, Oktaeder und Tetraeder Elementen erstellt und ebenfalls zufällig in der Szene angeordnet.
+Da es sich bei den genannten Elementen um native three.js Elemente handelt, unterstützen diese (im Gegensatz zu den importierten Blender Modellen) die Verwendung des Phong-Beleuchtungsmodells.
+In Kombination mit der nativen three.js Lichtquelle, welche in der Flugsimulator-Szene zum Einsatz kommt, wird somit das Phong-Beleuchtungsmodell verwendet.
 \newparagraph
 Um zu erkennen, ob das Flugzeug erfolgreich durch einen Ring geflogen ist oder mit einem Ring oder einem sonstigen Hindernis kollidiert ist, wird Kollisionserkennung benötigt.
 Dazu wird zunächst das Element mit dem geringsten Abstand zum Flugzeug ermittelt.
