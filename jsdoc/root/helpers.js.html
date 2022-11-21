@@ -26,9 +26,7 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// @ts-check
-
-/**
+            <pre class="prettyprint source linenums"><code>/**
  * Fetches a gltf model from the given url and returns it
  * @param { string } path the path to the gltf model
  * @param { string } alternativePath the path to the gltf model if the first path is not working
@@ -43,31 +41,28 @@ async function getMashFromBlenderModel(path, alternativePath = "") {
   // check if file exists
   const response = await fetch(path);
   if (response.status === 404) {
-    console.warn("file of model not found, using alternative path");
+    console.warn(`local file of model (${path}) not found`);
     if (alternativePath === "") {
-      console.error("no alternative path provided");
+      console.warn("no alternative path provided");
+      console.error("model not found");
       return;
     }
+    console.log(`trying to load model from alternative path (${alternativePath})`);
     path = alternativePath;
   }
 
   // use three.js to load the model
   await loader.load(
     path,
-    function (gltf) {
+    (gltf) => {
       mesh = gltf.scene;
       dispatchEvent(new Event("modelLoaded"));
     },
-    undefined,
-    function (error) {
-      console.error(error);
-    }
+    undefined, (error) => console.error(error)
   )
 
   // wait till the model is loaded
-  await new Promise(resolve => {
-    addEventListener("modelLoaded", resolve, { once: true });
-  });
+  await new Promise(resolve => addEventListener("modelLoaded", resolve, { once: true }));
 
   return mesh;
 }
@@ -84,7 +79,6 @@ function checkIfPointIsInsideMesh(point, mesh) {
     var localPt = mesh.worldToLocal(point.clone());
     return mesh.geometry?.boundingBox?.containsPoint(localPt);
   } catch (error) {
-    console.warn(error);
     return false;
   }
 }
@@ -233,13 +227,13 @@ function showVector(vector, position, name, color = 0xffffff) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleBlackboardInertia">handleBlackboardInertia</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#maxDistance">maxDistance</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleBlackboardInertia">handleBlackboardInertia</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 21 2022 10:28:21 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 21 2022 20:33:45 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,29 +1,29 @@
 // global variables
 var container,
-    stats,
-    scene,
-    camera,
-    renderer,
-    controls,
-    sceneObjects = {},
-    isMouseDown = false,
-    clock,
-    deltaTime,
-    planeLookAt,
-    headingTo = { right: 0, up: 0 },
-    invertedControls = false,
-    torusScore = 0,
-    hasScored = false,
-    startTime = null,
-    timeLeft = 60,
-    sun,
-    water,
-    isFlying = true,
-    showFlightVectors = false,
-    planeIsUpsideDown = false,
-    invertedControlsDivTimeout = null,
-    isGameOver = false,
-    speed = 0;
+  stats,
+  scene,
+  camera,
+  renderer,
+  controls,
+  sceneObjects = {},
+  isMouseDown = false,
+  clock,
+  deltaTime,
+  planeLookAt,
+  headingTo = { right: 0, up: 0 },
+  invertedControls = false,
+  torusScore = 0,
+  hasScored = false,
+  startTime = null,
+  timeLeft = 60,
+  sun,
+  water,
+  isFlying = true,
+  showFlightVectors = false,
+  planeIsUpsideDown = false,
+  invertedControlsDivTimeout = null,
+  isGameOver = false,
+  speed = 0;
 
 // global constants
 const torusScale = 0.2;
@@ -40,5 +40,5 @@ const basePlaneRotateFactor = 0.01;
 
 // initialize the scene and run the animation loop
 init().then(() => {
-    animate();
+  animate();
 });

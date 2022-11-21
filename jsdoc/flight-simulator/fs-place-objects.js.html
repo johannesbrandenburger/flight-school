@@ -30,47 +30,47 @@
  * Places torus objects in the scene at random positions+
  */
 function placeTorusObjects() {
-    for (let i = 0; i &lt; torusAmount + extraTorusAmount; i++) {
-        const torus = new THREE.Mesh(
-            new THREE.TorusGeometry(torusRadius, torusTube, 16, 100),
-            new THREE.MeshPhongMaterial({ color: 0xff0000 })
-        );
-        torus.position.set(
-            (Math.random() - 0.5) * torusSpawnRadius,
-            (Math.random()) * torusSpawnRadius,
-            (Math.random() - 0.5) * torusSpawnRadius
-        );
-        torus.castShadow = true;
+  for (let i = 0; i &lt; torusAmount + extraTorusAmount; i++) {
+    const torus = new THREE.Mesh(
+      new THREE.TorusGeometry(torusRadius, torusTube, 16, 100),
+      new THREE.MeshPhongMaterial({ color: 0xff0000 })
+    );
+    torus.position.set(
+      (Math.random() - 0.5) * torusSpawnRadius,
+      (Math.random()) * torusSpawnRadius,
+      (Math.random() - 0.5) * torusSpawnRadius
+    );
+    torus.castShadow = true;
 
-        // rotate the torus (either 0 or 90 degrees around the x or z or y axis)
-        torus.rotation.x = Math.random() > 0.5 ? Math.PI / 2 : 0;
-        torus.rotation.z = Math.random() > 0.5 ? Math.PI / 2 : 0;
-        torus.rotation.y = Math.random() > 0.5 ? Math.PI / 2 : 0;
-        scene.add(torus);
-        torus.name = "torus";
+    // rotate the torus (either 0 or 90 degrees around the x or z or y axis)
+    torus.rotation.x = Math.random() > 0.5 ? Math.PI / 2 : 0;
+    torus.rotation.z = Math.random() > 0.5 ? Math.PI / 2 : 0;
+    torus.rotation.y = Math.random() > 0.5 ? Math.PI / 2 : 0;
+    scene.add(torus);
+    torus.name = "torus";
 
-        // if torus is in the extra torus amount, make it gold and name it "extraTorus"
-        if (i >= torusAmount) {
-            torus.material.color.setHex(0xffd700);
-            torus.name = "extraTorus";
-        }
-
-        // check if torus intersects with another torus
-        let torusIntersects = false;
-        for (let j = 0; j &lt; scene.children.length; j++) {
-            const otherTorus = scene.children[j];
-            if (otherTorus !== torus) {
-                const distance = torus.position.distanceTo(otherTorus.position);
-                if (distance &lt; 5 * torusScale) {
-                    torusIntersects = true;
-                }
-            }
-        }
-        if (torusIntersects) {
-            i -= 1;
-            scene.remove(torus);
-        }
+    // if torus is in the extra torus amount, make it gold and name it "extraTorus"
+    if (i >= torusAmount) {
+      torus.material.color.setHex(0xffd700);
+      torus.name = "extraTorus";
     }
+
+    // check if torus intersects with another torus
+    let torusIntersects = false;
+    for (let j = 0; j &lt; scene.children.length; j++) {
+      const otherTorus = scene.children[j];
+      if (otherTorus !== torus) {
+        const distance = torus.position.distanceTo(otherTorus.position);
+        if (distance &lt; 5 * torusScale) {
+          torusIntersects = true;
+        }
+      }
+    }
+    if (torusIntersects) {
+      i -= 1;
+      scene.remove(torus);
+    }
+  }
 }
 
 
@@ -83,44 +83,44 @@ function placeTorusObjects() {
  *  - TetrahedronGeometry
  */
 function placeObstaclesObjects() {
-    for (let i = 0; i &lt; obstacleAmount; i++) {
+  for (let i = 0; i &lt; obstacleAmount; i++) {
 
-        // switch case to choose a random object type
-        const randomObjectType = Math.floor(Math.random() * 4);
-        let geometry;
-        switch (randomObjectType) {
-            case 0:
-                geometry = new THREE.DodecahedronGeometry(obstacleRadius, 0);
-                break;
-            case 1:
-                geometry = new THREE.IcosahedronGeometry(obstacleRadius, 0);
-                break;
-            case 2:
-                geometry = new THREE.OctahedronGeometry(obstacleRadius, 0);
-                break;
-            case 3:
-                geometry = new THREE.TetrahedronGeometry(obstacleRadius, 0);
-                break;
-        }
-
-        // create the object with random grayscale color, position and rotation
-        const colorVal = Math.floor(Math.random() * 255);
-        const color = "rgb(" + colorVal + "," + colorVal + "," + colorVal + ")";
-        const material = new THREE.MeshPhongMaterial({ color: color });
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(
-            (Math.random() - 0.5) * torusSpawnRadius,
-            (Math.random()) * torusSpawnRadius,
-            (Math.random() - 0.5) * torusSpawnRadius
-        );
-        mesh.rotation.set(
-            Math.random() * Math.PI,
-            Math.random() * Math.PI,
-            Math.random() * Math.PI
-        );
-        mesh.name = "obstacle";
-        scene.add(mesh);
+    // switch case to choose a random object type
+    const randomObjectType = Math.floor(Math.random() * 4);
+    let geometry;
+    switch (randomObjectType) {
+      case 0:
+        geometry = new THREE.DodecahedronGeometry(obstacleRadius, 0);
+        break;
+      case 1:
+        geometry = new THREE.IcosahedronGeometry(obstacleRadius, 0);
+        break;
+      case 2:
+        geometry = new THREE.OctahedronGeometry(obstacleRadius, 0);
+        break;
+      case 3:
+        geometry = new THREE.TetrahedronGeometry(obstacleRadius, 0);
+        break;
     }
+
+    // create the object with random grayscale color, position and rotation
+    const colorVal = Math.floor(Math.random() * 255);
+    const color = "rgb(" + colorVal + "," + colorVal + "," + colorVal + ")";
+    const material = new THREE.MeshPhongMaterial({ color: color });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(
+      (Math.random() - 0.5) * torusSpawnRadius,
+      (Math.random()) * torusSpawnRadius,
+      (Math.random() - 0.5) * torusSpawnRadius
+    );
+    mesh.rotation.set(
+      Math.random() * Math.PI,
+      Math.random() * Math.PI,
+      Math.random() * Math.PI
+    );
+    mesh.name = "obstacle";
+    scene.add(mesh);
+  }
 
 }
 </code></pre>
@@ -133,13 +133,13 @@ function placeObstaclesObjects() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#basePlaneRotateFactor">basePlaneRotateFactor</a></li><li><a href="global.html#calcSpeed">calcSpeed</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#invertControls">invertControls</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#showInvertedControlsDiv">showInvertedControlsDiv</a></li><li><a href="global.html#speed">speed</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#calcSpeed">calcSpeed</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#invertControls">invertControls</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#showInvertedControlsDiv">showInvertedControlsDiv</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 21 2022 10:28:21 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 21 2022 20:33:45 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>
