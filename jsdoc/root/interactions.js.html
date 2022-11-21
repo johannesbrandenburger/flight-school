@@ -131,6 +131,9 @@ function initAdjustBlackboardHeight() {
     isMouseOnBlackboardBoard2 = true;
   });
 
+  // add a mouse move listener to the window to adjust the height of the blackboards
+  // if the mouse is on the blackboard the blackboard is moved up and down and the speed is calculated
+
   window.addEventListener("mousemove", event => {
     if (!isMouseOnBlackboardBoard1) return;
     let y = blackboard.board1.position.y - event.movementY * deltaTime * 0.3;
@@ -261,13 +264,11 @@ function initOpenCloset() {
       if (closetAnimation.activeCloset !== null) return;
 
       // check if one closet is already open
-      let closetIsOpen = false;
+      let anyClosetIsOpen = false;
       sceneObjects.closets.forEach(closet => {
-        if (closet.isOpen) {
-          closetIsOpen = true;
-        }
+        if (closet.isOpen) anyClosetIsOpen = true;
       });
-      if (closetIsOpen &amp;&amp; !closet.isOpen) return;
+      if (anyClosetIsOpen &amp;&amp; !closet.isOpen) return;
 
       closetAnimation.activeCloset = closet;
       closetAnimation.open = !closet.isOpen;
@@ -486,7 +487,6 @@ function handleAnimateChairs() {
       timeSinceAnimationStart: 0
     };
   }
-
 }
 
 
@@ -496,11 +496,8 @@ function handleAnimateChairs() {
 function handleAnimateClosets() {
   if (closetAnimation.activeCloset === null) return;
 
-  // Closet_Door_1 und Closet_Door_2 
   closetAnimation.timeSinceAnimationStart = closetAnimation.timeSinceAnimationStart + deltaTime;
-  /** @type {THREE.Object3D} */
   let door1 = closetAnimation.activeCloset.children.find(child => child.name === "Closet_Door_1");
-  /** @type {THREE.Object3D} */
   let door2 = closetAnimation.activeCloset.children.find(child => child.name === "Closet_Door_2");
 
   let animationComplete = false;
@@ -647,13 +644,13 @@ function handleBlackboardInertia() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleBlackboardInertia">handleBlackboardInertia</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleBlackboardInertia">handleBlackboardInertia</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 21 2022 20:33:45 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 21 2022 22:30:09 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>
