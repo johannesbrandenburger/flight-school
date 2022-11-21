@@ -6,20 +6,20 @@ Zunächst werden alle Modelle aus Blender in das GL Transmission Format (.glb) e
 % Platzierung der Modelle gemäß der Zeichnung aus Abb.
 Anschließend werden diese Modelle in three.js eingebunden und gemäß dem Plan in Abbildung~\ref{fig:KlassenzimmerEntwurf}
 platziert.
-Um bei einem Blick aus dem Fenster, den Ausblick aus der DHBW Richtung Bodensee zu sehen wurde ein 3D Bild erstellt,
-dieses wird ebenfalls in three.js eingebunden.
+Um bei einem Blick aus dem Fenster den Ausblick aus der DHBW Richtung Bodensee zu sehen wurde ein 3D Bild erstellt.
+Dieses wird ebenfalls in three.js eingebunden.
 Abschließend müssen die Scheiben in die Fenster eingefügt werden, da dies nicht mit einem Export aus Blender möglich ist.
 \newparagraph
 % Bewegungen / Kollisionserkennungen / sonst. Interaktionen
 Nachdem die Szene vollständig erstellt wurde, müssen nachfolgend die definierten Interaktionen hinzugefügt werden.
 Um sich im Raum zu bewegen, wird ein unsichtbarer Quader hinzugefügt, der die Person darstellt. Dieser Quader enthält auch die Kamera
-und kann mit den Tasten \textKeyboradKey{W}, \textKeyboradKey{A}, \textKeyboradKey{S} und \textKeyboradKey{D} durch den Raum bewegt werden. Um Kollisionsen zu erkennen wird vor Ausführung der Bewegung überprüft,
+und kann mit den Tasten \textKeyboradKey{W}, \textKeyboradKey{A}, \textKeyboradKey{S} und \textKeyboradKey{D} durch den Raum bewegt werden. Um Kollisionen zu erkennen wird vor Ausführung der Bewegung überprüft,
 ob die Bewegung ausgeführt werden darf. 
 Würde der Quader innerhalb eines anderen Objekts sein, wird die Bewegung nicht ausgeführt.
 \newparagraph
 Damit die Tafel nach oben bzw. nach unten bewegt werden kann, wird die Tafel mit der Maus angewählt und verschoben.
-% TODO: Ray-Casting erwähnen??? @Johannes @Lukas?
-Hierzu wir bei einem Mausklick überprüft ob auf die Tafel geklickt wurde und anschließend abhängig von der Maus Bewegung in die Y-Achsen Richtung die Tafel verschoben.
+Hierzu wird das Modul threex verwendet, welches bei einem Mausklick ein Ray aussendet und überprüft ob dieses das Tafelobjekt trifft.
+Ist dies der Fall, wird diese anschließend abhängig von der Mausbewegung in die Y-Achsen Richtung verschoben.
 Das Auf- und Abstuhlen der Stühle funktioniert ähnlich. Es wird ebenfalls überprüft ob bei einem Mausklick auf einen Stuhl geklickt wurde und anschließend wird dieser auf- oder abgestuhlt.
 Das Öffnen oder Schließen der Schranktüren funktioniert analog zu den Stühlen.
 Allgemein gilt für alle Aktionen, dass der Abstand zwischen Personen-Quader und dem Objekt maximal vier Meter betragen darf damit die Animation ausgeführt wird.
@@ -27,10 +27,9 @@ Allgemein gilt für alle Aktionen, dass der Abstand zwischen Personen-Quader und
 Das Rendern der Schatten aller Elemente führt zu hohen Auslastungen mancher Systeme, deshalb wurde ein Performance Mode hinzugefügt, so können über die Tasten \textKeyboradKey{C} bzw. \textKeyboradKey{T}
 die Schatten für die Stühle bzw. Tische aktiviert oder deaktiviert werden.
 \newparagraph
-Das Laden der verschiedenen Modelle in die Szene benötigt einen längeren Zeitraum, weshalb zusätzlich eine Landingpage hinzugefügt wurde, sodass die Modelle im Hintergrund gelanden werden können.
+Das Laden der verschiedenen Modelle in die Szene benötigt einen längeren Zeitraum, weshalb zusätzlich eine Landingpage hinzugefügt wurde, sodass die Modelle im Hintergrund geladen werden können.
 Die Landingpage gibt einen Ausblick über die Features des erstellten Programms und listet die Interaktionen und Hotkeys im Klassenzimmer und im Flugsimulator.
-Die Loadingpage kann jederzeit mit dem Hotekey \textKeyboradKey{H} aufgerufen werden und dient somit als Hilfe.
-% // lukas
+Die Landingpage kann jederzeit mit dem Hotkey \textKeyboradKey{H} aufgerufen werden und dient somit als Hilfe.
 \subsection{Flugsimulator}
 % ThreeJs Meer + Licht,
 % Flugzeugmodell
@@ -55,7 +54,7 @@ Die Ringe werden in einer Schleife als three.js Torus-Objekte erstellt und zufä
 Außerdem werden der Szene Hindernisse hinzugefügt, die das Flugzeug nicht berühren darf.
 Diese werden aus Dodekaeder, Icosahedron, Oktaeder und Tetraeder Elementen erstellt und ebenfalls zufällig in der Szene angeordnet.
 \newparagraph
-Um zu erkennen, ob ein das Flugzeug erfolgreich durch einen Ring geflogen ist oder mit einem Ring oder einem sonstigen Hindernis kollidiert ist, wird Kollisionserkennung benötigt.
+Um zu erkennen, ob das Flugzeug erfolgreich durch einen Ring geflogen ist oder mit einem Ring oder einem sonstigen Hindernis kollidiert ist, wird Kollisionserkennung benötigt.
 Dazu wird zunächst das Element mit dem geringsten Abstand zum Flugzeug ermittelt.
 Von diesem Objekt wird anschließend eine BoundingBox bzw. ein BoundingSphere erstellt und geprüft, ob diese die Flugzeugposition beinhaltet.
 Bei den Ringen wird zusätzlich auf den Abstand zum Mittelpunkt des Torus-Objekts geprüft und so determiniert, ob das Flugzeug den Ring durchfliegt, in den Rand des Rings fliegt oder außerhalb am Rand des Rings vorbeifliegt.
@@ -63,8 +62,8 @@ Die Kollisionserkennung wird in jeder Animationsschleife aufgerufen und die Punk
 Bei einem Kollisionsereignis oder beim Ablaufen der Zeit, wird die Flug-Animation unterbrochen, die aktuelle Punktezahl in einem \gqq{Game Over}-Overlay angezeigt und der User bekommt die Möglichkeit, das Spiel neu zu starten oder zurück zur Flugschule zu gelangen.
 
 \subsection{Architektur}
-Im folgenden wird die Architektur des Programmenwurfs in Form von Flowcharts beschrieben.
-Die Abbildung \ref{fig:FlowchartComplete} beschreibt die Funktionsaufrufe des kompletten Programmenwurfs, die Grafiken
+Im folgenden wird die Architektur des Programmentwurfs in Form von Flowcharts beschrieben.
+Die Abbildung \ref{fig:FlowchartComplete} beschreibt die Funktionsaufrufe des kompletten Programmentwurfs, die Grafiken
 \ref{fig:FlowchartRoot} und \ref{fig:FlowchartFlightSim} beschreiben die Funktionsaufrufe im Klassenzimmer bzw. im Flugsimulator.
 \begin{figure}[H]
   \centering
