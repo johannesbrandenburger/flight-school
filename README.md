@@ -4,7 +4,6 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 
 ## Features
 
-
 - 3D-Modeling of a Flight School
 - Flight Simulator Game
 - Animations and Interactions in the Scene triggered by Mouse
@@ -50,7 +49,3 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 1. If node and npm are not already installed, install them from [nodejs.org](https://nodejs.org/en/).
 2. Run `npm run start` to install all dependencies and start the server on port 3000.
 3. Open [localhost:3000](http://localhost:3000) in your browser.
-
-1. Wenn node und npm noch nicht installiert sind, installieren Sie sie von [nodejs.org](https://nodejs.org/en/).
-2. Führen Sie `npm run start` aus, um alle Abhängigkeiten zu installieren und den Server auf Port 3000 zu starten.
-3. Öffnen Sie [localhost:3000](http://localhost:3000) in Ihrem Browser.
