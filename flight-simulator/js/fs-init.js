@@ -53,9 +53,6 @@ async function init() {
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  // enable THREEx dom events
-  domEvents = new THREEx.DomEvents(camera, renderer.domElement);
-
   // add a clock
   clock = new THREE.Clock();
   deltaTime = 0;
