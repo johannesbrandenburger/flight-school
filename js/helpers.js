@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * Fetches a gltf model from the given url and returns it
  * @param { string } path the path to the gltf model
@@ -15,31 +13,28 @@ async function getMashFromBlenderModel(path, alternativePath = "") {
   // check if file exists
   const response = await fetch(path);
   if (response.status === 404) {
-    console.warn("file of model not found, using alternative path");
+    console.warn(`local file of model (${path}) not found`);
     if (alternativePath === "") {
-      console.error("no alternative path provided");
+      console.warn("no alternative path provided");
+      console.error("model not found");
       return;
     }
+    console.log(`trying to load model from alternative path (${alternativePath})`);
     path = alternativePath;
   }
 
   // use three.js to load the model
   await loader.load(
     path,
-    function (gltf) {
+    (gltf) => {
       mesh = gltf.scene;
       dispatchEvent(new Event("modelLoaded"));
     },
-    undefined,
-    function (error) {
-      console.error(error);
-    }
+    undefined, (error) => console.error(error)
   )
 
   // wait till the model is loaded
-  await new Promise(resolve => {
-    addEventListener("modelLoaded", resolve, { once: true });
-  });
+  await new Promise(resolve => addEventListener("modelLoaded", resolve, { once: true }));
 
   return mesh;
 }
@@ -56,7 +51,6 @@ function checkIfPointIsInsideMesh(point, mesh) {
     var localPt = mesh.worldToLocal(point.clone());
     return mesh.geometry?.boundingBox?.containsPoint(localPt);
   } catch (error) {
-    console.warn(error);
     return false;
   }
 }

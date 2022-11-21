@@ -1,5 +1,6 @@
-// @ts-check
-
+/**
+ * Initializes the flight school scene
+ */
 async function init() {
 
   const urlParams = new URLSearchParams(window.location.search);

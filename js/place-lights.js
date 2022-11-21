@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * Places all lights in the scene
  */

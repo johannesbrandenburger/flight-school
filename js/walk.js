@@ -1,6 +1,4 @@
-// @ts-check
-
-// create config
+// configuration variables
 const headHeight = 1.50;
 const startPoint = new THREE.Vector3(9, headHeight, 11);
 const mouseRotateSpeed = 0.17;
@@ -177,15 +175,9 @@ function handleWalking() {
       && allMeshs[i].name !== "Scene"
       && allMeshs[i].name !== "Floor"
       && allMeshs[i].name !== "Ground_Material007_0"
-      && allMeshs[i].name !== "Trunk_Material001_0"
-      && allMeshs[i].name !== "Trunk_Trunk_0"
-      && allMeshs[i].name !== "Grass_Material_0"
-      && allMeshs[i].name !== "Mud_Material004_0"
-      && allMeshs[i].name !== "Watter_Material005_0"
       && allMeshs[i].name !== ""
       && checkCollision(sceneObjects.player, allMeshs[i])
     ) {
-      console.log(allMeshs[i].name);
       isCollision = true;
       break;
     }

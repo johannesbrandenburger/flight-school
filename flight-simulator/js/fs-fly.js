@@ -1,14 +1,3 @@
-// @ts-check
-
-/** @type {number} */
-const distanceOfCameraFromPlane = 1.5;
-
-/** @type {number} */
-let basePlaneRotateFactor = 0.01;
-
-/** @type {number} */
-let speed = 0;
-
 /**
  * Initializes the flying controls
  */
@@ -81,7 +70,7 @@ function handleFlying() {
     let horizontalTurn = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * planeRotationFactor));
     planeLookAt = horizontalTurn.newVector;
     turnedBeyondYAxis = horizontalTurn.turnedBeyondYAxis;
-    if (turnedBeyondYAxis) { planeIsUpsideDown = !planeIsUpsideDown; console.log("turnd"); }
+    if (turnedBeyondYAxis) planeIsUpsideDown = !planeIsUpsideDown;
     planeLookAt.normalize();
 
     // set the new lookAt vector

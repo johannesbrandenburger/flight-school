@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * Places all objects in the scene and adds them to the sceneObjects object
  */
@@ -31,7 +29,6 @@ async function placeObjects() {
         metalness: 0,
         roughness: 0,
         transmission: 1,
-        // thickness: 0.5,
         clearcoat: 1,
         clearcoatRoughness: 0,
     });
@@ -230,7 +227,6 @@ async function placeObjects() {
     scene.add(lightSwitchThree); sceneObjects.lightSwitchThree = lightSwitchThree;
     lightSwitchThree.position.set(9.6, 1.2, 11.5);
 
-
     // #region 360 degree environment/background
 
     // sphere almost half sphere to create a 360° like view outside the window
@@ -248,11 +244,4 @@ async function placeObjects() {
 
     // #endregion
 
-    // create blue sky box
-    const skyBox = new THREE.Mesh(
-        new THREE.BoxGeometry(1000, 1000, 1000),
-        new THREE.MeshBasicMaterial({ color: 0x5c5cf2, side: THREE.BackSide })
-    );
-    scene.add(skyBox); sceneObjects.skyBox = skyBox;
-    sceneObjects.skyBox.position.set(0, 0, 0);
 }

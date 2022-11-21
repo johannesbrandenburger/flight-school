@@ -1,17 +1,3 @@
-// @ts-check
-
-/** @type {Array<{x: number, z: number, text: string}>} */
-let infoTable = [];
-
-/** @type {HTMLDivElement} */
-let infoDiv;
-
-/** @type {number} */
-let infoStartTime = null;
-
-/** @type {number} */
-let maxDistance = 4;
-
 /**
  * Calls the init functions to initialize the interactions
  */
@@ -85,8 +71,7 @@ function initInfoDiv() {
 function initTriggerFlightSimulator() {
     if (sceneObjects.monitor === undefined) return;
     domEvents.addEventListener(sceneObjects.monitor, "click", () => {
-        if (camera.position.distanceTo(sceneObjects.monitor.position) > maxDistance) return;
-        console.log("clicked on monitor");
+        if (camera.position.distanceTo(sceneObjects.monitor.position) > maxInteractionDistance) return;
         location.href = "/flight-simulator";
     });
 }
@@ -107,13 +92,13 @@ function initAdjustBlackboardHeight() {
     blackboard.distanceBetweenBoardAndChalkTray = blackboard.chalkTray1.position.y - blackboard.board1.position.y;
 
     domEvents.addEventListener(blackboard.board1, "mousedown", () => {
-        if (camera.position.distanceTo(sceneObjects.blackboard.position) > maxDistance * 2) return;
+        if (camera.position.distanceTo(sceneObjects.blackboard.position) > maxInteractionDistance * 2) return;
         isMouseDown = isMouseOnBlackboardBoard2 = false;
         isMouseOnBlackboardBoard1 = true;
     });
 
     domEvents.addEventListener(blackboard.board2, "mousedown", () => {
-        if (camera.position.distanceTo(sceneObjects.blackboard.position) > maxDistance * 2) return;
+        if (camera.position.distanceTo(sceneObjects.blackboard.position) > maxInteractionDistance * 2) return;
         isMouseDown = isMouseOnBlackboardBoard1 = false;
         isMouseOnBlackboardBoard2 = true;
     });
@@ -155,8 +140,7 @@ function initSwitchLight() {
 
     // add the event listeners
     domEvents.addEventListener(sceneObjects.lightSwitchOne, "click", () => {
-        if (camera.position.distanceTo(sceneObjects.lightSwitchOne.position) > maxDistance) return;
-        console.log("clicked on light switch one");
+        if (camera.position.distanceTo(sceneObjects.lightSwitchOne.position) > maxInteractionDistance) return;
         sceneObjects.bulbLights.forEach(light => {
             if (light.name === "1") {
                 light.visible = !light.visible;
@@ -170,8 +154,7 @@ function initSwitchLight() {
     });
 
     domEvents.addEventListener(sceneObjects.lightSwitchTwo, "click", () => {
-        if (camera.position.distanceTo(sceneObjects.lightSwitchTwo.position) > maxDistance) return;
-        console.log("clicked on light switch two");
+        if (camera.position.distanceTo(sceneObjects.lightSwitchTwo.position) > maxInteractionDistance) return;
         sceneObjects.bulbLights.forEach(light => {
             if (light.name === "2") {
                 light.visible = !light.visible;
@@ -185,8 +168,7 @@ function initSwitchLight() {
     });
 
     domEvents.addEventListener(sceneObjects.lightSwitchThree, "click", () => {
-        if (camera.position.distanceTo(sceneObjects.lightSwitchThree.position) > maxDistance) return;
-        console.log("clicked on light switch three");
+        if (camera.position.distanceTo(sceneObjects.lightSwitchThree.position) > maxInteractionDistance) return;
         sceneObjects.bulbLights.forEach(light => {
             if (light.name === "3") {
                 light.visible = !light.visible;
@@ -229,8 +211,7 @@ function initPutChairOnTable() {
 
         // add the event listener
         domEvents.addEventListener(chair, "click", () => {
-            if (camera.position.distanceTo(chair.position) > maxDistance) return;
-            console.log("clicked on chair:", chair);
+            if (camera.position.distanceTo(chair.position) > maxInteractionDistance) return;
             if (chairAnimation.activeChair !== null) return;
             chairAnimation.activeChair = chair;
             chairAnimation.initialPosition = chair.position.clone();
@@ -248,8 +229,7 @@ function initOpenCloset() {
     sceneObjects.closets.forEach(closet => {
         closet.isOpen = false;
         domEvents.addEventListener(closet, "click", () => {
-            if (camera.position.distanceTo(closet.position) > maxDistance) return;
-            console.log("clicked on closet:", closet);
+            if (camera.position.distanceTo(closet.position) > maxInteractionDistance) return;
             if (closetAnimation.activeCloset !== null) return;
 
             // check if one closet is already open
@@ -603,7 +583,7 @@ function handleBlackboardInertia() {
 
         let board = i === 0 ? blackboard.board1 : blackboard.board2;
         let chalkTray = i === 0 ? blackboard.chalkTray1 : blackboard.chalkTray2;
-        
+
         // maximum speed guard
         if (Math.abs(v) > maxSpeed) v = v > 0 ? maxSpeed : -maxSpeed;
 

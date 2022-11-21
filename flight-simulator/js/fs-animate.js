@@ -15,7 +15,7 @@ async function animate() {
         handlePlaneOutOfBounds();
     }
     handleTime();
-    
+
     water.material.uniforms['time'].value += 0.05 * deltaTime;
     renderer.render(scene, camera);
 }

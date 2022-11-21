@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * Animates the scene
  */
