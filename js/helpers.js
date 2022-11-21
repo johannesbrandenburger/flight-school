@@ -4,7 +4,7 @@
  * @param { string } alternativePath the path to the gltf model if the first path is not working
  * @returns { Promise<THREE.Mesh> } mesh mesh of the gltf model
  */
-async function getMashFromBlenderModel(path, alternativePath = "") {
+async function getMeshFromBlenderModel(path, alternativePath = "") {
 
   // @ts-ignore
   const loader = new THREE.GLTFLoader();
