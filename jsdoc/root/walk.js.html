@@ -26,12 +26,10 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// @ts-check
-
-// create config
+            <pre class="prettyprint source linenums"><code>// configuration variables
 const headHeight = 1.50;
 const startPoint = new THREE.Vector3(9, headHeight, 11);
-const mouseRotateSpeed = 0.2;
+const mouseRotateSpeed = 0.17;
 const playerWidth = 0.4;
 const mouseZoomSpeed = 0.8;
 const baseDistancePerWalk = 4
@@ -42,7 +40,7 @@ let distancePerWalk = baseDistancePerWalk;
  */
 function initWalk() {
 
-  camera.lookAt(new THREE.Vector3(0, headHeight, 0));
+  camera.lookAt(new THREE.Vector3(-1, 0, -1));
 
   // register key events
   window.addEventListener("keydown", event => {
@@ -70,10 +68,6 @@ function initWalk() {
       case "Shift":
       case "shift":
         distancePerWalk = baseDistancePerWalk * 2;
-        break;
-      // TEMP: remove later
-      case "f":
-        window.location.href = "/flight-simulator";
         break;
     }
   });
@@ -167,6 +161,11 @@ function createPlayer() {
   player.position.set(startPoint.x, headHeight / 2 + 0.2, startPoint.z);
   scene.add(player);
   sceneObjects.player = player;
+  camera.position.set(
+    sceneObjects.player.position.x,
+    headHeight,
+    sceneObjects.player.position.z
+  );
 }
 
 
@@ -176,6 +175,8 @@ function createPlayer() {
  */
 function handleWalking() {
 
+  if (!(isWalking.forward || isWalking.backward || isWalking.left || isWalking.right)) return;
+
   // store previous position of player to check for collision
   const previousPosition = new THREE.Vector3(
     sceneObjects.player.position.x,
@@ -184,49 +185,44 @@ function handleWalking() {
   );
   let isCollision = false;
 
-  // walk if the user is pressing a key
-  if (isWalking.forward || isWalking.backward || isWalking.left || isWalking.right) {
-    const newPosition = getNewPosition(
-      sceneObjects.player.position,
-      getCameraLookAt(camera),
-      distancePerWalk * deltaTime,
-      isWalking
-    );
-    sceneObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
-  }
+  // walk in the direction the player is looking at
+  const newPosition = getNewPosition(
+    sceneObjects.player.position,
+    getCameraLookAt(camera),
+    distancePerWalk * deltaTime,
+    isWalking
+  );
+  sceneObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
 
   // check if the player is inside a mesh
-  let allMeshs = []
-  scene.traverse((child) => { allMeshs.push(child) });
-  for (let i = 0; i &lt; allMeshs.length; i++) {
-    // TODO: some exceptions can be removed later
-    if (
-      allMeshs[i] !== sceneObjects.player
-      &amp;&amp; allMeshs[i].name !== "Scene"
-      &amp;&amp; allMeshs[i].name !== "Floor"
-      &amp;&amp; allMeshs[i].name !== "Ground_Material007_0"
-      &amp;&amp; allMeshs[i].name !== "Trunk_Material001_0"
-      &amp;&amp; allMeshs[i].name !== "Trunk_Trunk_0"
-      &amp;&amp; allMeshs[i].name !== "Grass_Material_0"
-      &amp;&amp; allMeshs[i].name !== "Mud_Material004_0"
-      &amp;&amp; allMeshs[i].name !== "Watter_Material005_0"
-      &amp;&amp; allMeshs[i].name !== ""
-      &amp;&amp; checkCollision(sceneObjects.player, allMeshs[i])
-    ) {
-      console.log(allMeshs[i].name);
-      isCollision = true;
-      break;
-    }
-  }
+  if (collisionDetectionEnabled) {
 
-  // if the player is inside a mesh, set the position back to the previous position
-  // if (isCollision === true) {
-  //   sceneObjects.player.position.set(
-  //     previousPosition.x,
-  //     previousPosition.y,
-  //     previousPosition.z
-  //   );
-  // }
+    let allMeshs = []
+    scene.traverse((child) => { allMeshs.push(child) });
+    for (let i = 0; i &lt; allMeshs.length; i++) {
+      if (
+        allMeshs[i] !== sceneObjects.player
+        &amp;&amp; allMeshs[i].name !== "Scene"
+        &amp;&amp; allMeshs[i].name !== "Floor"
+        &amp;&amp; allMeshs[i].name !== "Ground_Material007_0"
+        &amp;&amp; allMeshs[i].name !== ""
+        &amp;&amp; checkCollision(sceneObjects.player, allMeshs[i])
+      ) {
+        isCollision = true;
+        break;
+      }
+    }
+
+    // if the player is inside a mesh, set the position back to the previous position
+    if (isCollision === true) {
+      sceneObjects.player.position.set(
+        previousPosition.x,
+        previousPosition.y,
+        previousPosition.z
+      );
+    }
+
+  }
 
   // update the camera position
   camera.position.set(
@@ -277,13 +273,13 @@ function initMouseClickMove() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#maxDistance">maxDistance</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMeshFromBlenderModel">getMeshFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleBlackboardInertia">handleBlackboardInertia</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 16:19:01 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 21 2022 22:49:58 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,50 +1,47 @@
-// @ts-check
-
-/** @type {number} */
-const distanceOfCameraFromPlane = 1.5;
-
-/** @type {number} */
-let basePlaneRotateFactor = 0.01;
-
-/** @type {number} */
-let speed = 1.5;
-
 /**
  * Initializes the flying controls
  */
 async function initFlying() {
 
-    // as further the mouse is right/left of the cross the more the plane is moving right/left
-    // headingTo = { right: int, up: int } stores values from 0 to 100 
-    // headingTo = { right: -80, up: 5 } would move the plane a bit up and strongly to the left
+  // as further the mouse is right/left of the cross the more the plane is moving right/left
+  // headingTo = { right: int, up: int } stores values from 0 to 100 
+  // headingTo = { right: -80, up: 5 } would move the plane a bit up and strongly to the left
 
-    // change cursor to crosshair
+  // change cursor to crosshair
+  document.body.style.cursor = "crosshair";
+
+  window.addEventListener("mousemove", event => {
+    headingTo.right = invertedControls ? (event.clientX - window.innerWidth / 2) / 2 : - (event.clientX - window.innerWidth / 2) / 2;
+    headingTo.up = invertedControls ? (window.innerHeight / 2 - event.clientY) / 2 : - (window.innerHeight / 2 - event.clientY) / 2;
     document.body.style.cursor = "crosshair";
+    if (headingTo.right > 100) { headingTo.right = 100; document.body.style.cursor = "e-resize"; }
+    if (headingTo.right < -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
+    if (headingTo.up > 100) { headingTo.up = 100; document.body.style.cursor = "n-resize"; }
+    if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
+  });
 
-    window.addEventListener("mousemove", event => {
-        headingTo.right = invertedControls ? (event.clientX - window.innerWidth / 2) / 2 : - (event.clientX - window.innerWidth / 2) / 2;
-        headingTo.up = invertedControls ? (window.innerHeight / 2 - event.clientY) / 2 : - (window.innerHeight / 2 - event.clientY) / 2;
-        document.body.style.cursor = "crosshair";
-        if (headingTo.right > 100) { headingTo.right = 100; document.body.style.cursor = "e-resize"; }
-        if (headingTo.right < -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
-        if (headingTo.up > 100) { headingTo.up = 100; document.body.style.cursor = "n-resize"; }
-        if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
+  // if its a mobile device, use touch controls
+  if ((typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1)) {
+    let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
+    window.addEventListener("touchstart", event => {
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
     });
-
-    // add touch support for mobile devices
     window.addEventListener("touchmove", event => {
-        headingTo.right = - (event.touches[0].clientX - window.innerWidth / 2) / 2;
-        headingTo.up = - (window.innerHeight / 2 - event.touches[0].clientY) / 2;
-        document.body.style.cursor = "crosshair";
-        if (headingTo.right > 100) { headingTo.right = 100; document.body.style.cursor = "e-resize"; }
-        if (headingTo.right < -100) { headingTo.right = -100; document.body.style.cursor = "w-resize"; }
-        if (headingTo.up > 100) { headingTo.up = 100; document.body.style.cursor = "n-resize"; }
-        if (headingTo.up < -100) { headingTo.up = -100; document.body.style.cursor = "s-resize"; }
+      touchEndX = event.touches[0].clientX;
+      touchEndY = event.touches[0].clientY;
+      headingTo.right = invertedControls ? (touchEndX - touchStartX) * 1 : -(touchEndX - touchStartX) * 1;
+      headingTo.up = invertedControls ? (touchStartY - touchEndY) * 1 : -(touchStartY - touchEndY) * 1;
+      if (headingTo.right > 100) { headingTo.right = 100; }
+      if (headingTo.right < -100) { headingTo.right = -100; }
+      if (headingTo.up > 100) { headingTo.up = 100; }
+      if (headingTo.up < -100) { headingTo.up = -100; }
     });
+  }
 
-    await createModelPlane();
+  await createModelPlane();
 
-    camera.lookAt(sceneObjects.modelPlane.position);
+  camera.lookAt(sceneObjects.modelPlane.position);
 }
 
 
@@ -53,66 +50,57 @@ async function initFlying() {
  */
 function handleFlying() {
 
-    if (!sceneObjects.modelPlane) return;
+  if (!sceneObjects.modelPlane) return;
 
-    // get the planes lookAt vector by its quaternion
-    let quaternion = sceneObjects.modelPlane.quaternion;
-    let planeLookAt = new THREE.Vector3(0, 0, 1);
-    planeLookAt.applyQuaternion(quaternion);
-    planeLookAt.normalize();
+  // get the planes lookAt vector by its quaternion
+  let quaternion = sceneObjects.modelPlane.quaternion;
+  let planeLookAt = new THREE.Vector3(0, 0, 1);
+  planeLookAt.applyQuaternion(quaternion);
+  planeLookAt.normalize();
 
-    //TEMP
-    const oldPlaneLookAt = planeLookAt.clone();
+  // planeRotationFactor
+  let planeRotationFactor = basePlaneRotateFactor;
+  if (planeIsUpsideDown) {
+    planeRotationFactor = -basePlaneRotateFactor;
+  }
 
-    // planeRotationFactor
-    let planeRotationFactor = basePlaneRotateFactor;
-    if (planeIsUpsideDown) {
-        planeRotationFactor = -basePlaneRotateFactor;
-    }
+  // manipulate the lookAt vector by the headingTo values
+  let turnedBeyondYAxis = false;
+  planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - planeRotationFactor));
+  let horizontalTurn = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * planeRotationFactor));
+  planeLookAt = horizontalTurn.newVector;
+  turnedBeyondYAxis = horizontalTurn.turnedBeyondYAxis;
+  if (turnedBeyondYAxis) planeIsUpsideDown = !planeIsUpsideDown;
+  planeLookAt.normalize();
 
-    // manipulate the lookAt vector by the headingTo values
-    let turnedBeyondYAxis = false;
-    planeLookAt = turnVectorAroundVerticalAxis(planeLookAt, degToRad(headingTo.right * - planeRotationFactor));
-    let horizontalTurn = turnVectorAroundHorizontalAxis(planeLookAt, degToRad(headingTo.up * planeRotationFactor));
-    planeLookAt = horizontalTurn.newVector;
-    turnedBeyondYAxis = horizontalTurn.turnedBeyondYAxis;
-    if (turnedBeyondYAxis) { planeIsUpsideDown = !planeIsUpsideDown; console.log("turnd");}
-    planeLookAt.normalize();
+  // set the new lookAt vector
+  let newPointToLookAt = new THREE.Vector3(sceneObjects.modelPlane.position.x + planeLookAt.x, sceneObjects.modelPlane.position.y + planeLookAt.y, sceneObjects.modelPlane.position.z + planeLookAt.z);
+  sceneObjects.modelPlane.lookAt(newPointToLookAt);
 
-    // set the new lookAt vector
-    let newPointToLookAt = new THREE.Vector3(sceneObjects.modelPlane.position.x + planeLookAt.x, sceneObjects.modelPlane.position.y + planeLookAt.y, sceneObjects.modelPlane.position.z + planeLookAt.z);
-    sceneObjects.modelPlane.lookAt(newPointToLookAt);
+  // move the plane forward (always)
+  speed = calcSpeed(speed, planeLookAt.y);
+  let newPlanePosition = sceneObjects.modelPlane.position.clone();
+  newPlanePosition.addScaledVector(planeLookAt, speed * deltaTime);
 
-    // move the plane forward (always)
-    speed = calcSpeed(speed, planeLookAt.y);
-    let newPlanePosition = sceneObjects.modelPlane.position.clone();
-    newPlanePosition.addScaledVector(planeLookAt, speed * deltaTime);
+  // apply the new position
+  sceneObjects.modelPlane.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
 
-    // apply the new position
-    sceneObjects.modelPlane.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
-    
-    // turn the camera and plane
-    if (turnedBeyondYAxis) {
-        camera.up.set(0, -camera.up.y, 0);
-        console.table({
-            "newPlanePosition": newPlanePosition,
-            "planeLookAt": planeLookAt,
-            "oldPlaneLookAt": oldPlaneLookAt,
-        });
-        console.count("turnedBeyondYAxis");
-    }
-    if (planeIsUpsideDown) {
-        sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(180));
-    }
+  // turn the camera and plane
+  if (turnedBeyondYAxis) {
+    camera.up.set(0, -camera.up.y, 0);
+  }
+  if (planeIsUpsideDown) {
+    sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(180));
+  }
 
-    // move the camera behind the plane -lookAt
-    camera.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
-    camera.position.addScaledVector(planeLookAt, -distanceOfCameraFromPlane);
-    camera.lookAt(newPlanePosition);
-    
-    // tend the plane a little bit to the right/left depending on the headingTo.right value
-    sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.5));
-    sceneObjects.modelPlane.updateMatrixWorld();
+  // move the camera behind the plane -lookAt
+  camera.position.set(newPlanePosition.x, newPlanePosition.y, newPlanePosition.z);
+  camera.position.addScaledVector(planeLookAt, -distanceOfCameraFromPlane);
+  camera.lookAt(newPlanePosition);
+
+  // tend the plane a little bit to the right/left depending on the headingTo.right value
+  sceneObjects.modelPlane.rotateOnWorldAxis(planeLookAt, degToRad(headingTo.right * 0.5));
+  sceneObjects.modelPlane.updateMatrixWorld();
 
 }
 
@@ -122,39 +110,37 @@ function handleFlying() {
  */
 async function createModelPlane() {
 
-    const planeStartPoint = new THREE.Vector3(torusSpawnRadius * 0.5 + 2, 8, torusSpawnRadius * 0.5 + 2);
+  const planeStartPoint = new THREE.Vector3(torusSpawnRadius * 0.5 + 2, 8, torusSpawnRadius * 0.5 + 2);
 
-    // load the plane model
-    const modelPlane = await getMashFromBlenderModel("../low-poly_airplane.glb-low", "https://download1591.mediafire.com/1ukswzole2ag/2otcm1ju178d63g/basic_plane.glb");
-    scene.add(modelPlane);
+  // load the plane model
+  const modelPlane = await getMeshFromBlenderModel("./low-poly_airplane.glb-low", "https://download1492.mediafire.com/07ni12qd4mjg/7jumu3xf1vdz13y/low-poly_airplane.glb");
+  scene.add(modelPlane);
 
-    /** @type { THREE.Mesh } */
-    sceneObjects.modelPlane = modelPlane;
+  /** @type { THREE.Mesh } */
+  sceneObjects.modelPlane = modelPlane;
 
-    // set the plane position
-    sceneObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
-    sceneObjects.modelPlane.scale.set(0.002, 0.003, 0.003);
-    sceneObjects.modelPlane.lookAt(planeStartPoint.x - 1, planeStartPoint.y, planeStartPoint.z - 1);
+  // set the plane position
+  sceneObjects.modelPlane.position.set(planeStartPoint.x, planeStartPoint.y, planeStartPoint.z);
+  sceneObjects.modelPlane.scale.set(0.002, 0.003, 0.003);
+  sceneObjects.modelPlane.lookAt(planeStartPoint.x - 1, planeStartPoint.y, planeStartPoint.z - 1);
 }
 
 
 /**
  * Calculates the speed depending on the y value of the planeLookAt vector and the previous speed
- * @param {number} speed previous speed
+ * @param {number} v0 previous speed
  * @param {*} y y value of the planeLookAt vector 1 = straight up, -1 = straight down
  */
-function calcSpeed(speed, y) {
+function calcSpeed(v0, y) {
 
-    const minSpeed = 1.5;
-    const maxSpeed = 3.5;
-    const baseSpeed = 2;
-    const yFactor = 0.1;
+  const g = 9.81;
+  const aGravity = g * -y;
+  const aThrust = 10;
+  const aAirResistance = - v0 * v0 * 0.9;
 
-    let newSpeed = speed * 0.9 + baseSpeed * 0.1;
-    newSpeed -= y * yFactor;
+  const a = aGravity + aThrust + aAirResistance;
 
-    if (newSpeed < minSpeed) newSpeed = minSpeed;
-    if (newSpeed > maxSpeed) newSpeed = maxSpeed;
+  const v1 = v0 + a * deltaTime;
 
-    return newSpeed;
+  return v1;
 }

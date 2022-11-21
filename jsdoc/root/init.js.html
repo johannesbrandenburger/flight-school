@@ -26,15 +26,17 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>// @ts-check
-
+            <pre class="prettyprint source linenums"><code>/**
+ * Initializes the flight school scene
+ */
 async function init() {
 
+  // check if the user was redirected from the flight simulator
   const urlParams = new URLSearchParams(window.location.search);
   const redirect = urlParams.get("redirect-from");
   if (redirect === "flight-simulator") redirectFromFlightSimulator = true;
 
-  initStartScreen();
+  window.addEventListener("keydown", event => { if (event.key === "f" || event.key === "F") window.location.href = "/flight-simulator" });
 
   // config for three.js
   scene = new THREE.Scene();
@@ -46,8 +48,7 @@ async function init() {
   );
   renderer = new THREE.WebGLRenderer();
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  // renderer.physicallyCorrectLights = true;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
 
   // resize the renderer when the window is resized
   window.addEventListener("resize", () => {
@@ -62,9 +63,6 @@ async function init() {
 
   // add a clock
   clock = new THREE.Clock();
-
-  // add the renderer to the dom
-  camera.position.set(4, 8, 17);
 
   // place all objects/lights and enable its interactions
   await placeObjects();
@@ -83,6 +81,7 @@ async function init() {
   if (redirectFromFlightSimulator) {
     redirectFromFlightSimulator = true;
     sceneObjects.player.position.set(3.6, sceneObjects.player.position.y, 1.5);
+    camera.position.set(sceneObjects.player.position.x, headHeight, sceneObjects.player.position.z);
     camera.lookAt(sceneObjects.monitor.position.x, -10, 100);
     camera.updateProjectionMatrix()
     window.history.replaceState({}, document.title, "/");
@@ -90,24 +89,26 @@ async function init() {
 
   const startImmediately = putStartScreenOnReady();
 
-  if (!startImmediately) {
+  if (startImmediately) {
+    startScene();
+    document.getElementById("start-button").addEventListener("click", () => { startScene() });
+    window.addEventListener("keydown", (event) => { if (event.key === "Enter") startScene() });
+    return;
+  }
 
-    // wait till the user clicks on the start button or presses enter
-    await new Promise((resolve) => {
-      document.getElementById("start-button").addEventListener("click", () => {
+  // wait till the user clicks on the start button or presses enter
+  await new Promise((resolve) => {
+    document.getElementById("start-button").addEventListener("click", () => {
+      startScene();
+      resolve();
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
         startScene();
         resolve();
-      });
-      window.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          startScene();
-          resolve();
-        }
-      });
+      }
     });
-  } else {
-    startScene();
-  }
+  });
 
 }
 
@@ -119,8 +120,8 @@ function initStats() {
   stats = new Stats();
   stats.setMode(0);
   stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0';
-  stats.domElement.style.top = '50px';
+  stats.domElement.style.left = '10px';
+  stats.domElement.style.top = '80px';
   stats.domElement.id = "stats";
   stats.domElement.style.display = "none";
   document.body.appendChild(stats.domElement);
@@ -175,7 +176,7 @@ function initDevControls() {
 
         // toggle help screen visibility
         document.getElementById("start-screen").style.display = document.getElementById("start-screen").style.display === "none" ? "block" : "none";
-        
+
         break;
 
       case "j":
@@ -185,16 +186,18 @@ function initDevControls() {
         stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
 
         break;
+
+      case "u":
+      case "U":
+
+        // toggle collision detection
+        collisionDetectionEnabled = !collisionDetectionEnabled;
+
+        break;
     }
   });
 
 }
-
-
-/**
- * Initialize the start screen / landing page (no js needed so far)
- */
-function initStartScreen() { }
 
 
 /**
@@ -203,7 +206,6 @@ function initStartScreen() { }
 function startScene() {
   document.body.appendChild(renderer.domElement);
   document.getElementById("start-screen").style.display = "none";
-  document.getElementById("stats").style.display = "block";
 }
 
 
@@ -235,13 +237,13 @@ function putStartScreenOnReady() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMashFromBlenderModel">getMashFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#infoDiv">infoDiv</a></li><li><a href="global.html#infoStartTime">infoStartTime</a></li><li><a href="global.html#infoTable">infoTable</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStartScreen">initStartScreen</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#maxDistance">maxDistance</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#checkCollision">checkCollision</a></li><li><a href="global.html#checkIfPointIsInsideMesh">checkIfPointIsInsideMesh</a></li><li><a href="global.html#createPlayer">createPlayer</a></li><li><a href="global.html#degToRad">degToRad</a></li><li><a href="global.html#getCameraLookAt">getCameraLookAt</a></li><li><a href="global.html#getMeshFromBlenderModel">getMeshFromBlenderModel</a></li><li><a href="global.html#getNewPosition">getNewPosition</a></li><li><a href="global.html#handleAnimateChairs">handleAnimateChairs</a></li><li><a href="global.html#handleAnimateClosets">handleAnimateClosets</a></li><li><a href="global.html#handleBlackboardInertia">handleBlackboardInertia</a></li><li><a href="global.html#handleInfoDiv">handleInfoDiv</a></li><li><a href="global.html#handleWalking">handleWalking</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initAdjustBlackboardHeight">initAdjustBlackboardHeight</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initInfoDiv">initInfoDiv</a></li><li><a href="global.html#initInteractions">initInteractions</a></li><li><a href="global.html#initMouseClickMove">initMouseClickMove</a></li><li><a href="global.html#initOpenCloset">initOpenCloset</a></li><li><a href="global.html#initPutChairOnTable">initPutChairOnTable</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#initSwitchLight">initSwitchLight</a></li><li><a href="global.html#initTriggerFlightSimulator">initTriggerFlightSimulator</a></li><li><a href="global.html#initWalk">initWalk</a></li><li><a href="global.html#placeLights">placeLights</a></li><li><a href="global.html#placeObjects">placeObjects</a></li><li><a href="global.html#putStartScreenOnReady">putStartScreenOnReady</a></li><li><a href="global.html#showBoundingBox">showBoundingBox</a></li><li><a href="global.html#showVector">showVector</a></li><li><a href="global.html#startScene">startScene</a></li><li><a href="global.html#turnVectorAroundHorizontalAxis">turnVectorAroundHorizontalAxis</a></li><li><a href="global.html#turnVectorAroundVerticalAxis">turnVectorAroundVerticalAxis</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 16:19:01 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 21 2022 22:49:58 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>

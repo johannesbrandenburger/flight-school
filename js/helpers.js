@@ -1,12 +1,10 @@
-// @ts-check
-
 /**
  * Fetches a gltf model from the given url and returns it
  * @param { string } path the path to the gltf model
  * @param { string } alternativePath the path to the gltf model if the first path is not working
  * @returns { Promise<THREE.Mesh> } mesh mesh of the gltf model
  */
-async function getMashFromBlenderModel(path, alternativePath = "") {
+async function getMeshFromBlenderModel(path, alternativePath = "") {
 
   // @ts-ignore
   const loader = new THREE.GLTFLoader();
@@ -15,31 +13,28 @@ async function getMashFromBlenderModel(path, alternativePath = "") {
   // check if file exists
   const response = await fetch(path);
   if (response.status === 404) {
-    console.warn("file of model not found, using alternative path");
+    console.warn(`local file of model (${path}) not found`);
     if (alternativePath === "") {
-      console.error("no alternative path provided");
+      console.warn("no alternative path provided");
+      console.error("model not found");
       return;
     }
+    console.log(`trying to load model from alternative path (${alternativePath})`);
     path = alternativePath;
   }
 
   // use three.js to load the model
   await loader.load(
     path,
-    function (gltf) {
+    (gltf) => {
       mesh = gltf.scene;
       dispatchEvent(new Event("modelLoaded"));
     },
-    undefined,
-    function (error) {
-      console.error(error);
-    }
+    undefined, (error) => console.error(error)
   )
 
   // wait till the model is loaded
-  await new Promise(resolve => {
-    addEventListener("modelLoaded", resolve, { once: true });
-  });
+  await new Promise(resolve => addEventListener("modelLoaded", resolve, { once: true }));
 
   return mesh;
 }
@@ -49,6 +44,7 @@ async function getMashFromBlenderModel(path, alternativePath = "") {
  * Checks if a point is inside a mesh
  * @param { THREE.Vector3 } point point to check
  * @param { THREE.Mesh } mesh mesh to check
+ * @returns { boolean } true if the point is inside the mesh
  */
 function checkIfPointIsInsideMesh(point, mesh) {
   try {
@@ -56,7 +52,6 @@ function checkIfPointIsInsideMesh(point, mesh) {
     var localPt = mesh.worldToLocal(point.clone());
     return mesh.geometry?.boundingBox?.containsPoint(localPt);
   } catch (error) {
-    console.warn(error);
     return false;
   }
 }
@@ -114,6 +109,7 @@ function showBoundingBox(mesh) {
  * Turns a vector around the vertical axis (for plane movement)
  * @param { THREE.Vector3 } vector vector to turn
  * @param { number } angle angle to turn
+ * @returns { THREE.Vector3 } turned vector
  */
 function turnVectorAroundVerticalAxis(vector, angle) {
   let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
@@ -164,18 +160,18 @@ function turnVectorAroundHorizontalAxis(vector, angle) {
   // rotate the vector around the cross product
   let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);
   newVector.applyAxisAngle(crossProduct, -angle);
-  
+
   // check if one of the x or z values are 0 to avoid division by 0
   if (newVector.x === 0 || newVector.z === 0 || vector.x === 0 || vector.z === 0) {
     return { newVector, turnedBeyondYAxis: false };
   }
-  
+
   // check if the vector turned beyond the y axis
   let turnedBeyondYAxis = false;
-  if ( 
-    (newVector.x / Math.abs(newVector.x)) !== (vector.x / Math.abs(vector.x)) || 
+  if (
+    (newVector.x / Math.abs(newVector.x)) !== (vector.x / Math.abs(vector.x)) ||
     (newVector.z / Math.abs(newVector.z)) !== (vector.z / Math.abs(vector.z))
-    ) {
+  ) {
     turnedBeyondYAxis = true;
   }
 

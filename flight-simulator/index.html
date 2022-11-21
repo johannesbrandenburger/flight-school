@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,15 +10,32 @@
     <link rel="icon" href="../logo/logo-black-only-plane.ico" type="image/x-icon">
     <link rel="shortcut icon" href="../logo/logo-black-only-plane.ico" type="image/x-icon">
 </head>
+
 <body>
+    <div id="loading">Loading...</div>
+    <div id="score">Score: 0</div>
+    <div id="time">Time left: 60</div>
+    <div id="outOfBounds">Don't fly out of bounds!</div>
+    <div id="invertedControls" style="display: none;"></div>
+    <div class="gameOverScreen" id="gameOverScreen">
+        <div class="gameOverContent">
+            <div class="gameOverDiv" id="gameOverDiv">
+            </div>
+            <div class="controlPanel">
+                <button class="restartButton" id="restartButton">
+                    Restart
+                </button>
+                <button class="exitButton" id="exitButton">
+                    Exit Flight Simulator
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="../threejs/three.js"></script>
-    <script src="../threejs/extra-utils/controls/OrbitControls.js"></script>
     <script src="../threejs/extra-utils/loaders/GLTFLoader.js"></script>
-    <script src='../threejs/extra-utils/threex.domevents.js'></script>
-    <script src="../threejs/extra-utils/effects/AsciiEffect.js"></script>
     <script src="../threejs/extra-utils/objects/Water.js"></script>
     <script src="../threejs/extra-utils/objects/Sky.js"></script>
-    <script src="../threejs/extra-utils/geometries/TextGeometry.js"></script>
     <script src="../threejs/extra-utils/libs/stats.min.js"></script>
     <script src="../js/helpers.js"></script>
     <script src="js/fs-fly.js"></script>
@@ -26,4 +44,5 @@
     <script src="js/fs-init.js"></script>
     <script src="js/fs-main.js"></script>
 </body>
+
 </html>

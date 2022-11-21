@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * Animates the scene
  */
@@ -11,9 +9,10 @@ async function animate() {
   handleAnimateChairs();
   handleAnimateClosets();
   handleInfoDiv();
-  
+  handleBlackboardInertia()
+
   deltaTime = clock.getDelta();
-  
+
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }

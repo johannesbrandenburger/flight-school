@@ -1,5 +1,3 @@
-// @ts-check
-
 // global variables
 var container,
   stats,
@@ -24,16 +22,31 @@ var container,
     up: true,
     timeSinceAnimationStart: 0,
   },
-  closetAnimation = { 
+  closetAnimation = {
     activeCloset: null,
     open: true,
     timeSinceAnimationStart: 0,
   },
   redirectFromFlightSimulator = false,
-  collisionDetectionEnabled = true
-  ;
+  collisionDetectionEnabled = true,
+  blackboard = {
+    board1: null,
+    board2: null,
+    chalkTray1: null,
+    chalkTray2: null,
+    distanceBetweenBoardAndChalkTray: null,
+    speeds: [0, 0],
+    boardYmin: 0.7,
+    boardYmax: 1.83
+  },
+  infoTable = [],
+  infoDiv,
+  infoStartTime = null;
 
+// global constants
+const maxInteractionDistance = 4;
+
+// initialize the scene and run the animation loop
 init().then(() => {
-  console.log("init done");
   animate();
 });

@@ -31,21 +31,21 @@
  */
 async function animate() {
 
-    requestAnimationFrame(animate);
-    stats.update();
-    
-    if (isFlying) {
-        handleFlying();
-        handleScore();
-        handleObstacleCollision();
-        handleTime();
-        handlePlaneOutOfBounds();
-    }
-    water.material.uniforms['time'].value += 0.05 * deltaTime;
+  requestAnimationFrame(animate);
+  stats.update();
 
-    deltaTime = clock.getDelta();
+  deltaTime = clock.getDelta();
 
-    renderer.render(scene, camera);
+  if (isFlying) {
+    handleFlying();
+    handleScore();
+    handleObstacleCollision();
+    handlePlaneOutOfBounds();
+  }
+  handleTime();
+
+  water.material.uniforms['time'].value += 0.05 * deltaTime;
+  renderer.render(scene, camera);
 }
 
 
@@ -55,60 +55,60 @@ async function animate() {
  */
 function handleScore() {
 
-    if (!sceneObjects.modelPlane) return;
+  if (!sceneObjects.modelPlane) return;
 
-    const planePosition = sceneObjects.modelPlane.position;
+  const planePosition = sceneObjects.modelPlane.position;
 
-    if (planePosition.y &lt; 0) {
-        gameOver();
-        return;
+  if (planePosition.y &lt; 0) {
+    gameOver();
+    return;
+  }
+
+  let nearestTorus = null;
+
+  // check if plane intersects with a torus
+  for (let i = 0; i &lt; scene.children.length; i++) {
+    if (scene.children[i].name !== "torus" &amp;&amp; scene.children[i].name !== "extraTorus") continue;
+
+    // get nearest torus
+    const torus = scene.children[i];
+    if (!nearestTorus) {
+      nearestTorus = torus;
+    } else {
+      const distanceToTorus = torus.position.distanceTo(planePosition);
+      const distanceToNearestTorus = nearestTorus.position.distanceTo(planePosition);
+      if (distanceToTorus &lt; distanceToNearestTorus) {
+        nearestTorus = torus;
+      }
+    }
+  }
+
+  // check if plane intersects with the nearest torus
+  const distanceToCenter = nearestTorus.position.distanceTo(planePosition);
+
+  // check if the planes position is inside the torus
+  const boundingBox = new THREE.Box3().setFromObject(nearestTorus);
+  if (boundingBox.containsPoint(planePosition)) {
+
+    // check the distance to the center of the torus
+    if (distanceToCenter &lt; torusRadius - 0.5 * torusTube &amp;&amp; !hasScored) {
+      nearestTorus.material.color.set(0x00ff00);
+      nearestTorus.material.needsUpdate = true;
+      torusScore = nearestTorus.name === "extraTorus" ? torusScore + 5 : torusScore + 1;
+      hasScored = true;
+      document.getElementById("score").innerHTML = "Score: " + torusScore;
+
+      // remove the torus after 1 second
+      setTimeout(() => {
+        scene.remove(nearestTorus);
+        hasScored = false;
+      }, 500);
     }
 
-    let nearestTorus = null;
-
-    // check if plane intersects with a torus
-    for (let i = 0; i &lt; scene.children.length; i++) {
-        if (scene.children[i].name !== "torus" &amp;&amp; scene.children[i].name !== "extraTorus") continue;
-
-        // get nearest torus
-        const torus = scene.children[i];
-        if (!nearestTorus) {
-            nearestTorus = torus;
-        } else {
-            const distanceToTorus = torus.position.distanceTo(planePosition);
-            const distanceToNearestTorus = nearestTorus.position.distanceTo(planePosition);
-            if (distanceToTorus &lt; distanceToNearestTorus) {
-                nearestTorus = torus;
-            }
-        }
+    if (distanceToCenter > torusRadius - planeWingSize - 0.5 * torusTube &amp;&amp; distanceToCenter &lt; torusRadius + torusTube + planeWingSize) {
+      gameOver();
     }
-
-    // check if plane intersects with the nearest torus
-    const distanceToCenter = nearestTorus.position.distanceTo(planePosition);
-
-    // check if the planes position is inside the torus
-    const boundingBox = new THREE.Box3().setFromObject(nearestTorus);
-    if (boundingBox.containsPoint(planePosition)) {
-
-        // check the distance to the center of the torus
-        if (distanceToCenter &lt; torusRadius - 0.5 * torusTube &amp;&amp; !hasScored) {
-            nearestTorus.material.color.set(0x00ff00);
-            nearestTorus.material.needsUpdate = true;
-            torusScore = nearestTorus.name === "extraTorus" ? torusScore + 5 : torusScore + 1;
-            hasScored = true;
-            document.getElementById("score").innerHTML = "Score: " + torusScore;
-
-            // remove the torus after 1 second
-            setTimeout(() => {
-                scene.remove(nearestTorus);
-                hasScored = false;
-            }, 500);
-        }
-
-        if (distanceToCenter > torusRadius - planeWingSize - 0.5 * torusTube &amp;&amp; distanceToCenter &lt; torusRadius + torusTube + planeWingSize) {
-            gameOver();
-        }
-    }
+  }
 }
 
 
@@ -116,13 +116,19 @@ function handleScore() {
  * Decreases the time and checks if the time is up
  */
 function handleTime() {
-    const currentTime = new Date().getTime();
-    timeLeft = 60 - Math.floor((currentTime - startTime) / 1000);
-    document.getElementById("time").innerHTML = "Time left: " + timeLeft;
 
-    if (timeLeft &lt;= 0) {
-        gameOver();
-    }
+  if (isFlying == false) {
+    startTime += deltaTime * 1000;
+    return;
+  }
+
+  const currentTime = new Date().getTime();
+  timeLeft = 60 - Math.floor((currentTime - startTime) / 1000);
+  document.getElementById("time").innerHTML = "Time left: " + timeLeft;
+
+  if (timeLeft &lt;= 0) {
+    gameOver();
+  }
 }
 
 
@@ -130,12 +136,12 @@ function handleTime() {
  * Chechs if the plane collides with an object
  */
 function handleObstacleCollision() {
-    for (let i = 0; i &lt; scene.children.length; i++) {
-        if (scene.children[i].name !== "obstacle") continue;
-        if (scene.children[i].position.distanceTo(sceneObjects.modelPlane.position) &lt; obstacleRadius + planeWingSize) {
-            gameOver();
-        }
+  for (let i = 0; i &lt; scene.children.length; i++) {
+    if (scene.children[i].name !== "obstacle") continue;
+    if (scene.children[i].position.distanceTo(sceneObjects.modelPlane.position) &lt; obstacleRadius + planeWingSize) {
+      gameOver();
     }
+  }
 }
 
 
@@ -145,17 +151,17 @@ function handleObstacleCollision() {
  */
 function handlePlaneOutOfBounds() {
 
-    if (sceneObjects.modelPlane.position.distanceTo(new THREE.Vector3(0, 0, 0)) - 5 > torusSpawnRadius) {
+  if (sceneObjects.modelPlane.position.distanceTo(new THREE.Vector3(0, 0, 0)) - 10 > torusSpawnRadius) {
 
-        // turn the plane around
-        sceneObjects.modelPlane.lookAt(new THREE.Vector3(0, 10, 0));
+    // turn the plane around
+    sceneObjects.modelPlane.lookAt(new THREE.Vector3(0, 10, 0));
 
-        // show outOfBounds div for 3 seconds
-        document.getElementById("outOfBounds").style.display = "block";
-        setTimeout(() => {
-            document.getElementById("outOfBounds").style.display = "none";
-        }, 3000);
-    }
+    // show outOfBounds div for 3 seconds
+    document.getElementById("outOfBounds").style.display = "block";
+    setTimeout(() => {
+      document.getElementById("outOfBounds").style.display = "none";
+    }, 3000);
+  }
 }</code></pre>
         </article>
     </section>
@@ -166,13 +172,13 @@ function handlePlaneOutOfBounds() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#basePlaneRotateFactor">basePlaneRotateFactor</a></li><li><a href="global.html#calcSpeed">calcSpeed</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#distanceOfCameraFromPlane">distanceOfCameraFromPlane</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#speed">speed</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#animate">animate</a></li><li><a href="global.html#calcSpeed">calcSpeed</a></li><li><a href="global.html#createModelPlane">createModelPlane</a></li><li><a href="global.html#gameOver">gameOver</a></li><li><a href="global.html#handleFlying">handleFlying</a></li><li><a href="global.html#handlePlaneOutOfBounds">handlePlaneOutOfBounds</a></li><li><a href="global.html#handleScore">handleScore</a></li><li><a href="global.html#handleTime">handleTime</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initDevControls">initDevControls</a></li><li><a href="global.html#initFlying">initFlying</a></li><li><a href="global.html#initOceanAndSky">initOceanAndSky</a></li><li><a href="global.html#initStats">initStats</a></li><li><a href="global.html#invertControls">invertControls</a></li><li><a href="global.html#placeObstaclesObjects">placeObstaclesObjects</a></li><li><a href="global.html#placeTorusObjects">placeTorusObjects</a></li><li><a href="global.html#showInvertedControlsDiv">showInvertedControlsDiv</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 14 2022 16:19:01 GMT+0100 (Mitteleuropäische Normalzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Mon Nov 21 2022 22:49:58 GMT+0100 (Mitteleuropäische Normalzeit)
 </footer>
 
 <script> prettyPrint(); </script>
