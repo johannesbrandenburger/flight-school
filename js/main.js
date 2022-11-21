@@ -30,7 +30,17 @@ var container,
     timeSinceAnimationStart: 0,
   },
   redirectFromFlightSimulator = false,
-  collisionDetectionEnabled = true
+  collisionDetectionEnabled = true,
+  blackboard = {
+    board1: null,
+    board2: null,
+    chalkTray1: null,
+    chalkTray2: null,
+    distanceBetweenBoardAndChalkTray: null,
+    speeds:  [0, 0],
+    boardYmin: 0.7,
+    boardYmax: 1.83
+  }
   ;
 
 init().then(() => {
