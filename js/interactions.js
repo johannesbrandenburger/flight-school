@@ -98,24 +98,21 @@ function initTriggerFlightSimulator() {
 function initAdjustBlackboardHeight() {
     if (sceneObjects.blackboard === undefined) return;
 
-    const boardYmin = 0.7;
-    const boardYmax = 1.83;
-
     // get the individual boards and their chalk trays
-    let board1 = sceneObjects.blackboard.children.find(child => child.name === "Board1")
-    let chalkTray1 = sceneObjects.blackboard.children.find(child => child.name === "Kreideablage1")
-    let board2 = sceneObjects.blackboard.children.find(child => child.name === "Board2")
-    let chalkTray2 = sceneObjects.blackboard.children.find(child => child.name === "Kreideablage2")
-    if (board1 === undefined || chalkTray1 === undefined || board2 === undefined || chalkTray2 === undefined) return;
-    const distanceBetweenBoardAndChalkTray = chalkTray1.position.y - board1.position.y;
+    blackboard.board1 = sceneObjects.blackboard.children.find(child => child.name === "Board1")
+    blackboard.chalkTray1 = sceneObjects.blackboard.children.find(child => child.name === "Kreideablage1")
+    blackboard.board2 = sceneObjects.blackboard.children.find(child => child.name === "Board2")
+    blackboard.chalkTray2 = sceneObjects.blackboard.children.find(child => child.name === "Kreideablage2")
+    if (blackboard.board1 === null || blackboard.chalkTray1 === null || blackboard.board2 === null || blackboard.chalkTray2 === null) return;
+    blackboard.distanceBetweenBoardAndChalkTray = blackboard.chalkTray1.position.y - blackboard.board1.position.y;
 
-    domEvents.addEventListener(board1, "mousedown", () => {
+    domEvents.addEventListener(blackboard.board1, "mousedown", () => {
         if (camera.position.distanceTo(sceneObjects.blackboard.position) > maxDistance * 2) return;
         isMouseDown = isMouseOnBlackboardBoard2 = false;
         isMouseOnBlackboardBoard1 = true;
     });
 
-    domEvents.addEventListener(board2, "mousedown", () => {
+    domEvents.addEventListener(blackboard.board2, "mousedown", () => {
         if (camera.position.distanceTo(sceneObjects.blackboard.position) > maxDistance * 2) return;
         isMouseDown = isMouseOnBlackboardBoard1 = false;
         isMouseOnBlackboardBoard2 = true;
@@ -123,20 +120,28 @@ function initAdjustBlackboardHeight() {
 
     window.addEventListener("mousemove", event => {
         if (!isMouseOnBlackboardBoard1) return;
-        let y = board1.position.y - event.movementY * deltaTime * 0.3;
-        if (y < boardYmin) y = boardYmin;
-        if (y > boardYmax) y = boardYmax;
-        board1.position.y = y;
-        chalkTray1.position.y = y + distanceBetweenBoardAndChalkTray;
+        let y = blackboard.board1.position.y - event.movementY * deltaTime * 0.3;
+
+        let speed = (y - blackboard.board1.position.y) / deltaTime;
+        if (speed !== 0) blackboard.speeds[0] = speed;
+
+        if (y < blackboard.boardYmin) y = blackboard.boardYmin;
+        if (y > blackboard.boardYmax) y = blackboard.boardYmax;
+        blackboard.board1.position.y = y;
+        blackboard.chalkTray1.position.y = y + blackboard.distanceBetweenBoardAndChalkTray;
     });
 
     window.addEventListener("mousemove", event => {
         if (!isMouseOnBlackboardBoard2) return;
-        let y = board2.position.y - event.movementY * deltaTime * 0.3;
-        if (y < boardYmin) y = boardYmin;
-        if (y > boardYmax) y = boardYmax;
-        board2.position.y = y;
-        chalkTray2.position.y = y + distanceBetweenBoardAndChalkTray;
+        let y = blackboard.board2.position.y - event.movementY * deltaTime * 0.3;
+
+        let speed = (y - blackboard.board2.position.y) / deltaTime;
+        if (speed !== 0) blackboard.speeds[1] = speed;
+
+        if (y < blackboard.boardYmin) y = blackboard.boardYmin;
+        if (y > blackboard.boardYmax) y = blackboard.boardYmax;
+        blackboard.board2.position.y = y;
+        blackboard.chalkTray2.position.y = y + blackboard.distanceBetweenBoardAndChalkTray;
     });
 
 }
@@ -577,4 +582,50 @@ function handleInfoDiv() {
         infoDiv.style.visibility = "hidden";
     }
 
+}
+
+
+/**
+ * Is called every frame and moves the blackboard boards if there is a fast movement by the user
+ */
+function handleBlackboardInertia() {
+
+    if (sceneObjects.blackboard === undefined) return;
+
+    const inertiaFactor = 2.5;
+    const bounceRepulsionFactor = 0.7;
+    const maxSpeed = 2;
+
+    blackboard.speeds.forEach((v, i) => {
+        if (v === 0) return;
+        if (isMouseOnBlackboardBoard1 && i === 0) return;
+        if (isMouseOnBlackboardBoard2 && i === 1) return;
+
+        let board = i === 0 ? blackboard.board1 : blackboard.board2;
+        let chalkTray = i === 0 ? blackboard.chalkTray1 : blackboard.chalkTray2;
+        
+        // maximum speed guard
+        if (Math.abs(v) > maxSpeed) v = v > 0 ? maxSpeed : -maxSpeed;
+
+        // friction
+        if (v > 0) {
+            v = v - inertiaFactor * deltaTime;
+            if (v < 0) v = 0;
+        } else {
+            v = v + inertiaFactor * deltaTime;
+            if (v > 0) v = 0;
+        }
+
+        // bounce repulsion
+        let y = board.position.y + v * deltaTime;
+        if (y < blackboard.boardYmin || y > blackboard.boardYmax) {
+            v = - bounceRepulsionFactor * v;
+            y = board.position.y + v * deltaTime;
+        }
+
+        // update position and speed
+        board.position.y = y;
+        chalkTray.position.y = y + blackboard.distanceBetweenBoardAndChalkTray;
+        blackboard.speeds[i] = v;
+    });
 }

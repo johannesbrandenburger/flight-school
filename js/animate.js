@@ -11,6 +11,7 @@ async function animate() {
   handleAnimateChairs();
   handleAnimateClosets();
   handleInfoDiv();
+  handleBlackboardInertia()
 
   deltaTime = clock.getDelta();
 
