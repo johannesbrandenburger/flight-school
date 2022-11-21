@@ -45,6 +45,7 @@
 \usepackage[nohyperlinks, printonlyused, withpage]{acronym}                           % Abkürzungen
 \usepackage{dirtree}
 \usepackage{float}                                                                % Ordnerstruktur (z.B. für Anhang)
+\usepackage{pdfpages}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                      Angaben zur Arbeit                      %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -180,5 +181,5 @@
   \renewcommand{\thelstlisting}{\Alph{section}.\arabic{lstlisting}}
   \pagenumbering{Alph}
 
-  %\include{pages/anhang}
+  \include{pages/anhang}
 \end{document}
