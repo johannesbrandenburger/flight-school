@@ -31,7 +31,7 @@ async function placeLights() {
   ]
 
   // create a light and a lamp for each light config
-  const lampModel = await getMashFromBlenderModel("../blender/lamp.glb");
+  const lampModel = await getMashFromBlenderModel("../blender/lamp.glb", "https://download1081.mediafire.com/6qpirzkpblog/h7nssr5ld6lnjv8/lamp.glb");
   roomLightConfig.forEach((lightConfig) => {
 
     // create the light

@@ -113,7 +113,7 @@ async function createModelPlane() {
   const planeStartPoint = new THREE.Vector3(torusSpawnRadius * 0.5 + 2, 8, torusSpawnRadius * 0.5 + 2);
 
   // load the plane model
-  const modelPlane = await getMashFromBlenderModel("./low-poly_airplane.glb-low", "https://download1591.mediafire.com/1ukswzole2ag/2otcm1ju178d63g/basic_plane.glb");
+  const modelPlane = await getMashFromBlenderModel("./low-poly_airplane.glb-low", "https://download1492.mediafire.com/07ni12qd4mjg/7jumu3xf1vdz13y/low-poly_airplane.glb");
   scene.add(modelPlane);
 
   /** @type { THREE.Mesh } */

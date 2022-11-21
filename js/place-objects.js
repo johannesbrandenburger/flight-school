@@ -4,7 +4,7 @@
 async function placeObjects() {
 
   // room walls
-  let room = await getMashFromBlenderModel("../blender/room_door.glb");
+  let room = await getMashFromBlenderModel("../blender/room_door.glb", "https://download1336.mediafire.com/7wazvzxo1l3g/xeh353cupp3f577/room_door.glb");
   scene.add(room); sceneObjects.room = room;
   sceneObjects.room.position.set(5.213, 0, 5.750);
 
@@ -46,14 +46,14 @@ async function placeObjects() {
   scene.add(smallWindow); sceneObjects.smallWindow = smallWindow;
 
   // blackboard
-  let blackboard = await getMashFromBlenderModel("../blender/blackboard.glb");
+  let blackboard = await getMashFromBlenderModel("../blender/blackboard.glb", "https://download1503.mediafire.com/conlzykj1l5g/7r5cpvtdj8pwzyt/blackboard.glb");
   blackboard.position.set(3.400, 0, 0.4);
   blackboard.traverse(child => { child.receiveShadow = true; });
   scene.add(blackboard); sceneObjects.blackboard = blackboard;
 
   // closet 1
   sceneObjects.closets = [];
-  let closetOne = await getMashFromBlenderModel("../blender/closet.glb");
+  let closetOne = await getMashFromBlenderModel("../blender/closet.glb", "https://download848.mediafire.com/zifjq4b7alpg/2tjisjr3lfis4xj/closet.glb");
   scene.add(closetOne);
   closetOne.rotateY(degToRad(180));
   closetOne.position.set(8.926, 0, 0);
@@ -72,7 +72,7 @@ async function placeObjects() {
   sceneObjects.closets.push(closetTwo);
 
   // sideboard 1
-  let sideboardOne = await getMashFromBlenderModel("../blender/sideboard.glb");
+  let sideboardOne = await getMashFromBlenderModel("../blender/sideboard.glb", "https://download1351.mediafire.com/kp1npc6olyig/cigvg16rtdm50lf/sideboard.glb");
   scene.add(sideboardOne); sceneObjects.sideboardOne = sideboardOne;
   sceneObjects.sideboardOne.rotateY(degToRad(270));
   sceneObjects.sideboardOne.position.set(0, 0, 0);
@@ -92,8 +92,8 @@ async function placeObjects() {
   sceneObjects.sideboardThree.traverse(child => { child.receiveShadow = true; })
 
   // load chair and table model one time and clone it for each char
-  let chairModel = await getMashFromBlenderModel("../blender/chair.glb");
-  let tableModel = await getMashFromBlenderModel("../blender/table.glb");
+  let chairModel = await getMashFromBlenderModel("../blender/chair.glb", "https://download848.mediafire.com/ik9qvgy7hveg/bkst5kfyyt9ope2/chair.glb");
+  let tableModel = await getMashFromBlenderModel("../blender/table.glb", "https://download1484.mediafire.com/esmqvzbj2sng/a0dic35nar0z342/table.glb");
 
   // prof chair
   let profChair = chairModel.clone();
@@ -107,7 +107,7 @@ async function placeObjects() {
   sceneObjects.profTable.position.set(3, 0, 2.5);
 
   // keyboard
-  let keyboard = await getMashFromBlenderModel("../blender/Keyboard.glb");
+  let keyboard = await getMashFromBlenderModel("../blender/keyboard.glb", "https://download1080.mediafire.com/sm7jse7hdklg/2iyblyfyecir66p/keyboard.glb");
   scene.add(keyboard); sceneObjects.keyboard = keyboard;
   sceneObjects.keyboard.position.set(3.8, 0.79, 2.8);
   sceneObjects.keyboard.rotateY(degToRad(180));
@@ -117,7 +117,7 @@ async function placeObjects() {
   });
 
   // monitor
-  let monitor = await getMashFromBlenderModel("../blender/Monitor.glb");
+  let monitor = await getMashFromBlenderModel("../blender/monitor.glb", "https://download857.mediafire.com/0shz8s4nh6qg/x5qeuurjwuazc9c/Monitor.glb");
   scene.add(monitor); sceneObjects.monitor = monitor;
   sceneObjects.monitor.position.set(3.6, 0.79, 3.2);
   sceneObjects.monitor.rotateY(degToRad(270));
@@ -212,7 +212,7 @@ async function placeObjects() {
   // #endregion
 
   // lightswitch 1
-  let lightSwitchOne = await getMashFromBlenderModel("../blender/lightswitch.glb")
+  let lightSwitchOne = await getMashFromBlenderModel("../blender/lightswitch.glb", "https://download1593.mediafire.com/1joraa4wrfig/hjgogwpbzn94bwq/lightswitch.glb")
   scene.add(lightSwitchOne); sceneObjects.lightSwitchOne = lightSwitchOne;
   lightSwitchOne.scale.set(1.4, 1.4, 1.4);
   lightSwitchOne.position.set(9.6, 0.9, 11.5);
