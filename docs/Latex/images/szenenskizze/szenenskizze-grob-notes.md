@@ -1,0 +1,38 @@
+- Scene 1: Flightschool
+  - Classroom
+    - Room and Door
+      - Floor
+      - Ceiling
+      - Walls (1 - 4)
+      - Door
+    - Big Window
+    - Small Window
+    - Blackboard
+      - Board 1
+      - Board 2
+    - Closet 1
+    - Closet 2
+    - Sideboard 1
+    - Sideboard 3
+    - Sideboard 3
+    - Chairs [24]
+    - Tables [12]
+    - Lightswitch 1
+    - Lightswitch 2
+    - Lightswitch 3
+  - Background
+    - Image (DHBW)
+    - Sphere
+- Scene 2: Flightsimulator
+  - Obstacles [300]
+    - Dodecahedron 
+    - Icosahedron
+    - Octahedron
+    - Tetrahedron
+  - Rings (Torus)
+    - Red Torus (+1 Point) [200]
+    - Golden Torus (+5 Points) [20]
+  - Sky
+    - Sun
+    - Skybox 
+  - Ocean

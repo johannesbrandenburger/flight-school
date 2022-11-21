@@ -43,8 +43,9 @@
 \usepackage{multirow}                                                                 % Mehrzeilige Tabelleneinträge
 \usepackage[addtotoc]{abstract}                                                       % Abstract
 \usepackage[nohyperlinks, printonlyused, withpage]{acronym}                           % Abkürzungen
-\usepackage{dirtree}                                                                  % Ordnerstruktur (z.B. für Anhang)
-
+\usepackage{dirtree}
+\usepackage{float}                                                                % Ordnerstruktur (z.B. für Anhang)
+\usepackage{pdfpages}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                      Angaben zur Arbeit                      %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -88,6 +89,8 @@
 \newcommand{\textVariable}[1]{\texttt{#1}}
 \newcommand{\textKlasse}[1]{\texttt{#1}}
 \newcommand{\textFunktion}[1]{\texttt{#1}}
+\newcommand{\textKeyboradKey}[1]{\gqq{#1}}
+\newcommand{\newparagraph}{\newline \newline}
 
 
 %%%%%%%%%%%%%%%%%%%% Zitatbibliothek einbinden %%%%%%%%%%%%%%%%%%%%%
@@ -146,10 +149,10 @@
   \include{pages/selbststaendigkeitserklaerung}
   %\include{pages/abstract}
   \include{pages/inhaltsverzeichnis}
-  \include{pages/abkuerzungsverzeichnis}
+  %\include{pages/abkuerzungsverzeichnis}
   \include{pages/abbildungsverzeichnis}
   \include{pages/tabellenverzeichnis}
-  \include{pages/listingsverzeichnis}
+  %\include{pages/listingsverzeichnis}
   % \include{pages/vorwort}
 
 
@@ -163,9 +166,13 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \include{chapter/Einleitung}
   \include{chapter/Tools}
+  \include{chapter/Konzept.tex}
+  \include{chapter/Realisierung.tex}
+  \include{chapter/Finalproduct.tex}
+  \include{chapter/Installationsanleitung.tex}
 
   %%%%%%%%%%%%%%%%%%%%%%% Literaturverzeichnis %%%%%%%%%%%%%%%%%%%%%%%
-  \include{pages/literaturverzeichnis}
+  %\include{pages/literaturverzeichnis}
 
 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Anhang %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
