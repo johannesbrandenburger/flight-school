@@ -3,36 +3,6 @@
  */
 async function init() {
 
-  // add a loading div
-  const loadingDiv = document.createElement("div");
-  loadingDiv.id = "loading";
-  loadingDiv.innerHTML = "Loading...";
-  document.body.appendChild(loadingDiv);
-
-  // add a div for the score
-  const scoreDiv = document.createElement("div");
-  scoreDiv.id = "score";
-  scoreDiv.innerHTML = "Score: 0";
-  document.body.appendChild(scoreDiv);
-
-  // add a div for the time
-  const timeDiv = document.createElement("div");
-  timeDiv.id = "time";
-  timeDiv.innerHTML = "Time left: " + timeLeft;
-  document.body.appendChild(timeDiv);
-
-  // add a div for telling the user to not fly out of bounds
-  const outOfBoundsDiv = document.createElement("div");
-  outOfBoundsDiv.id = "outOfBounds";
-  outOfBoundsDiv.innerHTML = "Don't fly out of bounds!";
-  document.body.appendChild(outOfBoundsDiv);
-
-  // add a div for telling the user that the controls are inverted
-  const invertedControlsDiv = document.createElement("div");
-  invertedControlsDiv.id = "invertedControls";
-  invertedControlsDiv.style.display = "none";
-  document.body.appendChild(invertedControlsDiv);
-
   // config for three.js
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(
@@ -89,7 +59,7 @@ async function init() {
 
   // add the canvas and remove the loading div
   document.body.appendChild(renderer.domElement);
-  document.body.removeChild(loadingDiv);
+  document.body.removeChild(document.getElementById("loading"));
 
 }
 
@@ -100,22 +70,20 @@ async function init() {
  */
 async function initOceanAndSky() {
 
-  // sun
-  sun = new THREE.Vector3();
-  const waterGeometry = new THREE.PlaneGeometry(10000, 10000);
-
   // water
+  const waterGeometry = new THREE.PlaneGeometry(10000, 10000);
   water = new THREE.Water(
-    waterGeometry, {
-    textureWidth: 512,
-    textureHeight: 512,
-    waterNormals: new THREE.TextureLoader().load('../textures/waternormals.jpg', function (texture) { texture.wrapS = texture.wrapT = THREE.RepeatWrapping; }),
-    sunDirection: new THREE.Vector3(),
-    sunColor: 0xffffff,
-    waterColor: 0x001e0f,
-    distortionScale: 3.7,
-    fog: scene.fog !== undefined
-  }
+    waterGeometry,
+    {
+      textureWidth: 512,
+      textureHeight: 512,
+      waterNormals: new THREE.TextureLoader().load('../textures/waternormals.jpg', function (texture) { texture.wrapS = texture.wrapT = THREE.RepeatWrapping; }),
+      sunDirection: new THREE.Vector3(),
+      sunColor: 0xffffff,
+      waterColor: 0x001e0f,
+      distortionScale: 3.7,
+      fog: scene.fog !== undefined
+    }
   );
   water.rotation.x = - Math.PI / 2;
   scene.add(water);
@@ -130,15 +98,19 @@ async function initOceanAndSky() {
   };
   const pmremGenerator = new THREE.PMREMGenerator(renderer);
   let renderTarget;
+
+  // sun
   const phi = THREE.MathUtils.degToRad(90 - parameters.elevation);
   const theta = THREE.MathUtils.degToRad(parameters.azimuth);
+  sun = new THREE.Vector3();
   sun.setFromSphericalCoords(1, phi, theta);
   sky.material.uniforms['sunPosition'].value.copy(sun);
   water.material.uniforms['sunDirection'].value.copy(sun).normalize();
+
+  // environment
   if (renderTarget !== undefined) renderTarget.dispose();
   renderTarget = pmremGenerator.fromScene(sky);
   scene.environment = renderTarget.texture;
-
 }
 
 
@@ -172,40 +144,23 @@ function gameOver() {
   // set cursor to default
   document.body.style.cursor = "pointer";
 
-  const gameOverScreen = document.createElement("div");
-  gameOverScreen.classList.add("gameOverScreen");
-  document.body.appendChild(gameOverScreen);
-  const gameOverContent = document.createElement("div");
-  gameOverContent.classList.add("gameOverContent");
-  gameOverScreen.appendChild(gameOverContent);
-
   // show game over message and score in the middle of the screen
-  const gameOverDiv = document.createElement("div");
+  const gameOverDiv = document.getElementById("gameOverDiv");
+  const gameOverScreen = document.getElementById("gameOverScreen");
+  gameOverScreen.style.display = "flex";
   gameOverDiv.innerHTML = "Game over! </br> Your score is: " + torusScore;
-  gameOverDiv.classList.add("gameOverDiv");
-  gameOverContent.appendChild(gameOverDiv);
 
-
-  const controlPanel = document.createElement("div");
-  controlPanel.classList.add("controlPanel");
-  gameOverContent.appendChild(controlPanel);
   // show restart button
-  const restartButton = document.createElement("button");
-  restartButton.innerHTML = "Restart";
-  restartButton.classList.add("restartButton");
+  const restartButton = document.getElementById("restartButton");
   restartButton.onclick = () => {
     location.reload();
   }
-  controlPanel.appendChild(restartButton);
 
   // show a exit button
-  const exitButton = document.createElement("button");
-  exitButton.innerHTML = "Exit Flight Simulator";
-  exitButton.classList.add("exitButton");
+  const exitButton = document.getElementById("exitButton");
   exitButton.onclick = () => {
     location.href = "/?redirect-from=flight-simulator";
   }
-  controlPanel.appendChild(exitButton);
 }
 
 
@@ -223,9 +178,9 @@ function invertControls() {
  * Shows a alert with if the controls are inverted or not for 3 seconds
  */
 function showInvertedControlsDiv() {
-  const TextIfTrue = "Inverted Controls: On <br/> The airplane will follow your mouse cursor. <br/> This setting is saved in your browser and can be toggled by pressing 'I'.";
-  const TextIfFalse = "Inverted Controls: Off <br/> The control direction is realisitc like in a real airplane. <br/> This setting is saved in your browser and can be toggled by pressing 'I'.";
-  document.getElementById("invertedControls").innerHTML = invertedControls ? TextIfTrue : TextIfFalse;
+  const textIfTrue = "Inverted Controls: On <br/> The airplane will follow your mouse cursor. <br/> This setting is saved in your browser and can be toggled by pressing 'I'.";
+  const textIfFalse = "Inverted Controls: Off <br/> The control direction is realisitc like in a real airplane. <br/> This setting is saved in your browser and can be toggled by pressing 'I'.";
+  document.getElementById("invertedControls").innerHTML = invertedControls ? textIfTrue : textIfFalse;
   document.getElementById("invertedControls").style.display = "block";
   if (invertedControlsDivTimeout != null) {
     clearTimeout(invertedControlsDivTimeout);
@@ -247,7 +202,6 @@ function initDevControls() {
 
       case "j":
       case "J":
-
 
         // toggle stats visibility
         stats.domElement.style.display = stats.domElement.style.display === "none" ? "block" : "none";
@@ -281,14 +235,12 @@ function initDevControls() {
       case "P":
 
         // pause the game
-        if (!isGameOver) {
-
-          if (isFlying) {
-            isFlying = false;
-            document.getElementById("time").innerHTML = "Paused";
-          } else {
-            isFlying = true;
-          }
+        if (isGameOver) break;
+        if (isFlying) {
+          isFlying = false;
+          document.getElementById("time").innerHTML = "Paused";
+        } else {
+          isFlying = true;
         }
 
         break;

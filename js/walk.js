@@ -167,29 +167,33 @@ function handleWalking() {
   sceneObjects.player.position.set(newPosition.x, newPosition.y, newPosition.z);
 
   // check if the player is inside a mesh
-  let allMeshs = []
-  scene.traverse((child) => { allMeshs.push(child) });
-  for (let i = 0; i < allMeshs.length; i++) {
-    if (
-      allMeshs[i] !== sceneObjects.player
-      && allMeshs[i].name !== "Scene"
-      && allMeshs[i].name !== "Floor"
-      && allMeshs[i].name !== "Ground_Material007_0"
-      && allMeshs[i].name !== ""
-      && checkCollision(sceneObjects.player, allMeshs[i])
-    ) {
-      isCollision = true;
-      break;
-    }
-  }
+  if (collisionDetectionEnabled) {
 
-  // if the player is inside a mesh, set the position back to the previous position
-  if (isCollision === true && collisionDetectionEnabled) {
-    sceneObjects.player.position.set(
-      previousPosition.x,
-      previousPosition.y,
-      previousPosition.z
-    );
+    let allMeshs = []
+    scene.traverse((child) => { allMeshs.push(child) });
+    for (let i = 0; i < allMeshs.length; i++) {
+      if (
+        allMeshs[i] !== sceneObjects.player
+        && allMeshs[i].name !== "Scene"
+        && allMeshs[i].name !== "Floor"
+        && allMeshs[i].name !== "Ground_Material007_0"
+        && allMeshs[i].name !== ""
+        && checkCollision(sceneObjects.player, allMeshs[i])
+      ) {
+        isCollision = true;
+        break;
+      }
+    }
+
+    // if the player is inside a mesh, set the position back to the previous position
+    if (isCollision === true) {
+      sceneObjects.player.position.set(
+        previousPosition.x,
+        previousPosition.y,
+        previousPosition.z
+      );
+    }
+
   }
 
   // update the camera position

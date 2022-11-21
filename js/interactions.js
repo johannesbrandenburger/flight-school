@@ -103,6 +103,9 @@ function initAdjustBlackboardHeight() {
     isMouseOnBlackboardBoard2 = true;
   });
 
+  // add a mouse move listener to the window to adjust the height of the blackboards
+  // if the mouse is on the blackboard the blackboard is moved up and down and the speed is calculated
+
   window.addEventListener("mousemove", event => {
     if (!isMouseOnBlackboardBoard1) return;
     let y = blackboard.board1.position.y - event.movementY * deltaTime * 0.3;
@@ -233,13 +236,11 @@ function initOpenCloset() {
       if (closetAnimation.activeCloset !== null) return;
 
       // check if one closet is already open
-      let closetIsOpen = false;
+      let anyClosetIsOpen = false;
       sceneObjects.closets.forEach(closet => {
-        if (closet.isOpen) {
-          closetIsOpen = true;
-        }
+        if (closet.isOpen) anyClosetIsOpen = true;
       });
-      if (closetIsOpen && !closet.isOpen) return;
+      if (anyClosetIsOpen && !closet.isOpen) return;
 
       closetAnimation.activeCloset = closet;
       closetAnimation.open = !closet.isOpen;
@@ -458,7 +459,6 @@ function handleAnimateChairs() {
       timeSinceAnimationStart: 0
     };
   }
-
 }
 
 
@@ -468,11 +468,8 @@ function handleAnimateChairs() {
 function handleAnimateClosets() {
   if (closetAnimation.activeCloset === null) return;
 
-  // Closet_Door_1 und Closet_Door_2 
   closetAnimation.timeSinceAnimationStart = closetAnimation.timeSinceAnimationStart + deltaTime;
-  /** @type {THREE.Object3D} */
   let door1 = closetAnimation.activeCloset.children.find(child => child.name === "Closet_Door_1");
-  /** @type {THREE.Object3D} */
   let door2 = closetAnimation.activeCloset.children.find(child => child.name === "Closet_Door_2");
 
   let animationComplete = false;

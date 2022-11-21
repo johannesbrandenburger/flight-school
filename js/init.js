@@ -3,11 +3,10 @@
  */
 async function init() {
 
+  // check if the user was redirected from the flight simulator
   const urlParams = new URLSearchParams(window.location.search);
   const redirect = urlParams.get("redirect-from");
   if (redirect === "flight-simulator") redirectFromFlightSimulator = true;
-
-  initStartScreen();
 
   window.addEventListener("keydown", event => { if (event.key === "f" || event.key === "F") window.location.href = "/flight-simulator" });
 
@@ -171,12 +170,6 @@ function initDevControls() {
   });
 
 }
-
-
-/**
- * Initialize the start screen / landing page (no js needed so far)
- */
-function initStartScreen() { }
 
 
 /**

@@ -63,6 +63,4 @@ async function placeLights() {
   dayLight.castShadow = true;
   dayLight.shadow.mapSize.width = dayLight.shadow.mapSize.height = shadowMapSize;
   scene.add(dayLight);
-
-
 }

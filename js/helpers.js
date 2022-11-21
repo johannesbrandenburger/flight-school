@@ -44,6 +44,7 @@ async function getMashFromBlenderModel(path, alternativePath = "") {
  * Checks if a point is inside a mesh
  * @param { THREE.Vector3 } point point to check
  * @param { THREE.Mesh } mesh mesh to check
+ * @returns { boolean } true if the point is inside the mesh
  */
 function checkIfPointIsInsideMesh(point, mesh) {
   try {
@@ -108,6 +109,7 @@ function showBoundingBox(mesh) {
  * Turns a vector around the vertical axis (for plane movement)
  * @param { THREE.Vector3 } vector vector to turn
  * @param { number } angle angle to turn
+ * @returns { THREE.Vector3 } turned vector
  */
 function turnVectorAroundVerticalAxis(vector, angle) {
   let newVector = new THREE.Vector3(vector.x, vector.y, vector.z);

@@ -1,5 +1,5 @@
 /**
- * Places torus objects in the scene at random positions+
+ * Places torus objects in the scene at random positions
  */
 function placeTorusObjects() {
   for (let i = 0; i < torusAmount + extraTorusAmount; i++) {
