@@ -14,6 +14,11 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 - Keyboard Shortcuts for Fast Controls over Lights, Shadows and other Features
 - Information about Interactions when near Objects
 
+## Online-Deployment
+
+Entire Project: [flight-school.brandenburger.dev](https://flight-school.brandenburger.dev)
+Flight Simulator as PWA: [flight-simulator.brandenburger.dev](https://flight-simulator.brandenburger.dev)
+
 ## Keyboard Shortcuts in Flight School Scene
 
 | Key | Function |
