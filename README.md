@@ -17,6 +17,7 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 ## Online-Deployment
 
 Entire Project: [flight-school.brandenburger.dev](https://flight-school.brandenburger.dev)
+
 Flight Simulator as PWA: [flight-simulator.brandenburger.dev](https://flight-simulator.brandenburger.dev)
 
 ## Keyboard Shortcuts in Flight School Scene
