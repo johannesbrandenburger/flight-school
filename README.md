@@ -20,6 +20,10 @@ Entire Project: [flight-school.brandenburger.dev](https://flight-school.brandenb
 
 Flight Simulator as installable PWA: [flight-simulator.brandenburger.dev](https://flight-simulator.brandenburger.dev)
 
+## Subproject Flight Simulator PWA
+
+[github.com/johannesbrandenburger/flight-simulator-pwa](https://github.com/johannesbrandenburger/flight-simulator-pwa)
+
 ## Keyboard Shortcuts in Flight School Scene
 
 | Key | Function |
