@@ -14,7 +14,7 @@ Computer Graphics Project of Henry Schuler, Lukas Braun und Johannes Brandenburg
 - Keyboard Shortcuts for Fast Controls over Lights, Shadows and other Features
 - Information about Interactions when near Objects
 
-## Online-Deployment
+## Online Deployment
 
 Entire Project: [flight-school.brandenburger.dev](https://flight-school.brandenburger.dev)
 
